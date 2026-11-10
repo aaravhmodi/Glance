@@ -12,7 +12,7 @@
 
 Note: the plan's `avc1.42001E` (Level 3.0) **fails** at 720p — 720p needs Level 3.1, so use `42001F`.
 
-MediaPipe Face Landmarker loads from vendored `/mediapipe/wasm` + `/mediapipe/models` (no CDN), ~250–500 ms.
+MediaPipe Face Landmarker loads from vendored `/mediapipe/wasm` + `/mediapipe/models` (no CDN), ~250–500 ms. Network check (10 Nov): every request from the built app goes to localhost only.
 
 UNISAL (pretrained, CPU, torch 2.15 + torchvision 0.29) runs unmodified on a 30-frame 720p test clip: 30 maps out, 1280×720, range 0–255. Needed `torchvision` in addition to pyfvvdp deps.
 Run: `cd offline/unisal && TRAIN_DIR=training_runs ../../.venv/Scripts/python run.py predictions_from_folder <dir with images/> --is_video True`
