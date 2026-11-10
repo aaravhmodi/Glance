@@ -10,3 +10,9 @@ Running log of what's built. Newest stage at the bottom. Details/numbers live in
 - **Python:** torch 2.15 CPU, torchvision, pyfvvdp 1.2.2, opencv. UNISAL cloned to `offline/unisal` (git-ignored, Apache-2.0); pretrained run works on CPU.
 - **Secrets:** `.env` at root holds `OPENAI_API_KEY` (git-ignored). Never import it into `web/`.
 - **Open:** pick demo clips → `assets/clips/`; fill license table; real Wi-Fi-off test.
+
+## Home server deploy ✅ (10 Nov)
+- **Where:** `aaravdagoat` (Tailscale `100.76.57.23`), folder `~/projects/glance`, container `glance-web-1` = nginx on `127.0.0.1:8095`.
+- **Deploy:** `git push server main`. Remote is a private bare repo on the server (`~/git/glance.git`), not GitHub. Cron `deploy.sh` rebuilds within ~1 min; log in `~/homelab/auto-deploy/deploy.log`.
+- **HTTPS (needed for webcam + WebCodecs):** `tailscale serve` on `https://aaravdagoat.tail732914.ts.net:8445`, tailnet-only (one-time sudo by user).
+- **Offline:** the server needs the tailnet → no use on the plane. Offline = laptop `npm run build && npm run preview`.
