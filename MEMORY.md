@@ -16,3 +16,8 @@ Running log of what's built. Newest stage at the bottom. Details/numbers live in
 - **Deploy:** `git push server main`. Remote is a private bare repo on the server (`~/git/glance.git`), not GitHub. Cron `deploy.sh` rebuilds within ~1 min; log in `~/homelab/auto-deploy/deploy.log`.
 - **HTTPS (needed for webcam + WebCodecs):** `tailscale serve` on `https://aaravdagoat.tail732914.ts.net:8445`, tailnet-only (one-time sudo by user).
 - **Offline:** the server needs the tailnet → no use on the plane. Offline = laptop `npm run build && npm run preview`.
+
+## Autopilot (10 Nov)
+- **What:** `autopilot/` runs Claude Code headless on the home server while I'm offline: one `autopilot/TASKS.md` item per run → build + `npm run smoke` → commit → `run.sh` pushes branch `autopilot` + ntfy push. How-to in `autopilot/README.md`.
+- **Safety:** container sees only the repo; tool allowlist (edit, npm ci/build/smoke, git add/commit, ffmpeg), no permission bypass; only the host script pushes, never to main.
+- **Smoke test:** `cd web && npm run smoke` = build + headless real Chrome (Playwright, fake webcam) on `?smoke`; fails on any `FAIL` line. Extend it per feature.

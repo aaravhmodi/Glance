@@ -5,3 +5,5 @@ offline/unisal/
 web/public/mediapipe/wasm/
 __pycache__/
 .env
+STOP
+autopilot.log

@@ -1,0 +1,11 @@
+# Not part of the deployed app: only run through autopilot/run.sh in ~/projects/glance-autopilot.
+services:
+  agent:
+    build: .
+    env_file: ../.env   # CLAUDE_CODE_OAUTH_TOKEN only
+    volumes:
+      - ..:/work        # the repo is the only host folder the agent can see
+      - claude-home:/home/node/.claude
+    shm_size: 1gb       # Chrome
+volumes:
+  claude-home:
