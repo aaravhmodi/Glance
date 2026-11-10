@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.venv/
+offline/unisal/
+web/public/mediapipe/wasm/
+__pycache__/
