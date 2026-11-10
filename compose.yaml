@@ -1,0 +1,6 @@
+# Home server: Tailscale serve gives HTTPS on :8445 (camera + WebCodecs need a secure context).
+services:
+  web:
+    build: .
+    ports: ["127.0.0.1:8095:80"]
+    restart: unless-stopped

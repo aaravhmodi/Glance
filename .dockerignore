@@ -1,0 +1,6 @@
+# allowlist: only the web app goes into the image (keeps .env, .venv, offline/ out)
+*
+!web
+web/node_modules
+web/dist
+web/public/mediapipe/wasm
