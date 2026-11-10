@@ -13,7 +13,7 @@ for (const codec of codecs) {
       ...(bitrateMode === 'constant' && { bitrate: 500_000 }),
     }
     const { supported } = await VideoEncoder.isConfigSupported(config).catch(() => ({ supported: false }))
-    log(`${supported ? 'OK  ' : 'FAIL'} ${codec} ${bitrateMode}`)
+    log(`${supported ? 'OK  ' : codec.startsWith('vp09') ? 'FAIL' : 'WARN'} ${codec} ${bitrateMode}`) // VP9 is required; others optional
   }
 }
 
