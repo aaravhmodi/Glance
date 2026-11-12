@@ -93,6 +93,30 @@ try {
   const lineF = `${okFov ? 'OK  ' : 'FAIL'} foveate: radius ${Math.round(fv.r)}px; fovea diff vs source ${fv.near.toFixed(2)}; far detail ${fv.farOut.toFixed(2)} vs source ${fv.farSrc.toFixed(2)}; VideoFrame ${JSON.stringify(fv.vf)}`
   console.log(lineF)
   text += '\n' + lineF
+  // Reveal: key R tints the quality map on the view (red near gaze, blue far); off by default; toggles back cleanly.
+  let lineR
+  try {
+    const px = () => app.evaluate(() => {
+      const g = document.querySelector('#view').getContext('2d', { willReadFrequently: true })
+      const d = (x, y) => Array.from(g.getImageData(x, y, 1, 1).data)
+      return { near: d(400, 300), far: d(1200, 680), status: document.querySelector('#status').textContent }
+    })
+    await app.mouse.move(400, 300)
+    await app.waitForTimeout(600)
+    const off = await px()
+    await app.keyboard.press('r')
+    await app.waitForFunction(() => /R reveal ON/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 5_000 })
+    await app.waitForTimeout(600)
+    const on = await px()
+    await app.keyboard.press('r')
+    await app.waitForFunction(() => /R reveal off/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 5_000 })
+    const okR = /R reveal off/.test(off.status) && off.far[0] - on.far[0] > 10 && on.near[0] - off.near[0] > 10 // tint: far loses red (blue tint), near gains red; same clip frame, so the difference is the overlay
+    lineR = `${okR ? 'OK  ' : 'FAIL'} reveal: far red ${off.far[0]} -> ${on.far[0]}, near red ${off.near[0]} -> ${on.near[0]}`
+  } catch (e) {
+    lineR = `FAIL reveal: ${String(e).slice(0, 150)}`
+  }
+  console.log(lineR)
+  text += '\n' + lineR
   // Encoders: key E runs two VP9 quantizer-mode encoders (same QP) for ~5 s on the real clip; Glance must be smaller.
   await app.mouse.move(400, 300)
   await app.keyboard.press('e')

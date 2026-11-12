@@ -10,7 +10,7 @@ void main(){ uv = p*0.5+0.5; gl_Position = vec4(p,0.,1.); }`
 
 const FS = `#version 300 es
 precision highp float;
-uniform sampler2D tex; uniform vec2 gaze; uniform float radius; uniform vec2 size; uniform float reveal;
+uniform sampler2D tex; uniform vec2 gaze; uniform float radius; uniform vec2 size;
 in vec2 uv; out vec4 o;
 void main(){
   vec2 t = vec2(uv.x, 1.0-uv.y);                  // top-left origin, like the 2D view (no UNPACK_FLIP_Y)
@@ -25,7 +25,6 @@ void main(){
   c += textureLod(tex, t-vec2(texel.x,0.), lod).rgb*0.15;
   c += textureLod(tex, t+vec2(0.,texel.y), lod).rgb*0.15;
   c += textureLod(tex, t-vec2(0.,texel.y), lod).rgb*0.15;
-  if (reveal > 0.5) c = mix(c, vec3(q, 0.15, 1.0-q), 0.35);   // quality map overlay (red = sharp, blue = coarse)
   o = vec4(c,1.);
 }`
 
@@ -33,7 +32,6 @@ export class Foveator {
   readonly canvas: HTMLCanvasElement
   private gl: WebGL2RenderingContext
   private u: Record<string, WebGLUniformLocation | null> = {}
-  reveal = false
   readonly width: number
   readonly height: number
 
@@ -65,7 +63,7 @@ export class Foveator {
     const loc = gl.getAttribLocation(prog, 'p')
     gl.enableVertexAttribArray(loc)
     gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0)
-    for (const n of ['tex', 'gaze', 'radius', 'size', 'reveal']) this.u[n] = gl.getUniformLocation(prog, n)
+    for (const n of ['tex', 'gaze', 'radius', 'size']) this.u[n] = gl.getUniformLocation(prog, n)
     const t = gl.createTexture()
     gl.bindTexture(gl.TEXTURE_2D, t)
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null)
@@ -85,7 +83,6 @@ export class Foveator {
     gl.generateMipmap(gl.TEXTURE_2D)
     gl.uniform2f(this.u.gaze, gazeX, gazeY)
     gl.uniform1f(this.u.radius, Math.max(1, radius))
-    gl.uniform1f(this.u.reveal, this.reveal ? 1 : 0)
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
   }
 

@@ -5,7 +5,7 @@ import { EyeTracker } from './gaze/tracker'
 import { createCamView } from './ui/camview'
 import { runCalibration } from './gaze/calib'
 import { Foveator } from './video/foveate'
-import { foveaRadiusPx } from './video/fovea'
+import { foveaRadiusPx, revealRGBA } from './video/fovea'
 import { DualEncoder, vp9QuantizerSupported, CODEC } from './video/encoders'
 import { StreamDecoder, decoderConfigFor } from './video/decoder'
 import { splitPanels, panelLabel, savedLabel } from './ui/split'
@@ -33,6 +33,17 @@ export async function startApp() {
   src.webcam = () => (tracker?.running ? tracker.video : null) // share the tracker's camera stream
   const fov = new Foveator(W, H) // key F: show the foveated picture (what Glance would send)
   let foveate = false
+  let reveal = false // key R: tint the quality map over the viewer's canvas (display only, never sent to the encoders)
+  const REV_W = 64, REV_H = 36
+  const revCanvas = document.createElement('canvas')
+  revCanvas.width = REV_W
+  revCanvas.height = REV_H
+  const revG = revCanvas.getContext('2d')!
+  const drawReveal = (x: number, y: number, w: number, h: number) => { // gaze is in full-view px; (x,y,w,h) is the panel drawn into
+    revG.putImageData(new ImageData(revealRGBA(W, H, gaze.x, gaze.y, foveaRadiusPx(geom, gaze.sigma), REV_W, REV_H), REV_W, REV_H), 0, 0)
+    g.imageSmoothingEnabled = true
+    g.drawImage(revCanvas, x, y, w, h)
+  }
   const geom = geometryFromUrl(W)
   ;(window as unknown as { glanceFoveate: unknown }).glanceFoveate = { fov, geom, src, radius: (sigma: number) => foveaRadiusPx(geom, sigma) }
   const picker = document.createElement('select')
@@ -50,6 +61,7 @@ export async function startApp() {
       if (gazeSwitch.preferred === 'eyes') void startTracker()
     }
     if (e.key.toLowerCase() === 'v') { cam.canvas.hidden = !cam.canvas.hidden; void startTracker() } // show what the vision sees
+    if (e.key.toLowerCase() === 'r') reveal = !reveal
     if (e.key.toLowerCase() === 'f') foveate = !foveate
     if (e.key.toLowerCase() === 'e') void toggleEncode()
     if (e.key.toLowerCase() === 's') void toggleSplit()
@@ -151,6 +163,7 @@ export async function startApp() {
     for (const [rect, dec, st, title] of [[left, split.n, enc.normal.stats, 'Normal stream'], [right, split.g, enc.glance.stats, 'Glance stream']] as const) {
       if (dec.latest) g.drawImage(dec.latest, rect.x, rect.y, rect.w, rect.h)
       else { g.fillStyle = '#888'; g.font = '20px ui-monospace, monospace'; g.fillText('waiting for first keyframe...', rect.x + 20, rect.y + 40) }
+      if (reveal && dec === split.g) drawReveal(rect.x, rect.y, rect.w, rect.h) // map only on the Glance panel
       g.strokeStyle = 'rgba(255,60,60,.9)'
       g.lineWidth = 2
       g.beginPath()
@@ -205,6 +218,7 @@ export async function startApp() {
     else {
       if (foveate) { fov.render(src.frame, gaze.x, gaze.y, foveaRadiusPx(geom, gaze.sigma)); g.drawImage(fov.canvas, 0, 0, W, H) }
       else g.drawImage(src.frame, 0, 0, W, H)
+      if (reveal) drawReveal(0, 0, W, H)
       g.strokeStyle = 'rgba(255,60,60,.9)'
       g.beginPath()
       g.lineWidth = 3
@@ -215,7 +229,7 @@ export async function startApp() {
     frames++
     const why = r.fallback ? (tracker?.latest ? ' (fallback: face found, not calibrated yet)' : ' (fallback: no face)') : ''
     const camTxt = trackerErr ? ` · tracker ERROR ${trackerErr}` : tracker ? ` · tracker ${tracker.delegate || 'loading'} face ${tracker.latest ? 'yes' : 'no'}` : ''
-    status.textContent = `source: ${src.kind} ${src.current?.id ?? ''} (keys 1-${src.options.length}) · gaze[${r.source}${why}] ${Math.round(gaze.x)},${Math.round(gaze.y)} · M toggles mouse/eyes · C calibrates: ${calibMsg} · T validates: ${validMsg} · F foveate ${foveate ? 'ON' : 'off'} · E encode: ${encText(performance.now())} · S split ${split ? 'ON' : 'off'} · V camera view${camTxt} · frames ${frames}`
+    status.textContent = `source: ${src.kind} ${src.current?.id ?? ''} (keys 1-${src.options.length}) · gaze[${r.source}${why}] ${Math.round(gaze.x)},${Math.round(gaze.y)} · M toggles mouse/eyes · C calibrates: ${calibMsg} · T validates: ${validMsg} · F foveate ${foveate ? 'ON' : 'off'} · E encode: ${encText(performance.now())} · S split ${split ? 'ON' : 'off'} · R reveal ${reveal ? 'ON' : 'off'} · V camera view${camTxt} · frames ${frames}`
     requestAnimationFrame(loop)
   }
   requestAnimationFrame(loop)
