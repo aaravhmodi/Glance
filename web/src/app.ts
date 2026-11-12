@@ -1,6 +1,7 @@
 import { createSource, W, H } from './video/source'
 import { MouseSource } from './gaze/mouse'
 import { GazeSwitch } from './gaze/switch'
+import { EyeTracker } from './gaze/tracker'
 
 // App shell: video source drawn to a canvas. Gaze comes from GazeSwitch (mouse now, eyes once the tracker lands; key M toggles).
 export const gaze = { x: W / 2, y: H / 2, sigma: 10 }
@@ -21,8 +22,22 @@ export async function startApp() {
   gazeSwitch = new GazeSwitch(new MouseSource(view, W, H))
   addEventListener('keydown', (e) => {
     if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return
-    if (e.key.toLowerCase() === 'm') gazeSwitch.toggle()
+    if (e.key.toLowerCase() === 'm') {
+      gazeSwitch.toggle()
+      if (gazeSwitch.preferred === 'eyes') void startTracker()
+    }
   })
+  // Webcam + Face Landmarker start the first time eyes are requested (triggers the camera permission prompt).
+  let tracker: EyeTracker | null = null
+  let trackerErr = ''
+  const startTracker = async () => {
+    if (tracker) return
+    const t = new EyeTracker()
+    tracker = t
+    ;(window as unknown as { glanceTracker: EyeTracker }).glanceTracker = t
+    gazeSwitch.setEyes(t)
+    try { await t.start() } catch (err) { trackerErr = String(err); t.stop(); tracker = null; gazeSwitch.setEyes(null) }
+  }
 
   let frames = 0
   const loop = (t: number) => {
@@ -40,7 +55,8 @@ export async function startApp() {
     g.stroke()
     frames++
     const why = r.fallback ? ' (fallback: no face)' : ''
-    status.textContent = `source: ${src.kind} · gaze[${r.source}${why}] ${Math.round(gaze.x)},${Math.round(gaze.y)} · M toggles mouse/eyes · frames ${frames}`
+    const cam = trackerErr ? ` · tracker ERROR ${trackerErr}` : tracker ? ` · tracker ${tracker.delegate || 'loading'} face ${tracker.latest ? 'yes' : 'no'}` : ''
+    status.textContent = `source: ${src.kind} · gaze[${r.source}${why}] ${Math.round(gaze.x)},${Math.round(gaze.y)} · M toggles mouse/eyes${cam} · frames ${frames}`
     requestAnimationFrame(loop)
   }
   requestAnimationFrame(loop)

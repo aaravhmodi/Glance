@@ -33,4 +33,6 @@ Running log of what's built. Newest stage at the bottom. Details/numbers live in
 
 ## P1 — real eye tracking
 - **Gaze plumbing ✅:** `web/src/gaze/{types,mouse,switch}.ts`. `GazeSwitch.read(now)` returns `{source, fallback, sample}`; key `M` toggles mouse/eyes; in eyes mode it holds the last good sample 500 ms, then falls back to the mouse (status line shows `gaze[mouse (fallback: no face)]`). The tracker just implements `GazeSource` (`name:'eyes'`, `read()`) and calls `gazeSwitch.setEyes(...)`.
+- **Tracker ✅:** `gaze/features.ts` (pure: iris offsets in eye widths per eye, head pose from the matrix, scale; `featureVector()` = mean iris u,v + yaw, pitch) and `gaze/tracker.ts` (`EyeTracker`: getUserMedia → FaceLandmarker GPU→CPU fallback; `latest` features, `mapper` set by calibration makes `read()` return a sample). Started lazily on first `M` in `app.ts`; exposed as `window.glanceTracker`.
+- **Smoke:** cuts a y4m from talking-heads with ffmpeg and runs Chrome with `--use-file-for-fake-video-capture`; a real face is detected (~11 faces in a few s).
 - **Tests:** `npm test` = `node --test tests/*.test.ts` (Node 24 strips types; import with `.ts` extensions); `npm run smoke` now runs build + tests + Chrome.
