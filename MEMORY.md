@@ -45,4 +45,5 @@ Running log of what's built. Newest stage at the bottom. Details/numbers live in
 
 ## P2 — visible effect
 - **Video source ✅ (12 Nov):** `video/source.ts` `SourceManager` draws the current source letterboxed into `frame` (1280×720). Options: clips from `/clips/clips.json`, then `webcam`, and synthetic only with `?synthetic` or when no clips are served. Keys 1–9 and `#picker` select; pure helpers are in `video/layout.ts`. `app.ts` draws `src.frame`, not `src.canvas`.
+- **Foveation ✅ (12 Nov):** `video/fovea.ts` (pure: radius = hypot(5° in px, 2·sigma), Gaussian quality falloff, LOD 0..3.5) and `video/foveate.ts` (`Foveator`: WebGL2, texture mips + 5 taps, `render(src,gx,gy,r)`, `frame(tsUs)` → VideoFrame, `reveal` flag for the later overlay). Key `F` previews it on the main view; hook `window.glanceFoveate`. 5° = 217 px with the default 31 cm screen at 60 cm (set `?screencm=` for the real laptop; 15.6" ≈ 237 px). Per-region QP is impossible in WebCodecs, so only the pre-filter reduces bits.
 - The webcam source shares the tracker's `<video>`; it opens its own camera only if the tracker is down, and a failure is latched until the next select.

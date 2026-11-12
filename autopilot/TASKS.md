@@ -15,7 +15,7 @@ Priorities come from `docs/COURSE_CORRECTION.md` (P1 → P2 → P3). Process rul
 
 ## P2 — make the effect visible (this is the demo)
 - [x] Real video source: play the clips from `/clips/clips.json` full-screen (picker + keys 1–3), live webcam as an extra source; the synthetic pattern only remains for tests.
-- [ ] `video/foveate.ts` (WebGL2): full quality in the fovea, smooth Gaussian falloff, heavy blur + downscale outside. Default radius 5° (≈250–300 px at 60 cm on a laptop), growing with sigma. Output `new VideoFrame(canvas, {timestamp})`. (WebCodecs QP is per frame, not per region — see BUILD_PLAN §4 — so the "lower quantizer in the fovea" part is not possible in-browser; note that in project_status.md.)
+- [x] `video/foveate.ts` (WebGL2): full quality in the fovea, smooth Gaussian falloff, heavy blur + downscale outside. Default radius 5° (≈250–300 px at 60 cm on a laptop), growing with sigma. Output `new VideoFrame(canvas, {timestamp})`. (WebCodecs QP is per frame, not per region — see BUILD_PLAN §4 — so the "lower quantizer in the fovea" part is not possible in-browser; note that in project_status.md.)
 - [ ] `video/encoders.ts` + `metrics/stats.ts`: two VP9 encoders (normal vs Glance), identical config, realtime, quantizer mode same QP, keyframe every 2 s; per-second kbps and % saved. Smoke test asserts Glance is smaller over ~5 s on a real clip.
 - [ ] Split-screen demo mode: left = what a normal stream sends, right = what Glance sends (decoded), live kbps and "% bandwidth saved" for each.
 - [ ] "Reveal" toggle (key `R`, off by default): overlay the quality map so judges see where the bits go.
