@@ -11,13 +11,18 @@ export interface Model {
   sigma: number
 }
 
+/** A feature that barely changed during calibration (e.g. head pose with a still head) is mostly noise; don't scale it up to unit variance. */
+const SD_FLOOR = 0.03
+
 export interface Pt2 { x: number; y: number }
 
-/** 2nd-order terms of z: 1, z_i, z_i*z_j (i<=j). For 4 features -> 15 terms. */
+/**
+ * Regression terms: 1 + the features (linear). The full 2nd-order set (21 terms for 5 features) was fitted
+ * from only 9 dots and amplified landmark noise into a jumpy, misplaced gaze point on a real webcam.
+ * shortcut: linear mapping only, add squared iris terms back if calibration grows past ~15 dots.
+ */
 export function poly(z: number[]): number[] {
-  const out = [1, ...z]
-  for (let i = 0; i < z.length; i++) for (let j = i; j < z.length; j++) out.push(z[i] * z[j])
-  return out
+  return [1, ...z]
 }
 
 /** Solve A w = b for each row b of B via Cholesky; A must be SPD (n x n). Returns null if not. */
@@ -81,7 +86,7 @@ export function fitCalibration(F: number[][], T: Pt2[], lambdas: number[] = LAMB
   if (F.length < 5 || F.length !== T.length) return null
   const d = F[0].length
   const mean = Array.from({ length: d }, (_, k) => F.reduce((s, r) => s + r[k], 0) / F.length)
-  const sd = Array.from({ length: d }, (_, k) => Math.sqrt(F.reduce((s, r) => s + (r[k] - mean[k]) ** 2, 0) / F.length) || 1)
+  const sd = Array.from({ length: d }, (_, k) => Math.max(SD_FLOOR, Math.sqrt(F.reduce((s, r) => s + (r[k] - mean[k]) ** 2, 0) / F.length)))
   const Z = F.map((r) => r.map((v, k) => (v - mean[k]) / sd[k]))
   const cv = (lam: number) => {
     let se = 0

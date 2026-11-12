@@ -19,7 +19,7 @@ export interface GazeFilterOptions {
 
 // Webcam gaze is noisy (hundreds of px), so the snap distance is far above noise; beta is in px units.
 export const DEFAULT_FILTER: GazeFilterOptions = {
-  minCutoff: 0.8, beta: 0.004, dCutoff: 1.0, snapDist: 250, snapSpeed: 1200, maxGapMs: 500,
+  minCutoff: 0.35, beta: 0.004, dCutoff: 1.0, snapDist: 250, snapSpeed: 1200, maxGapMs: 500,
 }
 
 const alpha = (fc: number, dt: number) => 1 / (1 + 1 / (2 * Math.PI * fc) / dt)
