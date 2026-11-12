@@ -109,6 +109,31 @@ try {
   console.log(lineE)
   text += '\n' + lineE
   await app.keyboard.press('e')
+  // Split screen: key S starts the encoders, decodes both streams, draws them side by side with live kbps + % saved.
+  await app.keyboard.press('s')
+  let lineS
+  try {
+    await app.waitForFunction(() => window.glanceSplit && window.glanceSplit.n.decoded >= 2 && window.glanceSplit.g.decoded >= 2, null, { timeout: 30_000 })
+    await app.waitForFunction(() => { // both panels must show a decoded picture (headless draws only ~2 fps)
+      const g = document.querySelector('#view').getContext('2d', { willReadFrequently: true })
+      const mean = (x, y, w, h) => { const d = g.getImageData(x, y, w, h).data; let t = 0; for (let i = 0; i < d.length; i += 4) t += d[i] + d[i + 1] + d[i + 2]; return t / (d.length / 4 * 3) }
+      return mean(40, 200, 560, 300) > 8 && mean(680, 200, 560, 300) > 8
+    }, null, { timeout: 15_000 })
+    const sp = await app.evaluate(() => {
+      const s = window.glanceSplit, c = document.querySelector('#view')
+      const g = c.getContext('2d', { willReadFrequently: true })
+      const mean = (x, y, w, h) => { const d = g.getImageData(x, y, w, h).data; let t = 0; for (let i = 0; i < d.length; i += 4) t += d[i] + d[i + 1] + d[i + 2]; return t / (d.length / 4 * 3) }
+      return { nd: s.n.decoded, gd: s.g.decoded, ne: s.n.error, ge: s.g.error, l: mean(40, 200, 560, 300), r: mean(680, 200, 560, 300), status: document.querySelector('#status').textContent, enc: window.glanceEnc.error }
+    })
+    const okS =!sp.ne && !sp.ge && !sp.enc && sp.l > 8 && sp.r > 8 && /S split ON/.test(sp.status) && /normal \d+ kbps vs glance \d+ kbps/.test(sp.status)
+    lineS = `${okS ? 'OK  ' : 'FAIL'} split screen: decoded normal ${sp.nd} / glance ${sp.gd} frames, panel luma L ${sp.l.toFixed(0)} R ${sp.r.toFixed(0)}; errors '${sp.ne}${sp.ge}${sp.enc}'`
+    await app.keyboard.press('s')
+    await app.waitForFunction(() => /S split off/.test(document.querySelector('#status')?.textContent ?? '') && /E encode: off/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 5_000 })
+  } catch (e) {
+    lineS = `FAIL split screen: ${String(e).slice(0, 150)}`
+  }
+  console.log(lineS)
+  text += '\n' + lineS
   // Key M: eyes preferred but no tracker yet -> automatic mouse fallback; M again -> plain mouse.
   await app.keyboard.press('m')
   await app.waitForFunction(() => /fallback: no face/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 5_000 })
