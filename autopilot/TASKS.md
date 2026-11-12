@@ -7,7 +7,7 @@ Priorities come from `docs/COURSE_CORRECTION.md` (P1 → P2 → P3). Process rul
 - [x] App shell: `?smoke` page kept, app entry, source abstraction, mouse position.
 
 ## P1 — real eye tracking (laptop webcam + computer vision)
-- [ ] `gaze/types.ts` + gaze plumbing: the `GazeSource` interface `{x, y, sigma, timestamp, confidence}` (screen px), a mouse source, and a switch: key `M` toggles mouse/eyes, automatic fallback to mouse when no face for ~0.5 s, current source shown on screen. Replace the app's direct mouse use with it.
+- [x] `gaze/types.ts` + gaze plumbing: the `GazeSource` interface `{x, y, sigma, timestamp, confidence}` (screen px), a mouse source, and a switch: key `M` toggles mouse/eyes, automatic fallback to mouse when no face for ~0.5 s, current source shown on screen. Replace the app's direct mouse use with it.
 - [ ] `gaze/tracker.ts`: getUserMedia webcam → Face Landmarker (VIDEO mode, vendored files) → per-frame features: iris centres relative to eye corners (normalised by eye width) for both eyes, head pose from the facial transformation matrix, face scale. **Test:** make a fake-webcam file from `web/public/clips/talking-heads.mp4` with ffmpeg (`.y4m` or `.mjpeg`) and launch Chrome in the smoke test with `--use-file-for-fake-video-capture=<file>` so a real face is detected end to end.
 - [ ] `gaze/calib.ts`: 9-point calibration screen (~1 s per dot, drop the first 300 ms), ridge regression on 2nd-order polynomial features → screen x,y; residual σ kept; key `C` recalibrates; target under 30 s total. Unit-test the regression on synthetic features with a known mapping.
 - [ ] `gaze/filter.ts`: One-Euro filter + saccade snap (large fast jump → bypass the filter). Unit-test both behaviours on synthetic traces.

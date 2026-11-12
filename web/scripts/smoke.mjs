@@ -25,10 +25,18 @@ try {
   await app.mouse.move(400, 300)
   await app.waitForFunction(() => /frames [1-9]\d/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 20_000 })
   const status = (await app.textContent('#status')) ?? ''
-  const ok = /source: (synthetic|clip)/.test(status) && !/gaze 640,360/.test(status)
+  const ok = /source: (synthetic|clip)/.test(status) && /gaze\[mouse\] /.test(status) && !/gaze\[mouse\] 640,360/.test(status)
   const line = `${ok ? 'OK  ' : 'FAIL'} app shell: ${status}`
   console.log(line)
   text += '\n' + line
+  // Key M: eyes preferred but no tracker yet -> automatic mouse fallback; M again -> plain mouse.
+  await app.keyboard.press('m')
+  await app.waitForFunction(() => /fallback: no face/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 5_000 })
+  await app.keyboard.press('m')
+  await app.waitForFunction(() => /gaze\[mouse\] /.test(document.querySelector('#status')?.textContent ?? '') && !/fallback/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 5_000 })
+  const line2 = 'OK   gaze switch: M toggles, falls back to mouse without a face'
+  console.log(line2)
+  text += '\n' + line2
 } finally {
   await browser.close()
   server.httpServer.close()
