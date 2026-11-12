@@ -12,7 +12,12 @@ compose() { docker compose -f autopilot/compose.yaml "$@"; }
 
 rm -f STOP
 git fetch -q origin
-git checkout -q autopilot 2> /dev/null || git checkout -q -b autopilot origin/main
+# `git switch`, not checkout: `checkout autopilot` matches the autopilot/ folder as a path.
+git switch -q autopilot 2> /dev/null || git switch -q -c autopilot origin/main
+if [ "$(git branch --show-current)" != autopilot ]; then
+  notify 4 warning "Glance autopilot didn't start" "Couldn't switch to the autopilot branch."
+  exit 1
+fi
 if ! git merge -q --no-edit origin/main; then  # picks up TASKS.md edits made on main
   git merge --abort
   notify 4 warning "Glance autopilot didn't start" "Merging main into the autopilot branch conflicted. Merge it on the laptop, push, start again."
