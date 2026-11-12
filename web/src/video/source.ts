@@ -118,6 +118,7 @@ export class SourceManager {
     const o = this.options.find((x) => x.id === id)
     if (!o || o === this.current) return
     const my = ++this.token
+    this.camFailed = false
     this.current = o
     const v = this.video
     if (o.kind === 'clip') {
@@ -127,16 +128,17 @@ export class SourceManager {
       v.src = '/clips/' + encodeURIComponent(this.clips.find((c) => c.id === id)!.file)
       await v.play().catch(() => {})
     } else if (o.kind === 'webcam') {
-      v.removeAttribute('src')
+      v.pause(); v.removeAttribute('src'); v.onerror = null; v.load() // stop the hidden clip
       await this.ensureOwn(my)
     } else { this.stopOwn(); this.synth ??= synthetic() }
     if (my === this.token) this.onChange(o)
   }
   private token = 0
   private opening = false
+  private camFailed = false // latch: no getUserMedia retry every frame after a failure; cleared by the next select()
   /** Opens our own camera only when the tracker's is unavailable; a stale call (token changed) closes what it opened. */
   private async ensureOwn(my: number): Promise<void> {
-    if (this.webcam() || this.own || this.opening) return
+    if (this.webcam() || this.own || this.opening || this.camFailed) return
     this.opening = true
     try {
       const s = await navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720, facingMode: 'user' }, audio: false })
@@ -144,7 +146,7 @@ export class SourceManager {
       this.own = s
       this.video.srcObject = s
       await this.video.play().catch(() => {})
-    } catch { /* camera missing/denied: the frame stays black */ } finally { this.opening = false }
+    } catch { this.camFailed = true /* camera missing/denied: the frame stays black */ } finally { this.opening = false }
   }
   private stopOwn() { this.own?.getTracks().forEach((t) => t.stop()); this.own = null }
 
