@@ -42,3 +42,7 @@ Running log of what's built. Newest stage at the bottom. Details/numbers live in
 - **Camera view (11 Nov):** `ui/camview.ts` = picture-in-picture of the webcam with the 478 face landmarks, eye corners and iris circles drawn; key `V` toggles, opens automatically with `M`. `EyeTracker.landmarks` holds the raw points.
 - **Startup order:** `#view` is appended only after key/mouse handlers exist (a real clip loads slower than the synthetic source, early key presses were lost). Fake-webcam smoke uses `call-plants` (close-up face; `call-desk`'s face is too small to detect at 640×360).
 - **Vertical accuracy (12 Nov):** Aarav saw the ring sit below his real gaze. Added eyelid opening (`lid`, 5th regression feature), blink hold (`lid < 0.12` keeps the last point), and key `X` = recenter (look at the video centre, press X; `C` clears it). Not yet confirmed by him.
+
+## P2 — visible effect
+- **Video source ✅ (12 Nov):** `video/source.ts` `SourceManager` draws the current source letterboxed into `frame` (1280×720). Options: clips from `/clips/clips.json`, then `webcam`, and synthetic only with `?synthetic` or when no clips are served. Keys 1–9 and `#picker` select; pure helpers are in `video/layout.ts`. `app.ts` draws `src.frame`, not `src.canvas`.
+- The webcam source shares the tracker's `<video>`; it opens its own camera only if the tracker is down, and a failure is latched until the next select.
