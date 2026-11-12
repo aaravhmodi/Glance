@@ -47,7 +47,7 @@ in < 2 min, `--all` = full matrix + charts + tables). Raw output `results/raw/`,
   real network, and results.md must say so.
 - **Gaze traces:** seeded fixations (200–600 ms) + saccades, biased towards faces/centre; JSON
   `{t, x, y, sigma}` in normalised coordinates, same format the app exports (T10). Labelled synthetic.
-- **Tracker-error run:** fovea centred on trace + 2° Gaussian noise + 100 ms lag; metrics at the true gaze.
+- **Tracker-error run:** fovea centred on trace + 2°, 4° and 6° Gaussian noise (webcam error per docs/research.md §4) + 100 ms lag; metrics at the true gaze.
 - **Sanity gates (fail the run, not just warn):** baseline vs itself = 0 % saved; radius ≥ frame diagonal =
   baseline bitrate and quality within noise; frame counts equal before any metric; achieved kbps within
   ±15 % of the cap or the condition is flagged.
