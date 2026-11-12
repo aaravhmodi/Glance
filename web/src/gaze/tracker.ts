@@ -5,7 +5,7 @@ import type { GazeSample, GazeSource } from './types'
 
 import { W, H } from '../video/source'
 
-const BLINK_LID = 0.12 // eyelid opening (in eye widths) below this counts as a blink
+const BLINK_LID = 0.06 // eyelid opening (in eye widths) below this counts as a blink
 export type Mapper = (f: GazeFeatures) => { x: number; y: number; sigma: number } | null
 
 /**
@@ -89,7 +89,12 @@ export class EyeTracker implements GazeSource {
         this.lastFeatures = f
         this.latestAt = now
         const m = f.lid < BLINK_LID ? null : this.mapper?.(f)
-        if (m) { this.raw = { x: m.x, y: m.y }; m.x += this.offset.x; m.y += this.offset.y }
+        if (m) {
+          this.raw = { x: m.x, y: m.y }
+          // keep the point on the video even after the recenter offset
+          m.x = Math.max(0, Math.min(W, m.x + this.offset.x))
+          m.y = Math.max(0, Math.min(H, m.y + this.offset.y))
+        }
         if (!m && this.mapper && this.sample) return void requestAnimationFrame(this.loop) // blink: hold the last gaze point
         const p = m ? this.filter.update(m.x, m.y, now) : null
         this.sample = m && p ? { x: p.x, y: p.y, sigma: m.sigma, timestamp: now, confidence: 1 } : null

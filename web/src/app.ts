@@ -83,7 +83,8 @@ export async function startApp() {
     }
     g.strokeStyle = 'rgba(255,60,60,.9)'
     g.beginPath()
-    g.arc(gaze.x, gaze.y, 8, 0, Math.PI * 2)
+    g.lineWidth = 3
+    g.arc(Math.max(40, Math.min(W - 40, gaze.x)), Math.max(40, Math.min(H - 40, gaze.y)), 40, 0, Math.PI * 2) // inset so it stays visible at the edges
     g.stroke()
     if (tracker && !cam.canvas.hidden) cam.draw(tracker)
     frames++
