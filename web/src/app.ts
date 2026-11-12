@@ -6,6 +6,8 @@ import { createCamView } from './ui/camview'
 import { runCalibration } from './gaze/calib'
 import { Foveator } from './video/foveate'
 import { foveaRadiusPx } from './video/fovea'
+import { DualEncoder, vp9QuantizerSupported } from './video/encoders'
+import { percentSaved } from './metrics/stats'
 import { geometryFromUrl, runValidation, type ValidationResult } from './gaze/validate'
 
 // App shell: video source drawn to a canvas. Gaze comes from GazeSwitch (mouse now, eyes once the tracker lands; key M toggles).
@@ -47,6 +49,7 @@ export async function startApp() {
     }
     if (e.key.toLowerCase() === 'v') { cam.canvas.hidden = !cam.canvas.hidden; void startTracker() } // show what the vision sees
     if (e.key.toLowerCase() === 'f') foveate = !foveate
+    if (e.key.toLowerCase() === 'e') void toggleEncode()
     if (e.key.toLowerCase() === 'c') void calibrate()
     if (e.key.toLowerCase() === 't') void validate()
     if (e.key === 'Escape') { calibAbort?.abort(); validAbort?.abort() }
@@ -92,6 +95,23 @@ export async function startApp() {
     } finally { validAbort = null }
   }
   ;(window as unknown as { glanceValidStatus: () => string }).glanceValidStatus = () => validMsg
+  // Key E: run the two VP9 encoders (normal vs Glance) on the live frames and show kbps / % saved.
+  let enc: DualEncoder | null = null
+  let encMsg = 'off'
+  let lastPushMs = -Infinity
+  const encT0 = performance.now() // chunk timestamps are relative to this, so stats seconds start at 0
+  const toggleEncode = async () => {
+    if (enc) { const e = enc; enc = null; e.close(); encMsg = 'off'; return }
+    if (!(await vp9QuantizerSupported(W, H))) { encMsg = 'VP9 quantizer mode not supported here'; return }
+    if (enc) return // a second E press while the support check was pending
+    enc = new DualEncoder(W, H, 30)
+    ;(window as unknown as { glanceEnc: DualEncoder }).glanceEnc = enc
+  }
+  const encText = (nowMs: number) => {
+    if (!enc) return encMsg
+    const ns = enc.normal.stats, gs = enc.glance.stats, t = (nowMs - encT0) / 1000
+    return `normal ${ns.lastSecondKbps(t).toFixed(0)} kbps vs glance ${gs.lastSecondKbps(t).toFixed(0)} kbps · ${percentSaved(ns.total, gs.total).toFixed(0)}% saved${enc.error ? ' ERR ' + enc.error : ''}`
+  }
   // Webcam + Face Landmarker start the first time eyes are requested (triggers the camera permission prompt).
   let tracker: EyeTracker | null = null
   let trackerErr = ''
@@ -117,6 +137,13 @@ export async function startApp() {
       gaze.y = r.sample.y
       gaze.sigma = r.sample.sigma
     }
+    if (enc && performance.now() - lastPushMs >= 1000 / 30 - 2) { // ~30 fps frame pair into both encoders
+      lastPushMs = performance.now()
+      fov.render(src.frame, gaze.x, gaze.y, foveaRadiusPx(geom, gaze.sigma))
+      const tsUs = Math.round((lastPushMs - encT0) * 1000)
+      const gf = fov.frame(tsUs)
+      try { enc.push(new VideoFrame(src.frame, { timestamp: tsUs }), gf) } catch (e) { gf.close(); throw e }
+    }
     if (foveate) { fov.render(src.frame, gaze.x, gaze.y, foveaRadiusPx(geom, gaze.sigma)); g.drawImage(fov.canvas, 0, 0, W, H) }
     else g.drawImage(src.frame, 0, 0, W, H)
     g.strokeStyle = 'rgba(255,60,60,.9)'
@@ -128,7 +155,7 @@ export async function startApp() {
     frames++
     const why = r.fallback ? (tracker?.latest ? ' (fallback: face found, not calibrated yet)' : ' (fallback: no face)') : ''
     const camTxt = trackerErr ? ` · tracker ERROR ${trackerErr}` : tracker ? ` · tracker ${tracker.delegate || 'loading'} face ${tracker.latest ? 'yes' : 'no'}` : ''
-    status.textContent = `source: ${src.kind} ${src.current?.id ?? ''} (keys 1-${src.options.length}) · gaze[${r.source}${why}] ${Math.round(gaze.x)},${Math.round(gaze.y)} · M toggles mouse/eyes · C calibrates: ${calibMsg} · T validates: ${validMsg} · F foveate ${foveate ? 'ON' : 'off'} · V camera view${camTxt} · frames ${frames}`
+    status.textContent = `source: ${src.kind} ${src.current?.id ?? ''} (keys 1-${src.options.length}) · gaze[${r.source}${why}] ${Math.round(gaze.x)},${Math.round(gaze.y)} · M toggles mouse/eyes · C calibrates: ${calibMsg} · T validates: ${validMsg} · F foveate ${foveate ? 'ON' : 'off'} · E encode: ${encText(performance.now())} · V camera view${camTxt} · frames ${frames}`
     requestAnimationFrame(loop)
   }
   requestAnimationFrame(loop)

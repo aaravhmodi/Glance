@@ -93,6 +93,22 @@ try {
   const lineF = `${okFov ? 'OK  ' : 'FAIL'} foveate: radius ${Math.round(fv.r)}px; fovea diff vs source ${fv.near.toFixed(2)}; far detail ${fv.farOut.toFixed(2)} vs source ${fv.farSrc.toFixed(2)}; VideoFrame ${JSON.stringify(fv.vf)}`
   console.log(lineF)
   text += '\n' + lineF
+  // Encoders: key E runs two VP9 quantizer-mode encoders (same QP) for ~5 s on the real clip; Glance must be smaller.
+  await app.mouse.move(400, 300)
+  await app.keyboard.press('e')
+  await app.waitForFunction(() => !!window.glanceEnc, null, { timeout: 10_000 })
+  await app.waitForTimeout(5_000)
+  const en = await app.evaluate(async () => {
+    const e = window.glanceEnc
+    await e.flush()
+    const n = e.normal.stats, g = e.glance.stats
+    return { nb: n.total, gb: g.total, nk: n.chunks, gk: g.chunks, nkbps: n.averageKbps(), gkbps: g.averageKbps(), err: e.error, enc: e.encoded, dropped: e.dropped, cfg: e.glance.config, same: JSON.stringify(e.normal.config) === JSON.stringify(e.glance.config) && e.normal.qp === e.glance.qp }
+  })
+  const okEnc = !en.err && en.same && en.enc >= 8 && Math.abs(en.nk - en.gk) <= 2 &&en.nb > 0 && en.gb > 0 && en.gb < en.nb * 0.95 && en.cfg.bitrateMode === 'quantizer'
+  const lineE = `${okEnc ? 'OK  ' : 'FAIL'} encoders: ${en.enc} frame pairs (${en.dropped} dropped), normal ${en.nkbps.toFixed(0)} kbps (${en.nb} B) vs glance ${en.gkbps.toFixed(0)} kbps (${en.gb} B) = ${(100 * (1 - en.gb / en.nb)).toFixed(1)}% saved; ${en.err}`
+  console.log(lineE)
+  text += '\n' + lineE
+  await app.keyboard.press('e')
   // Key M: eyes preferred but no tracker yet -> automatic mouse fallback; M again -> plain mouse.
   await app.keyboard.press('m')
   await app.waitForFunction(() => /fallback: no face/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 5_000 })
