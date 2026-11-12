@@ -5,8 +5,9 @@
 # and only to the `autopilot` branch. See autopilot/README.md.
 set -u
 cd "$(dirname "$0")/.."
-MAX_RUNS=${MAX_RUNS:-15}
-TOOLS='Read,Edit,Write,Glob,Grep,Bash(npm ci),Bash(npm run build),Bash(npm run smoke),Bash(git status:*),Bash(git diff:*),Bash(git log:*),Bash(git add:*),Bash(git commit:*),Bash(ffmpeg:*)'
+MAX_RUNS=${MAX_RUNS:-20}
+# Research (web search/fetch) and subagents per docs/AGENT_TEAM.md; no push, no package installs.
+TOOLS='Read,Edit,Write,Glob,Grep,TodoWrite,WebSearch,WebFetch,Agent,Task,Bash(npm ci),Bash(npm test),Bash(npm run:*),Bash(git status:*),Bash(git diff:*),Bash(git log:*),Bash(git show:*),Bash(git add:*),Bash(git commit:*),Bash(git worktree:*),Bash(ffmpeg:*),Bash(ffprobe:*)'
 notify() { "$HOME/homelab/alerts/notify.sh" "$@" || true; }
 compose() { docker compose -f autopilot/compose.yaml "$@"; }
 
@@ -18,6 +19,7 @@ if [ "$(git branch --show-current)" != autopilot ]; then
   notify 4 warning "Glance autopilot didn't start" "Couldn't switch to the autopilot branch."
   exit 1
 fi
+git merge -q --ff-only origin/autopilot 2> /dev/null  # edits pushed to the branch from the laptop
 if ! git merge -q --no-edit origin/main; then  # picks up TASKS.md edits made on main
   git merge --abort
   notify 4 warning "Glance autopilot didn't start" "Merging main into the autopilot branch conflicted. Merge it on the laptop, push, start again."

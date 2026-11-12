@@ -1,6 +1,6 @@
 # Autopilot
 
-Keeps building Glance on the home server while you're offline. Each run, Claude Code (in a container, with a tool allowlist: edit repo, build, smoke test, commit) does the first unchecked item in `TASKS.md`. Then `run.sh` pushes to the `autopilot` branch and sends a push to your phone. Stops on `ALL DONE`, a run with no commit, `MAX_RUNS` (15), or a `STOP` file.
+Keeps building Glance on the home server while you're offline. Each run, Claude Code (in a container, with a tool allowlist: edit repo, build, smoke test, commit) does the first unchecked item in `TASKS.md`. Then `run.sh` pushes to the `autopilot` branch and sends a push to your phone. Stops on `ALL DONE`, a run with no commit, `MAX_RUNS` (20), or a `STOP` file.
 
 **One-time setup** (server, already done except the token):
 ```

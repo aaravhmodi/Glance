@@ -25,3 +25,8 @@ Running log of what's built. Newest stage at the bottom. Details/numbers live in
 
 ## Autopilot notes
 - **Smoke test:** `cd web && npm run smoke` = build + headless real Chrome (Playwright, fake webcam) on `?smoke`; fails on any `FAIL` line. Extend it per feature.
+
+## Course correction (11 Nov)
+- **Product focus:** real webcam eye tracking (P1) → visible foveation on real video with split screen + reveal (P2) → metrics/bad-network (P3). Source of truth: `docs/COURSE_CORRECTION.md`; agent process: `docs/AGENT_TEAM.md` (researcher → reviewer → fact-check subagents).
+- **Clips:** 3 real clips from Tears of Steel (CC BY 3.0) in `web/public/clips/` (`talking-heads`, `canal-street`, `bridge`; 1280×720 letterboxed H.264, ~25 MB), manifest `clips.json`, credits `CREDITS.md`.
+- **Autopilot:** allowlist now adds WebSearch/WebFetch/subagents; queue rewritten P1→P3 (16 tasks), MAX_RUNS 20.
