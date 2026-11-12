@@ -127,6 +127,11 @@ try {
     })
     const okS =!sp.ne && !sp.ge && !sp.enc && sp.l > 8 && sp.r > 8 && /S split ON/.test(sp.status) && /normal \d+ kbps vs glance \d+ kbps/.test(sp.status)
     lineS = `${okS ? 'OK  ' : 'FAIL'} split screen: decoded normal ${sp.nd} / glance ${sp.gd} frames, panel luma L ${sp.l.toFixed(0)} R ${sp.r.toFixed(0)}; errors '${sp.ne}${sp.ge}${sp.enc}'`
+    // E while S started the encoders must switch both off cleanly (regression: null.close() crash)
+    await app.keyboard.press('e')
+    await app.waitForFunction(() => /S split off/.test(document.querySelector('#status')?.textContent ?? '') && /E encode: off/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 5_000 })
+    await app.keyboard.press('s')
+    await app.waitForFunction(() => /S split ON/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 10_000 })
     await app.keyboard.press('s')
     await app.waitForFunction(() => /S split off/.test(document.querySelector('#status')?.textContent ?? '') && /E encode: off/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 5_000 })
   } catch (e) {

@@ -104,7 +104,11 @@ export async function startApp() {
   let lastPushMs = -Infinity
   const encT0 = performance.now() // chunk timestamps are relative to this, so stats seconds start at 0
   const toggleEncode = async () => {
-    if (enc) { stopSplit(); const e = enc; enc = null; e.close(); encMsg = 'off'; return }
+    if (enc) {
+      stopSplit() // may already have closed and cleared enc (when S started the encoders)
+      if (enc) { const e: DualEncoder = enc; enc = null; e.close(); encMsg = 'off' }
+      return
+    }
     if (!(await vp9QuantizerSupported(W, H))) { encMsg = 'VP9 quantizer mode not supported here'; return }
     if (enc) return // a second E press while the support check was pending
     enc = new DualEncoder(W, H, 30)
