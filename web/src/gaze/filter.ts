@@ -44,6 +44,7 @@ export class GazeFilter {
   /** Filter one sample (t in ms). Returns the smoothed point. */
   update(x: number, y: number, t: number): { x: number; y: number } {
     this.snapped = false
+    if (!Number.isFinite(x) || !Number.isFinite(y) || !Number.isFinite(t)) return { x: this.x, y: this.y }
     if (!this.init || t - this.t > this.o.maxGapMs) return this.start(x, y, t)
     const dt = (t - this.t) / 1000
     if (!(dt > 0)) return { x: this.x, y: this.y } // duplicate / out-of-order timestamp

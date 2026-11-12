@@ -12,6 +12,14 @@ test('first sample passes through; duplicate timestamps do not break it', () => 
   assert.deepEqual(f.update(900, 900, 0), { x: 100, y: 200 })
 })
 
+test('NaN input never poisons the state', () => {
+  const f = new GazeFilter()
+  f.update(100, 200, 0)
+  f.update(NaN, 5, 33)
+  const p = f.update(110, 210, 66)
+  assert.ok(Number.isFinite(p.x) && Number.isFinite(p.y))
+})
+
 test('fixation: noise is reduced substantially', () => {
   const f = new GazeFilter()
   let raw = 0, out = 0, n = 0
