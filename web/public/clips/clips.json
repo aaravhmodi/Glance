@@ -1,5 +1,5 @@
 [
-  { "id": "talking-heads", "file": "talking-heads.mp4", "title": "Talking heads (video-call proxy)", "seconds": 25 },
-  { "id": "canal-street",  "file": "canal-street.mp4",  "title": "Canal street (fine detail, motion)", "seconds": 24 },
-  { "id": "bridge",        "file": "bridge.mp4",        "title": "Bridge dialogue (two people, foliage)", "seconds": 17 }
+  { "id": "call-desk",    "file": "call-desk.mp4",    "title": "Video call: woman at a desk", "seconds": 15 },
+  { "id": "call-plants",  "file": "call-plants.mp4",  "title": "Video call: man with earphones", "seconds": 10 },
+  { "id": "call-teacher", "file": "call-teacher.mp4", "title": "Video call: online class", "seconds": 10 }
 ]

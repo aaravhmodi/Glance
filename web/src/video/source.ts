@@ -1,4 +1,4 @@
-// Video source: a clip from /clips/clip.mp4 if one is served, else a synthetic 1280x720 animated canvas.
+// Video source: the real clip /clips/call-desk.mp4 if one is served, else a synthetic 1280x720 animated canvas.
 export const W = 1280
 export const H = 720
 
@@ -65,11 +65,11 @@ function synthetic(): Source {
 
 async function clip(): Promise<Source | null> {
   try {
-    const r = await fetch('/clips/clip.mp4', { method: 'HEAD' })
+    const r = await fetch('/clips/call-desk.mp4', { method: 'HEAD' })
     if (!r.ok || !(r.headers.get('content-type') ?? '').startsWith('video/')) return null
   } catch { return null }
   const v = document.createElement('video')
-  v.src = '/clips/clip.mp4'
+  v.src = '/clips/call-desk.mp4'
   v.loop = true
   v.muted = true
   await v.play().catch(() => {})

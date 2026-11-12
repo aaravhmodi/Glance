@@ -28,11 +28,13 @@ Running log of what's built. Newest stage at the bottom. Details/numbers live in
 
 ## Course correction (11 Nov)
 - **Product focus:** real webcam eye tracking (P1) → visible foveation on real video with split screen + reveal (P2) → metrics/bad-network (P3). Source of truth: `docs/COURSE_CORRECTION.md`; agent process: `docs/AGENT_TEAM.md` (researcher → reviewer → fact-check subagents).
-- **Clips:** 3 real clips from Tears of Steel (CC BY 3.0) in `web/public/clips/` (`talking-heads`, `canal-street`, `bridge`; 1280×720 letterboxed H.264, ~25 MB), manifest `clips.json`, credits `CREDITS.md`.
+- **Clips:** 3 single-shot video-call clips from Mixkit (Mixkit free license) in `web/public/clips/` (`call-desk`, `call-plants`, `call-teacher`; 720p H.264, ~6 MB), manifest `clips.json`, credits `CREDITS.md`. (Replaced the Tears of Steel movie scenes: Aarav wants video-call footage.)
 - **Autopilot:** allowlist now adds WebSearch/WebFetch/subagents; queue rewritten P1→P3 (16 tasks), MAX_RUNS 20.
 
 ## P1 — real eye tracking
 - **Gaze plumbing ✅:** `web/src/gaze/{types,mouse,switch}.ts`. `GazeSwitch.read(now)` returns `{source, fallback, sample}`; key `M` toggles mouse/eyes; in eyes mode it holds the last good sample 500 ms, then falls back to the mouse (status line shows `gaze[mouse (fallback: no face)]`). The tracker just implements `GazeSource` (`name:'eyes'`, `read()`) and calls `gazeSwitch.setEyes(...)`.
 - **Tracker ✅:** `gaze/features.ts` (pure: iris offsets in eye widths per eye, head pose from the matrix, scale; `featureVector()` = mean iris u,v + yaw, pitch) and `gaze/tracker.ts` (`EyeTracker`: getUserMedia → FaceLandmarker GPU→CPU fallback; `latest` features, `mapper` set by calibration makes `read()` return a sample). Started lazily on first `M` in `app.ts`; exposed as `window.glanceTracker`.
-- **Smoke:** cuts a y4m from talking-heads with ffmpeg and runs Chrome with `--use-file-for-fake-video-capture`; a real face is detected (~11 faces in a few s).
+- **Smoke:** cuts a y4m from call-desk with ffmpeg and runs Chrome with `--use-file-for-fake-video-capture`; a real face is detected (~11 faces in a few s).
 - **Tests:** `npm test` = `node --test tests/*.test.ts` (Node 24 strips types; import with `.ts` extensions); `npm run smoke` now runs build + tests + Chrome.
+- **Camera view (11 Nov):** `ui/camview.ts` = picture-in-picture of the webcam with the 478 face landmarks, eye corners and iris circles drawn; key `V` toggles, opens automatically with `M`. `EyeTracker.landmarks` holds the raw points.
+- **Startup order:** `#view` is appended only after key/mouse handlers exist (a real clip loads slower than the synthetic source, early key presses were lost). Fake-webcam smoke uses `call-plants` (close-up face; `call-desk`'s face is too small to detect at 640×360).

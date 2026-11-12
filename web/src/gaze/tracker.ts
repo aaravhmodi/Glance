@@ -15,6 +15,8 @@ export class EyeTracker implements GazeSource {
   /** Last features seen, kept even if the face is lost afterwards (for diagnostics). */
   lastFeatures: GazeFeatures | null = null
   latestAt = 0
+  /** Raw landmarks of the current face (normalised 0..1), for the camera overlay. */
+  landmarks: { x: number; y: number }[] | null = null
   frames = 0
   facesSeen = 0
   delegate = ''
@@ -57,6 +59,7 @@ export class EyeTracker implements GazeSource {
       try {
         const res = this.lm.detectForVideo(v, now)
         this.frames++
+        this.landmarks = res.faceLandmarks[0] ?? null
         f = res.faceLandmarks[0]
           ? extractFeatures(res.faceLandmarks[0], res.facialTransformationMatrixes?.[0]?.data ?? null, v.videoWidth / v.videoHeight)
           : null

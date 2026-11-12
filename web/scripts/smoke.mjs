@@ -41,10 +41,10 @@ try {
   const line2 = 'OK   gaze switch: M toggles, falls back to mouse without a face'
   console.log(line2)
   text += '\n' + line2
-  // Real face end to end: Chrome's fake webcam plays a y4m cut from the talking-heads clip.
+  // Real face end to end: Chrome's fake webcam plays a y4m cut from the call-plants clip (close-up face).
   const dir = mkdtempSync(join(tmpdir(), 'glance-fake-'))
   const y4m = join(dir, 'face.y4m')
-  execFileSync('ffmpeg', ['-v', 'error', '-y', '-ss', '3', '-t', '8', '-i', 'public/clips/talking-heads.mp4', '-vf', 'scale=640:360,fps=15', '-pix_fmt', 'yuv420p', y4m])
+  execFileSync('ffmpeg', ['-v', 'error', '-y', '-ss', '0', '-t', '8', '-i', 'public/clips/call-plants.mp4', '-vf', 'scale=640:360,fps=15', '-pix_fmt', 'yuv420p', y4m])
   const camBrowser = await chromium.launch({
     channel: 'chrome',
     args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream', `--use-file-for-fake-video-capture=${y4m}`, '--enable-unsafe-swiftshader'],

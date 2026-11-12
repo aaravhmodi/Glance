@@ -1,12 +1,11 @@
 # Clip credits
 
-All clips are excerpts of **Tears of Steel** (2012), © Blender Foundation | mango.blender.org,
-licensed **CC BY 3.0** (https://creativecommons.org/licenses/by/3.0/). Changes: trimmed, audio
-removed, letterboxed from 1280×534 to 1280×720, re-encoded H.264 (CRF 18).
-Source: https://download.blender.org/demo/movies/ToS/tears_of_steel_720p.mov (via the ftp.nluug.nl mirror).
+Single-shot video-call clips from Mixkit (https://mixkit.co), used under the Mixkit Stock Video
+Free License (https://mixkit.co/license/#videoFree). Changes: audio removed, scaled 1080p → 720p,
+re-encoded H.264 (CRF 18). Verify the license terms before any use beyond the hackathon demo.
 
-| File | Source time | Content |
-|------|-------------|---------|
-| talking-heads.mp4 | 3:42–4:07 | three-person close-up dialogue (short VFX cutaway) |
-| canal-street.mp4 | 4:20–4:44 | Amsterdam street, walking figure |
-| bridge.mp4 | 0:24–0:41 | two people on a canal bridge |
+| File | Mixkit page |
+|------|-------------|
+| call-desk.mp4 | https://mixkit.co/free-stock-video/therapist-in-his-office-talking-to-the-camera-4834/ |
+| call-plants.mp4 | https://mixkit.co/free-stock-video/guy-facing-in-the-middle-of-a-video-call-on-10457/ |
+| call-teacher.mp4 | https://mixkit.co/free-stock-video/teacher-in-online-class-10443/ |
