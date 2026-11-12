@@ -1,0 +1,16 @@
+import { preview } from 'vite'
+import { chromium } from 'playwright'
+const server = await preview({ preview: { port: 4175, strictPort: true }, logLevel: 'error' })
+const b = await chromium.launch({ channel: 'chrome', args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream', '--enable-unsafe-swiftshader'] })
+const p = await b.newPage()
+p.on('pageerror', (e) => console.log('ERR', e.message))
+await p.goto('http://localhost:4175/')
+await p.waitForSelector('#view')
+await p.waitForTimeout(3000)
+await p.keyboard.press('s')
+await p.waitForFunction(() => window.glanceSplit && window.glanceSplit.n.decoded >= 2, null, { timeout: 30000 })
+await p.waitForTimeout(3000)
+console.log(await p.evaluate(() => { const s = window.glanceSplit; const f = s.n.latest; return { f: f && [f.displayWidth, f.displayHeight, f.format, f.timestamp], d: s.n.decoded } }))
+await p.screenshot({ path: '/tmp/split.png' })
+await b.close()
+server.httpServer.close()

@@ -29,10 +29,140 @@ try {
   await app.mouse.move(400, 300)
   await app.waitForFunction(() => /frames [1-9]\d/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 20_000 })
   const status = (await app.textContent('#status')) ?? ''
-  const ok = /source: (synthetic|clip)/.test(status) && /gaze\[mouse\] /.test(status) && !/gaze\[mouse\] 640,360/.test(status)
+  const ok = /source: clip call-desk/.test(status) && /gaze\[mouse\] /.test(status) && !/gaze\[mouse\] 640,360/.test(status)
   const line = `${ok ? 'OK  ' : 'FAIL'} app shell: ${status}`
   console.log(line)
   text += '\n' + line
+  // Real video source: picker lists 3 clips + webcam; keys 1-3 switch clips and the frame is not black; key 4 = webcam.
+  const lumaOf = () => app.evaluate(() => {
+    const c = document.querySelector('#view')
+    const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data
+    let s = 0, n = 0
+    for (let i = 0; i < d.length; i += 4 * 97) { s += d[i] + d[i + 1] + d[i + 2]; n += 3 }
+    return s / n
+  })
+  const opts = await app.$$eval('#picker option', (o) => o.map((x) => x.value))
+  const picks = []
+  for (const [key, id] of [['2', 'call-plants'], ['3', 'call-teacher'], ['1', 'call-desk']]) {
+    await app.keyboard.press(key)
+    await app.waitForFunction((i) => document.querySelector('#status')?.textContent?.includes('clip ' + i), id, { timeout: 5_000 })
+    await app.waitForFunction(() => { // a clip needs time to decode its first frame
+      const c = document.querySelector('#view')
+      const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data
+      let s = 0
+      for (let i = 0; i < d.length; i += 388) s += d[i]
+      return s / (d.length / 388) > 8
+    }, null, { timeout: 8_000 }).catch(() => {})
+    picks.push(`${id}:${Math.round(await lumaOf())}`)
+  }
+  await app.keyboard.press('4')
+  await app.waitForFunction(() => /source: webcam webcam/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 5_000 })
+  await app.keyboard.press('1')
+  const lumas = picks.map((p) => Number(p.split(':')[1]))
+  const okSrc = opts.join() === 'call-desk,call-plants,call-teacher,webcam' && lumas.every((l) => l > 8)
+  const lineSrc = `${okSrc ? 'OK  ' : 'FAIL'} video source: picker ${opts.join('/')}; keys 1-3 switch clips (mean luma ${picks.join(' ')}); key 4 webcam`
+  console.log(lineSrc)
+  text += '\n' + lineSrc
+  // Foveation: sharp (== source, same orientation) at the gaze point, much less detail far away, VideoFrame works.
+  await app.waitForFunction(() => /clip call-desk/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 5_000 })
+  await app.waitForFunction(() => { // clip 1 was just re-selected: wait for a real frame
+    const c = document.querySelector('#view')
+    const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data
+    let s = 0
+    for (let i = 0; i < d.length; i += 388) s += d[i]
+    return s / (d.length / 388) > 8
+  }, null, { timeout: 8_000 })
+  const fv = await app.evaluate(async () => {
+    const { fov, geom, src } = window.glanceFoveate
+    const W = 1280, H = 720
+    const gx = 300, gy = 200
+    const r = window.glanceFoveate.radius(0)
+    fov.render(src.frame, gx, gy, r)
+    const grab = (c) => { const k = document.createElement('canvas'); k.width = W; k.height = H; const g = k.getContext('2d', { willReadFrequently: true }); g.drawImage(c, 0, 0, W, H); return g }
+    const a = grab(fov.canvas), b = grab(src.frame)
+    const diff = (x, y, w, h) => { const p = a.getImageData(x, y, w, h).data, q = b.getImageData(x, y, w, h).data; let s = 0; for (let i = 0; i < p.length; i += 4) s += Math.abs(p[i] - q[i]); return s / (p.length / 4) }
+    const detail = (g, x, y, w, h) => { const p = g.getImageData(x, y, w, h).data; let s = 0; for (let i = 4; i < p.length; i += 4) s += Math.abs(p[i] - p[i - 4]); return s / (p.length / 4) }
+    const near = diff(gx - 40, gy - 40, 80, 80) // inside the fovea: must equal the source
+    const farOut = detail(a, 1100, 560, 160, 120), farSrc = detail(b, 1100, 560, 160, 120)
+    const frame = fov.frame(1000)
+    const vf = { w: frame.displayWidth, h: frame.displayHeight, ts: frame.timestamp }
+    frame.close()
+    return { r, near, farOut, farSrc, vf, bigger: window.glanceFoveate.radius(100) > r }
+  })
+  const okFov = fv.r > 150 && fv.near < 3 && fv.farOut < fv.farSrc * 0.6 && fv.vf.w === 1280 && fv.vf.h === 720 && fv.vf.ts === 1000 && fv.bigger
+  const lineF = `${okFov ? 'OK  ' : 'FAIL'} foveate: radius ${Math.round(fv.r)}px; fovea diff vs source ${fv.near.toFixed(2)}; far detail ${fv.farOut.toFixed(2)} vs source ${fv.farSrc.toFixed(2)}; VideoFrame ${JSON.stringify(fv.vf)}`
+  console.log(lineF)
+  text += '\n' + lineF
+  // Reveal: key R tints the quality map on the view (red near gaze, blue far); off by default; toggles back cleanly.
+  let lineR
+  try {
+    const px = () => app.evaluate(() => {
+      const g = document.querySelector('#view').getContext('2d', { willReadFrequently: true })
+      const d = (x, y) => Array.from(g.getImageData(x, y, 1, 1).data)
+      return { near: d(400, 300), far: d(1200, 680), status: document.querySelector('#status').textContent }
+    })
+    await app.mouse.move(400, 300)
+    await app.waitForTimeout(600)
+    const off = await px()
+    await app.keyboard.press('r')
+    await app.waitForFunction(() => /R reveal ON/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 5_000 })
+    await app.waitForTimeout(600)
+    const on = await px()
+    await app.keyboard.press('r')
+    await app.waitForFunction(() => /R reveal off/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 5_000 })
+    const okR = /R reveal off/.test(off.status) && off.far[0] - on.far[0] > 10 && on.near[0] - off.near[0] > 10 // tint: far loses red (blue tint), near gains red; same clip frame, so the difference is the overlay
+    lineR = `${okR ? 'OK  ' : 'FAIL'} reveal: far red ${off.far[0]} -> ${on.far[0]}, near red ${off.near[0]} -> ${on.near[0]}`
+  } catch (e) {
+    lineR = `FAIL reveal: ${String(e).slice(0, 150)}`
+  }
+  console.log(lineR)
+  text += '\n' + lineR
+  // Encoders: key E runs two VP9 quantizer-mode encoders (same QP) for ~5 s on the real clip; Glance must be smaller.
+  await app.mouse.move(400, 300)
+  await app.keyboard.press('e')
+  await app.waitForFunction(() => !!window.glanceEnc, null, { timeout: 10_000 })
+  await app.waitForTimeout(5_000)
+  const en = await app.evaluate(async () => {
+    const e = window.glanceEnc
+    await e.flush()
+    const n = e.normal.stats, g = e.glance.stats
+    return { nb: n.total, gb: g.total, nk: n.chunks, gk: g.chunks, nkbps: n.averageKbps(), gkbps: g.averageKbps(), err: e.error, enc: e.encoded, dropped: e.dropped, cfg: e.glance.config, same: JSON.stringify(e.normal.config) === JSON.stringify(e.glance.config) && e.normal.qp === e.glance.qp }
+  })
+  const okEnc = !en.err && en.same && en.enc >= 8 && Math.abs(en.nk - en.gk) <= 2 &&en.nb > 0 && en.gb > 0 && en.gb < en.nb * 0.95 && en.cfg.bitrateMode === 'quantizer'
+  const lineE = `${okEnc ? 'OK  ' : 'FAIL'} encoders: ${en.enc} frame pairs (${en.dropped} dropped), normal ${en.nkbps.toFixed(0)} kbps (${en.nb} B) vs glance ${en.gkbps.toFixed(0)} kbps (${en.gb} B) = ${(100 * (1 - en.gb / en.nb)).toFixed(1)}% saved; ${en.err}`
+  console.log(lineE)
+  text += '\n' + lineE
+  await app.keyboard.press('e')
+  // Split screen: key S starts the encoders, decodes both streams, draws them side by side with live kbps + % saved.
+  await app.keyboard.press('s')
+  let lineS
+  try {
+    await app.waitForFunction(() => window.glanceSplit && window.glanceSplit.n.decoded >= 2 && window.glanceSplit.g.decoded >= 2, null, { timeout: 30_000 })
+    await app.waitForFunction(() => { // both panels must show a decoded picture (headless draws only ~2 fps)
+      const g = document.querySelector('#view').getContext('2d', { willReadFrequently: true })
+      const mean = (x, y, w, h) => { const d = g.getImageData(x, y, w, h).data; let t = 0; for (let i = 0; i < d.length; i += 4) t += d[i] + d[i + 1] + d[i + 2]; return t / (d.length / 4 * 3) }
+      return mean(40, 200, 560, 300) > 8 && mean(680, 200, 560, 300) > 8
+    }, null, { timeout: 15_000 })
+    const sp = await app.evaluate(() => {
+      const s = window.glanceSplit, c = document.querySelector('#view')
+      const g = c.getContext('2d', { willReadFrequently: true })
+      const mean = (x, y, w, h) => { const d = g.getImageData(x, y, w, h).data; let t = 0; for (let i = 0; i < d.length; i += 4) t += d[i] + d[i + 1] + d[i + 2]; return t / (d.length / 4 * 3) }
+      return { nd: s.n.decoded, gd: s.g.decoded, ne: s.n.error, ge: s.g.error, l: mean(40, 200, 560, 300), r: mean(680, 200, 560, 300), status: document.querySelector('#status').textContent, enc: window.glanceEnc.error }
+    })
+    const okS =!sp.ne && !sp.ge && !sp.enc && sp.l > 8 && sp.r > 8 && /S split ON/.test(sp.status) && /normal \d+ kbps vs glance \d+ kbps/.test(sp.status)
+    lineS = `${okS ? 'OK  ' : 'FAIL'} split screen: decoded normal ${sp.nd} / glance ${sp.gd} frames, panel luma L ${sp.l.toFixed(0)} R ${sp.r.toFixed(0)}; errors '${sp.ne}${sp.ge}${sp.enc}'`
+    // E while S started the encoders must switch both off cleanly (regression: null.close() crash)
+    await app.keyboard.press('e')
+    await app.waitForFunction(() => /S split off/.test(document.querySelector('#status')?.textContent ?? '') && /E encode: off/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 5_000 })
+    await app.keyboard.press('s')
+    await app.waitForFunction(() => /S split ON/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 10_000 })
+    await app.keyboard.press('s')
+    await app.waitForFunction(() => /S split off/.test(document.querySelector('#status')?.textContent ?? '') && /E encode: off/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 5_000 })
+  } catch (e) {
+    lineS = `FAIL split screen: ${String(e).slice(0, 150)}`
+  }
+  console.log(lineS)
+  text += '\n' + lineS
   // Key M: eyes preferred but no tracker yet -> automatic mouse fallback; M again -> plain mouse.
   await app.keyboard.press('m')
   await app.waitForFunction(() => /fallback: no face/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 5_000 })

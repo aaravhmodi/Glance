@@ -1,50 +1,27 @@
-# Glance: Project Status
-_Last updated: Fri 13 Nov 2026 01:30 Helsinki by autopilot (laptop session, handing over to the server run)_
+# Glance — project status
 
-## FINAL REPORT (fill in when stopping)
-Not written yet.
+## How to test it when I'm back
+(Checklist is written at the end of the P2 queue; not ready yet. P1 so far: gaze plumbing only, no eye tracker yet.)
 
-## Now
-T2 real video source (first unchecked item in `autopilot/TASKS.md`).
+## Status
+- P1: gaze plumbing done (mouse source, M toggle, 0.5 s no-face fallback). Tracker done (webcam → Face Landmarker → features; verified with a fake webcam file cut from talking-heads). Calibration done (key C, 9 dots, ridge poly regression; ~12 s happy path). Filter done (One-Euro + confirmed saccade snap, applied in `EyeTracker` after the mapper, reset on face loss). Validation done (key T after C; 20 dots, deg error, GO/PIVOT; set `?screencm=` to your real screen width).
+- P2: real video source done (commits 14ba30b, 8167a76; verified by `npm run smoke`: picker lists 3 clips + webcam, keys 1–3 switch clips with non-black frames, key 4 selects webcam; unit tests in `tests/layout.test.ts`). Foveation done (key F previews it; `video/foveate.ts` + `fovea.ts`; verified by smoke: fovea region equals source, far detail drops 3.22 → 0.95, VideoFrame 1280×720; unit tests in `tests/fovea.test.ts`). Decision: in-browser per-region QP is impossible (WebCodecs QP is per frame), so quality differences come only from the pre-filter. Decision: 5° radius = 217 px at the default 31 cm screen (below the 250–300 px guess in the docs; use `?screencm=`). Encoders done (key E; `video/encoders.ts`, `metrics/stats.ts`; smoke: Glance ≈50% smaller than normal at the same QP over 5 s on call-desk, only 11 frames in headless; unit tests `tests/stats.test.ts`). Split screen done (key S; smoke: both panels decode and show a picture, E/S toggles clean). Reveal done (commit 711ea2f; key R; smoke checks the tint changes pixels near/far from the gaze and toggles off; unit test `revealRGBA`). Next: the checklist + audit task.
+- Note: head-pose sign conventions (yaw/pitch) are not verified against real head turns; calibration's regression absorbs signs, but check if the pose features look odd.
 
-## Done (newest first): task, commit, verification + key numbers
-- T1 research → `docs/research.md` (laptop, 13 Nov). Sources linked there.
-- T0 session setup (laptop, 13 Nov): `plan.md`, this format, new task queue, `autopilot/stopped_containers.md`, `QUESTIONS_FOR_AARAV.md`. `npm run smoke` green on `b3c6f8b`; push to the server remote works.
-- P1 stability, `e1c0117`: linear calibration model (1 + 5 features), `SD_FLOOR` 0.03, One-Euro `minCutoff` 0.35. Unit tests + smoke. Not yet confirmed by Aarav on his face.
-- P1 validation, `8a91529`: key T, 20 dots, degree error, GO / GO-with-big-fovea / PIVOT. Smoke checks that it runs and reports; the accuracy number is Aarav's.
-- P1 filter, `cde0581`: One-Euro + confirmed saccade snap. Unit tests.
-- P1 calibration, `b8cefb0`: key C, 9 dots, ridge regression, about 12 s happy path. Unit tests + smoke on a real face (fake webcam).
-- P1 tracker, `155d87b`: webcam → Face Landmarker → features. Smoke detects a real face from a clip.
-- P1 gaze plumbing, `4f8fe82`: `GazeSource`, mouse source, key M, 0.5 s no-face fallback.
+## Research & review log
+- Reveal — researcher: NOT run (only Canvas 2D calls already used elsewhere in the app) — reviewer: PASS (round 1, static read only; it could not run smoke, I ran it green; minor: smoke compares pixels across two reads of a moving clip, so could flake) — fact-check: ok (no numbers in docs)
+- Split screen — researcher: VP9 VideoDecoder needs no description, first chunk after configure must be a key chunk, a closed decoder cannot be reconfigured, frames must be closed (W3C WebCodecs spec + VP9 registration, MDN; the spec's decoder-error section was truncated in the fetch) — reviewer: round 1 FAIL (E pressed while S had started the encoders hit null.close()); fixed and added a smoke regression; reviewer could not run smoke (Bash denied), I ran it green; no round-2 review — fact-check: ok (no numbers in docs). Known: the smoke split check flaked once before it polled for non-black panels.
+- Encoders — researcher: VP9 `quantizer` is per-frame via `encode(frame,{vp9:{quantizer}})` with bitrateMode 'quantizer', which ignores bitrate (W3C VP9 registration, MDN); registration says 0–255 but Chrome's 0–63 is from memory (QP 32 works in smoke) — reviewer: round 1 read-only (could not run smoke; I ran it green); I fixed a flaky chunk-count equality (now ±2) and a frame-leak path — fact-check: ok (no numbers in docs/results.md)
+- Foveation — researcher: WebGL2 allows NPOT mipmaps, `textureLod` for explicit blur level, VideoFrame accepts canvas with a required timestamp (MDN VideoFrame page was fetched; the rest from the researcher's memory, not verified against the spec); Gaussian vs smoothstep falloff is a design choice, no source — reviewer: PASS (round 1; notes: radius 217 px vs the 250–300 px hint, sigma-growth and orientation checks are weak, not on the encode path yet) — fact-check: ok (no numbers in docs/results.md)
+- Video source — researcher: NOT run (the code was already written in an earlier unattended run; I did not re-research) — reviewer: round 1 FAIL (webcam stream leak on rapid select, double getUserMedia, black webcam after tracker stop), round 2 FAIL (per-frame getUserMedia retry storm after a failure; the reviewer could not run smoke), I fixed both and ran smoke green myself, no round-3 review — fact-check: ok (no numbers in docs). Smoke now waits for the first decoded frame (a fixed 1.5 s wait was flaky once). Untracked `.resync.sh` is deliberately not committed.
+- Validation — researcher: deg = atan(size/distance) (SR Research visual-angle page); browsers expose no physical screen size (MDN/quirksmode), so screen width is a URL param; WebGazer ~3–4° only from secondary sources, unconfirmed — reviewer: PASS (round 1; fixed: verdict needs ≥75% of dots, seed comment) — fact-check: ok (no numbers in docs). Smoke checks only that the screen runs and reports; the accuracy number is Aarav's.
+- Tracker — researcher: 478-pt indices (iris 468/473, corners 33/133, 263/362) from MediaPipe face_landmarks_connections.ts; transform matrix is column-major 4x4 (matrix_data.proto); y4m fake-webcam details were from memory and confirmed empirically by the smoke test — reviewer: PASS (round 1; fixed weak sanity check + loop error handling) — fact-check: ok (no numbers in docs)
+- Calibration — researcher: ridge on z-scored features, intercept unpenalised, λ by leave-one-out CV (WebGazer uses fixed 1e-5 on raw pixels, util_regression.mjs); dot dwell/margin numbers were NOT from a primary source (researcher's own knowledge) — reviewer: PASS (round 3; r1: uncommitted work, unbounded time, tracker-failure hang; r2: <7-dot fits, flaky smoke; r3 could not run smoke, I ran it twice green) — fact-check: ok (no numbers in docs). Known gaps: overlay positioned once (resize mid-calibration unhandled); smoke face is static so its sigma (~500 px) is meaningless.
+- Filter — researcher: One-Euro formulas (alpha=1/(1+tau/dt), fc=fcmin+beta·|dx̂|, tune fcmin then beta) match the Casiez CHI 2012 paper but the project page only shows them as an image, reference code not opened; no primary-source defaults for webcam gaze, so minCutoff 0.8 / beta 0.004 / snap 250 px & 1200 px/s are my untuned guesses to retune with Aarav's real data; I-VT 20–40 deg/s from secondary sources — reviewer: PASS (round 1; added NaN guard + test) — fact-check: ok (no numbers in docs)
+- Gaze plumbing — researcher: use `e.key.toLowerCase()`, skip `e.repeat` and ctrl/meta/alt (MDN KeyboardEvent docs); event timeStamp and rAF time share performance.now() origin (MDN) — reviewer: PASS (round 1; notes: sigma NaN not checked yet, add when tracker lands) — fact-check: ok (no numbers/docs claims)
 
-## Next
-T2 → T11 in `autopilot/TASKS.md`. Experiment design in `plan.md`.
-
-## Blocked: task, why, what was tried, what Aarav must do
-- Gaze accuracy number: needs Aarav's own eyes. Open the app, press C, then T; write the result in `docs/results.md`.
-
-## Known bugs
-- Head-pose sign conventions (yaw/pitch) are not verified against real head turns; the calibration regression absorbs signs.
-- Calibration overlay is positioned once; resizing the window mid-calibration is not handled.
-- Filter parameters are untuned guesses until tried on real gaze data.
-
-## Decisions log
-- 13 Nov: run moved from the laptop to the home-server autopilot at Aarav's request. One task per run, pushes to `autopilot`.
-- 13 Nov: experiments run in an offline Python + ffmpeg harness (`libvpx-vp9` realtime CBR), not in the browser: deterministic and one-command reproducible. The app keeps its own live numbers for the demo.
-- 13 Nov: experiment gaze traces are seeded and synthetic (nobody can record one overnight); always labelled.
-- 13 Nov: no containers stopped (`autopilot/stopped_containers.md`); the `KEEP_RUNNING` list in the brief was empty.
-- 13 Nov: autopilot image gained Python packages and, if the download worked, an ffmpeg with `libvmaf`. Both are optional layers: a missing metric is skipped and said so in the results.
-- WebCodecs QP is per frame, not per region, so foveation is a pre-filter before encoding (BUILD_PLAN §4).
-
-## Research & validation log: task, researcher finding + source, reviewer PASS/FAIL (round), skeptic verdict, fact-check
-- T1 research — three researchers (call bitrates + network emulation; foveated coding + metrics; WebCodecs/WebGL2 + test clips); findings and links in `docs/research.md`; items not confirmed from a primary source are marked there.
-- Validation — researcher: deg = atan(size/distance) (SR Research visual-angle page); browsers expose no physical screen size, so screen width is a URL param — reviewer: PASS (round 1) — fact-check: ok.
-- Tracker — researcher: 478-pt indices (iris 468/473, corners 33/133, 263/362) from MediaPipe face_landmarks_connections.ts; transform matrix column-major 4x4 — reviewer: PASS (round 1) — fact-check: ok.
-- Calibration — researcher: ridge on z-scored features, intercept unpenalised, λ by leave-one-out CV; dot dwell/margin numbers NOT from a primary source — reviewer: PASS (round 3) — fact-check: ok.
-- Filter — researcher: One-Euro formulas match Casiez CHI 2012; defaults are untuned guesses — reviewer: PASS (round 1) — fact-check: ok.
-- Gaze plumbing — researcher: `e.key.toLowerCase()`, skip `e.repeat` and modifiers (MDN) — reviewer: PASS (round 1) — fact-check: ok.
-
-## Headline numbers
-| Content | Res | Network | Codec | Fovea | Baseline kbps | Glance kbps | % saved | Foveal PSNR base/Glance | Foveal VMAF base/Glance |
-|---|---|---|---|---|---|---|---|---|---|
-| (none yet: experiments start at T6) | | | | | | | | | |
+## Overnight run handover (Fri 13 Nov ~01:40 Helsinki, laptop session)
+- The server clone had 10 commits that never reached the remote (video source, foveation, encoders, split screen, Reveal): every push since 12 Nov 06:11 UTC was rejected as non-fast-forward because the laptop had pushed gaze fixes in between. They are now merged with the laptop commits (lid feature, linear calibration, validation) and pushed.
+- New instructions: `autopilot/PROMPT.md` (overnight brief), `plan.md` (approach + experiment design), `docs/research.md` (sources), queue in `autopilot/TASKS.md` (T6–T11 added). Convert this file to the section format in PROMPT.md at the next status update.
+- Decisions: experiments run in an offline Python + ffmpeg harness (`libvpx-vp9` realtime CBR), not in the browser; experiment gaze traces are seeded and synthetic, always labelled; no containers were stopped (`autopilot/stopped_containers.md`); the autopilot image gained optional Python and libvmaf layers (a missing metric is skipped and said so).
+- Open questions: `QUESTIONS_FOR_AARAV.md`.
