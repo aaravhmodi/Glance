@@ -44,7 +44,7 @@ export async function startApp() {
       while (!t.running && tracker === t && performance.now() < deadline && !ac.signal.aborted) await new Promise((r) => setTimeout(r, 100))
       if (!t.running) { calibMsg = ac.signal.aborted ? 'calibration cancelled' : `calibration failed: ${trackerErr || 'tracker not ready'}`; return }
       calibMsg = 'calibrating...'
-      const res = await runCalibration(t, view, ac.signal, new URLSearchParams(location.search).has('slowcam') ? 2 : undefined) // ?slowcam: test hook for the slow headless software-GL tracker
+      const res = await runCalibration(t, view, ac.signal, new URLSearchParams(location.search).has('slowcam') ? 1 : undefined,new URLSearchParams(location.search).has('slowcam') ? 120_000 : undefined) // ?slowcam: test hook for the slow headless software-GL tracker
       if (res) {
         calibMsg = `calibrated (${res.points} pts, sigma ${Math.round(res.model.sigma)}px)`
         if (gazeSwitch.preferred !== 'eyes') gazeSwitch.toggle()

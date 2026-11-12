@@ -112,7 +112,10 @@ export function aggregate(rows: number[][]): number[] {
 }
 
 /** 3x3 calibration grid at 10/50/90 % of the view. */
-export function gridPoints(w: number, h: number, margin = 0.1): Pt2[] {
+export function gridPoints(w: number, h: number, margin = 0.1, cornersFirst = false): Pt2[] {
   const xs = [margin, 0.5, 1 - margin], ys = [margin, 0.5, 1 - margin]
-  return ys.flatMap((y) => xs.map((x) => ({ x: x * w, y: y * h })))
+  const pts = ys.flatMap((y) => xs.map((x) => ({ x: x * w, y: y * h })))
+  if (!cornersFirst) return pts
+  // row-major indices: corners, then the centre, then edge midpoints
+  return [0, 2, 6, 8, 4, 1, 3, 5, 7].map((i) => pts[i])
 }

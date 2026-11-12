@@ -9,6 +9,8 @@ export const MIN_SAMPLES = 8
 const RETRY_EXTRA_MS = 500 // extra patience on a retry of a dot
 /** Hard cap: after this, remaining dots are skipped and we fit on what we have (needs >= 5 dots). Happy path is ~12 s. */
 export const MAX_TOTAL_MS = 30_000
+/** Fewer successful dots than this -> calibration fails instead of fitting a poorly covered mapping. */
+export const MIN_DOTS = 7
 
 export interface CalibResult { model: Model; points: number }
 
@@ -18,7 +20,7 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
  * 9-point calibration over the 1280x720 view. Shows an overlay with one dot at a time, collects feature
  * vectors from the tracker, fits the model and installs `tracker.mapper`. Resolves null if cancelled/failed.
  */
-export async function runCalibration(tracker: EyeTracker, view: HTMLCanvasElement, signal?: AbortSignal, minSamples = MIN_SAMPLES): Promise<CalibResult | null> {
+export async function runCalibration(tracker: EyeTracker, view: HTMLCanvasElement, signal?: AbortSignal, minSamples = MIN_SAMPLES, maxTotalMs = MAX_TOTAL_MS): Promise<CalibResult | null> {
   const W = view.width, H = view.height
   const ov = document.createElement('canvas')
   ov.width = W
@@ -45,14 +47,14 @@ export async function runCalibration(tracker: EyeTracker, view: HTMLCanvasElemen
     g.fill()
   }
   const rows: number[][] = []
-  const targets = gridPoints(W, H)
+  const targets = gridPoints(W, H, 0.1, true) // corners first, so a timeout still leaves coverage
   const pts: Pt2[] = []
   const start = performance.now()
   try {
     for (let i = 0; i < targets.length; i++) {
       const t = targets[i]
       let samples: number[][] = []
-      for (let attempt = 0; attempt < 2 && samples.length < minSamples && performance.now() - start < MAX_TOTAL_MS; attempt++) {
+      for (let attempt = 0; attempt < 2 && samples.length < minSamples && performance.now() - start < maxTotalMs; attempt++) {
         samples = []
         const t0 = performance.now()
         let lastAt = 0
@@ -78,6 +80,7 @@ export async function runCalibration(tracker: EyeTracker, view: HTMLCanvasElemen
   } finally {
     ov.remove()
   }
+  if (rows.length < MIN_DOTS) return null // too few dots: the polynomial would extrapolate wildly
   const model = fitCalibration(rows, pts)
   if (!model) return null
   tracker.mapper = (f) => {
