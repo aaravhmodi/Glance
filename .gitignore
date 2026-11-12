@@ -9,3 +9,4 @@ STOP
 autopilot.log
 offline/experiments/media/
 results/tmp/
+.resync.sh

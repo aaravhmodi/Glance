@@ -39,6 +39,14 @@ for run in $(seq 1 "$MAX_RUNS"); do
     sleep 1800
     continue
   fi
+  # The agent is sometimes refused git (seen 12 Nov, cause unknown): keep its work if smoke passes, else park it in a stash.
+  if [ -n "$(git status --porcelain)" ]; then
+    if compose run --rm -T agent sh -c 'cd web && npm run smoke'; then
+      git add -A && git commit -q -m "autopilot: work from run $run that the agent could not commit (smoke green)"
+    else
+      git stash push -q -u -m "run $run: uncommitted work, smoke failed"
+    fi
+  fi
   git push -q origin autopilot
   if [ "$(git rev-parse HEAD)" = "$before" ]; then
     notify 4 warning "Glance autopilot is stuck" "Run $run made no commit, so it stopped. Log: ~/projects/glance-autopilot/autopilot.log"
