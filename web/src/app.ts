@@ -69,6 +69,7 @@ export async function startApp() {
   }
 
   root.append(view, status, cam.canvas) // only once keys and mouse are wired, so nothing typed early is lost
+  void startTracker() // camera + face tracking start right away, so the camera view is visible without pressing anything
 
   let frames = 0
   const loop = (t: number) => {
