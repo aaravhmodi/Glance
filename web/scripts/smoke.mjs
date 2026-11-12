@@ -52,7 +52,7 @@ try {
   try {
     const cam = await camBrowser.newPage()
     cam.on('pageerror', (e) => console.log('[pageerror]', e.message))
-    await cam.goto('http://localhost:4174/')
+    await cam.goto('http://localhost:4174/?slowcam')
     await cam.waitForSelector('#view')
     await cam.keyboard.press('m')
     let line3
@@ -70,6 +70,26 @@ try {
     }
     console.log(line3)
     text += '\n' + line3
+    // Calibration: key C runs the 9-point screen against the real face stream, fits, installs the mapper.
+    let line4
+    try {
+      await cam.keyboard.press('c')
+      await cam.waitForSelector('#calib', { timeout: 10_000 })
+      await cam.waitForFunction(() => /calibrated \(/.test(window.glanceCalibStatus()), null, { timeout: 60_000 })
+      const st = await cam.evaluate(() => window.glanceCalibStatus())
+      const gone = (await cam.$('#calib')) === null
+      const mapped = await cam.evaluate(() => {
+        const t = window.glanceTracker
+        const m = t.lastFeatures && t.mapper ? t.mapper(t.lastFeatures) : null
+        return m
+      })
+      const good = gone && mapped && Number.isFinite(mapped.x) && Number.isFinite(mapped.y) && mapped.x >= 0 && mapped.x <= 1280 && st.includes('9 pts')
+      line4 = `${good ? 'OK  ' : 'FAIL'} calibration: ${st}; mapped sample ${JSON.stringify(mapped)}; overlay removed ${gone}`
+    } catch (e) {
+      line4 = `FAIL calibration: ${(await cam.evaluate(() => window.glanceCalibStatus()).catch(() => '?'))} ${String(e).slice(0, 120)}`
+    }
+    console.log(line4)
+    text += '\n' + line4
   } finally {
     await camBrowser.close()
     rmSync(dir, { recursive: true, force: true })

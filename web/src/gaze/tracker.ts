@@ -24,7 +24,7 @@ export class EyeTracker implements GazeSource {
   private sample: GazeSample | null = null
   private lm!: FaceLandmarker
   private lastVideoTime = -1
-  private running = false
+  running = false
 
   async start(): Promise<void> {
     this.video.muted = true

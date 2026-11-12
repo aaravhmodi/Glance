@@ -3,6 +3,7 @@ import { MouseSource } from './gaze/mouse'
 import { GazeSwitch } from './gaze/switch'
 import { EyeTracker } from './gaze/tracker'
 import { createCamView } from './ui/camview'
+import { runCalibration } from './gaze/calib'
 
 // App shell: video source drawn to a canvas. Gaze comes from GazeSwitch (mouse now, eyes once the tracker lands; key M toggles).
 export const gaze = { x: W / 2, y: H / 2, sigma: 10 }
@@ -24,12 +25,36 @@ export async function startApp() {
   gazeSwitch = new GazeSwitch(new MouseSource(view, W, H))
   addEventListener('keydown', (e) => {
     if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return
-    if (e.key.toLowerCase() === 'm') {
+    if (e.key.toLowerCase() === 'm' && !calibAbort) { // ignored while calibrating
       gazeSwitch.toggle()
       if (gazeSwitch.preferred === 'eyes') void startTracker()
     }
     if (e.key.toLowerCase() === 'v') { cam.canvas.hidden = !cam.canvas.hidden; void startTracker() } // show what the vision sees
+    if (e.key.toLowerCase() === 'c') void calibrate()
+    if (e.key === 'Escape') calibAbort?.abort()
   })
+  // Key C: (re)calibrate. Starts the tracker if needed, switches to eyes, runs the 9-point screen.
+  let calibAbort: AbortController | null = null
+  let calibMsg = 'not calibrated (press C)'
+  const calibrate = async () => {
+    if (calibAbort) return
+    const ac = (calibAbort = new AbortController())
+    try {
+      await startTracker()
+      const t = tracker
+      if (!t) { calibMsg = 'calibration failed: no camera'; return }
+      const deadline = performance.now() + 30_000
+      while (!t.running && tracker === t && performance.now() < deadline && !ac.signal.aborted) await new Promise((r) => setTimeout(r, 100))
+      if (!t.running) { calibMsg = ac.signal.aborted ? 'calibration cancelled' : `calibration failed: ${trackerErr || 'tracker not ready'}`; return }
+      calibMsg = 'calibrating...'
+      const res = await runCalibration(t, view, ac.signal, new URLSearchParams(location.search).has('slowcam') ? 1 : undefined,new URLSearchParams(location.search).has('slowcam') ? 120_000 : undefined) // ?slowcam: test hook for the slow headless software-GL tracker
+      if (res) {
+        calibMsg = `calibrated (${res.points} pts, sigma ${Math.round(res.model.sigma)}px)`
+        if (gazeSwitch.preferred !== 'eyes') gazeSwitch.toggle()
+      } else calibMsg = ac.signal.aborted ? 'calibration cancelled' : 'calibration failed (no face / bad fit)'
+    } finally { calibAbort = null }
+  }
+  ;(window as unknown as { glanceCalibStatus: () => string }).glanceCalibStatus = () => calibMsg
   // Webcam + Face Landmarker start the first time eyes are requested (triggers the camera permission prompt).
   let tracker: EyeTracker | null = null
   let trackerErr = ''
@@ -63,7 +88,7 @@ export async function startApp() {
     frames++
     const why = r.fallback ? (tracker?.latest ? ' (fallback: face found, not calibrated yet)' : ' (fallback: no face)') : ''
     const camTxt = trackerErr ? ` · tracker ERROR ${trackerErr}` : tracker ? ` · tracker ${tracker.delegate || 'loading'} face ${tracker.latest ? 'yes' : 'no'}` : ''
-    status.textContent = `source: ${src.kind} · gaze[${r.source}${why}] ${Math.round(gaze.x)},${Math.round(gaze.y)} · M toggles mouse/eyes · V camera view${camTxt} · frames ${frames}`
+    status.textContent = `source: ${src.kind} · gaze[${r.source}${why}] ${Math.round(gaze.x)},${Math.round(gaze.y)} · M toggles mouse/eyes · C calibrates: ${calibMsg} · V camera view${camTxt} · frames ${frames}`
     requestAnimationFrame(loop)
   }
   requestAnimationFrame(loop)
