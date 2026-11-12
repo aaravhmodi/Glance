@@ -1,4 +1,5 @@
 import { FaceLandmarker, FilesetResolver } from '@mediapipe/tasks-vision'
+import { GazeFilter } from './filter'
 import { extractFeatures, type GazeFeatures } from './features'
 import type { GazeSample, GazeSource } from './types'
 
@@ -21,6 +22,7 @@ export class EyeTracker implements GazeSource {
   facesSeen = 0
   delegate = ''
   mapper: Mapper | null = null
+  readonly filter = new GazeFilter()
   private sample: GazeSample | null = null
   private lm!: FaceLandmarker
   private lastVideoTime = -1
@@ -72,9 +74,11 @@ export class EyeTracker implements GazeSource {
         this.lastFeatures = f
         this.latestAt = now
         const m = this.mapper?.(f)
-        this.sample = m ? { x: m.x, y: m.y, sigma: m.sigma, timestamp: now, confidence: 1 } : null
+        const p = m ? this.filter.update(m.x, m.y, now) : null
+        this.sample = m && p ? { x: p.x, y: p.y, sigma: m.sigma, timestamp: now, confidence: 1 } : null
       } else {
         this.latest = null
+        this.filter.reset() // face lost: restart rather than smoothing across the gap
         if (this.sample) this.sample = { ...this.sample, confidence: 0 }
       }
     }
