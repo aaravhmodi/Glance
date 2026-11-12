@@ -20,4 +20,8 @@ Running log of what's built. Newest stage at the bottom. Details/numbers live in
 ## Autopilot (10 Nov)
 - **What:** `autopilot/` runs Claude Code headless on the home server while I'm offline: one `autopilot/TASKS.md` item per run → build + `npm run smoke` → commit → `run.sh` pushes branch `autopilot` + ntfy push. How-to in `autopilot/README.md`.
 - **Safety:** container sees only the repo; tool allowlist (edit, npm ci/build/smoke, git add/commit, ffmpeg), no permission bypass; only the host script pushes, never to main.
+## Stage 2 — foveation + dual encode (in progress)
+- **App shell ✅:** `web/src/main.ts` dispatches: `?smoke` → `smoke.ts` (old codec/MediaPipe checks), else `app.ts` (canvas `#view` + `#status`, mouse = gaze in 1280×720 coords, exported `gaze`). `video/source.ts`: uses `/clips/clip.mp4` if served (put in `web/public/clips/`), else synthetic animated canvas. No clips exist yet.
+
+## Autopilot notes
 - **Smoke test:** `cd web && npm run smoke` = build + headless real Chrome (Playwright, fake webcam) on `?smoke`; fails on any `FAIL` line. Extend it per feature.

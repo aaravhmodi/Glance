@@ -16,6 +16,19 @@ try {
   await page.waitForFunction(() => document.querySelector('#out')?.textContent?.includes('done'), null, { timeout: 90_000 })
   text = (await page.textContent('#out')) ?? ''
   console.log(text)
+  // App shell: default page renders frames from the source and tracks mouse gaze.
+  const app = await browser.newPage()
+  app.on('pageerror', (e) => console.log('[pageerror]', e.message))
+  await app.goto('http://localhost:4174/')
+  await app.waitForSelector('#view')
+  await app.mouse.move(300, 200)
+  await app.mouse.move(400, 300)
+  await app.waitForFunction(() => /frames [1-9]\d/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 20_000 })
+  const status = (await app.textContent('#status')) ?? ''
+  const ok = /source: (synthetic|clip)/.test(status) && !/gaze 640,360/.test(status)
+  const line = `${ok ? 'OK  ' : 'FAIL'} app shell: ${status}`
+  console.log(line)
+  text += '\n' + line
 } finally {
   await browser.close()
   server.httpServer.close()
