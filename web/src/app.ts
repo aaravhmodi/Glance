@@ -1,4 +1,4 @@
-import { createSource, W, H } from './video/source'
+import { SourceManager, W, H } from './video/source'
 import { MouseSource } from './gaze/mouse'
 import { GazeSwitch } from './gaze/switch'
 import { EyeTracker } from './gaze/tracker'
@@ -22,10 +22,19 @@ export async function startApp() {
   cam.canvas.hidden = true
   const g = view.getContext('2d')!
 
-  const src = await createSource()
+  const src = new SourceManager(new URLSearchParams(location.search).has('synthetic')) // ?synthetic = tests only
+  await src.init()
+  src.webcam = () => (tracker?.running ? tracker.video : null) // share the tracker's camera stream
+  const picker = document.createElement('select')
+  picker.id = 'picker'
+  for (const o of src.options) picker.add(new Option(`${picker.length + 1}: ${o.label}`, o.id))
+  picker.onchange = () => { void src.select(picker.value); picker.blur() }
+  src.onChange = (o) => { picker.value = o.id }
+  picker.value = src.current?.id ?? ''
   gazeSwitch = new GazeSwitch(new MouseSource(view, W, H))
   addEventListener('keydown', (e) => {
     if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return
+    if (/^[1-9]$/.test(e.key) && !calibAbort && !validAbort) void src.key(e.key) // keys 1-3 clips, then webcam
     if (e.key.toLowerCase() === 'm' && !calibAbort) { // ignored while calibrating
       gazeSwitch.toggle()
       if (gazeSwitch.preferred === 'eyes') void startTracker()
@@ -89,13 +98,13 @@ export async function startApp() {
     try { await t.start() } catch (err) { trackerErr = String(err); t.stop(); tracker = null; gazeSwitch.setEyes(null) }
   }
 
-  root.append(view, status, cam.canvas) // only once keys and mouse are wired, so nothing typed early is lost
+  root.append(view, status, picker, cam.canvas) // only once keys and mouse are wired, so nothing typed early is lost
   void startTracker() // camera + face tracking start right away, so the camera view is visible without pressing anything
 
   let frames = 0
   const loop = (t: number) => {
     src.tick(t)
-    g.drawImage(src.canvas, 0, 0, W, H)
+    g.drawImage(src.frame, 0, 0, W, H)
     const r = gazeSwitch.read(performance.now())
     if (r.sample) {
       gaze.x = r.sample.x
@@ -111,7 +120,7 @@ export async function startApp() {
     frames++
     const why = r.fallback ? (tracker?.latest ? ' (fallback: face found, not calibrated yet)' : ' (fallback: no face)') : ''
     const camTxt = trackerErr ? ` · tracker ERROR ${trackerErr}` : tracker ? ` · tracker ${tracker.delegate || 'loading'} face ${tracker.latest ? 'yes' : 'no'}` : ''
-    status.textContent = `source: ${src.kind} · gaze[${r.source}${why}] ${Math.round(gaze.x)},${Math.round(gaze.y)} · M toggles mouse/eyes · C calibrates: ${calibMsg} · T validates: ${validMsg} · V camera view${camTxt} · frames ${frames}`
+    status.textContent = `source: ${src.kind} ${src.current?.id ?? ''} (keys 1-${src.options.length}) · gaze[${r.source}${why}] ${Math.round(gaze.x)},${Math.round(gaze.y)} · M toggles mouse/eyes · C calibrates: ${calibMsg} · T validates: ${validMsg} · V camera view${camTxt} · frames ${frames}`
     requestAnimationFrame(loop)
   }
   requestAnimationFrame(loop)

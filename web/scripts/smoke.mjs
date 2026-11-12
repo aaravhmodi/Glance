@@ -29,10 +29,40 @@ try {
   await app.mouse.move(400, 300)
   await app.waitForFunction(() => /frames [1-9]\d/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 20_000 })
   const status = (await app.textContent('#status')) ?? ''
-  const ok = /source: (synthetic|clip)/.test(status) && /gaze\[mouse\] /.test(status) && !/gaze\[mouse\] 640,360/.test(status)
+  const ok = /source: clip call-desk/.test(status) && /gaze\[mouse\] /.test(status) && !/gaze\[mouse\] 640,360/.test(status)
   const line = `${ok ? 'OK  ' : 'FAIL'} app shell: ${status}`
   console.log(line)
   text += '\n' + line
+  // Real video source: picker lists 3 clips + webcam; keys 1-3 switch clips and the frame is not black; key 4 = webcam.
+  const lumaOf = () => app.evaluate(() => {
+    const c = document.querySelector('#view')
+    const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data
+    let s = 0, n = 0
+    for (let i = 0; i < d.length; i += 4 * 97) { s += d[i] + d[i + 1] + d[i + 2]; n += 3 }
+    return s / n
+  })
+  const opts = await app.$$eval('#picker option', (o) => o.map((x) => x.value))
+  const picks = []
+  for (const [key, id] of [['2', 'call-plants'], ['3', 'call-teacher'], ['1', 'call-desk']]) {
+    await app.keyboard.press(key)
+    await app.waitForFunction((i) => document.querySelector('#status')?.textContent?.includes('clip ' + i), id, { timeout: 5_000 })
+    await app.waitForFunction(() => { // a clip needs time to decode its first frame
+      const c = document.querySelector('#view')
+      const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data
+      let s = 0
+      for (let i = 0; i < d.length; i += 388) s += d[i]
+      return s / (d.length / 388) > 8
+    }, null, { timeout: 8_000 }).catch(() => {})
+    picks.push(`${id}:${Math.round(await lumaOf())}`)
+  }
+  await app.keyboard.press('4')
+  await app.waitForFunction(() => /source: webcam webcam/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 5_000 })
+  await app.keyboard.press('1')
+  const lumas = picks.map((p) => Number(p.split(':')[1]))
+  const okSrc = opts.join() === 'call-desk,call-plants,call-teacher,webcam' && lumas.every((l) => l > 8)
+  const lineSrc = `${okSrc ? 'OK  ' : 'FAIL'} video source: picker ${opts.join('/')}; keys 1-3 switch clips (mean luma ${picks.join(' ')}); key 4 webcam`
+  console.log(lineSrc)
+  text += '\n' + lineSrc
   // Key M: eyes preferred but no tracker yet -> automatic mouse fallback; M again -> plain mouse.
   await app.keyboard.press('m')
   await app.waitForFunction(() => /fallback: no face/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 5_000 })
