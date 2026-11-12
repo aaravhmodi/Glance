@@ -29,6 +29,7 @@ compose build -q || { notify 4 warning "Glance autopilot didn't start" "The agen
 
 for run in $(seq 1 "$MAX_RUNS"); do
   if [ -e STOP ]; then notify 3 pause_button "Glance autopilot stopped" "Stopped by you after $((run - 1)) runs."; exit 0; fi
+  git pull -q --rebase origin autopilot || git rebase --abort  # commits pushed from the laptop between runs
   before=$(git rev-parse HEAD)
   echo "=== run $run $(date '+%F %T') ==="
   if ! timeout 3h docker compose -f autopilot/compose.yaml run --rm -T agent \
