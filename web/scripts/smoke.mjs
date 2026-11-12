@@ -90,6 +90,20 @@ try {
     }
     console.log(line4)
     text += '\n' + line4
+    // Validation: key T runs the 20-dot screen on the calibrated tracker and produces a report.
+    let line5
+    try {
+      await cam.keyboard.press('t')
+      await cam.waitForSelector('#validate', { timeout: 10_000 })
+      await cam.waitForFunction(() => !!window.glanceValidation, null, { timeout: 120_000 })
+      const v = await cam.evaluate(() => ({ r: window.glanceValidation.report, s: window.glanceValidStatus() }))
+      const good = Number.isFinite(v.r.meanDeg) && v.r.maxDeg >= v.r.meanDeg && ['GO', 'GO-with-big-fovea', 'PIVOT'].includes(v.r.verdict)
+      line5 = `${good ? 'OK  ' : 'FAIL'} validation: ${v.s}`
+    } catch (e) {
+      line5 = `FAIL validation: ${(await cam.evaluate(() => window.glanceValidStatus()).catch(() => '?'))} ${String(e).slice(0, 120)}`
+    }
+    console.log(line5)
+    text += '\n' + line5
   } finally {
     await camBrowser.close()
     rmSync(dir, { recursive: true, force: true })

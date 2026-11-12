@@ -4,6 +4,7 @@ import { GazeSwitch } from './gaze/switch'
 import { EyeTracker } from './gaze/tracker'
 import { createCamView } from './ui/camview'
 import { runCalibration } from './gaze/calib'
+import { geometryFromUrl, runValidation, type ValidationResult } from './gaze/validate'
 
 // App shell: video source drawn to a canvas. Gaze comes from GazeSwitch (mouse now, eyes once the tracker lands; key M toggles).
 export const gaze = { x: W / 2, y: H / 2, sigma: 10 }
@@ -31,7 +32,8 @@ export async function startApp() {
     }
     if (e.key.toLowerCase() === 'v') { cam.canvas.hidden = !cam.canvas.hidden; void startTracker() } // show what the vision sees
     if (e.key.toLowerCase() === 'c') void calibrate()
-    if (e.key === 'Escape') calibAbort?.abort()
+    if (e.key.toLowerCase() === 't') void validate()
+    if (e.key === 'Escape') { calibAbort?.abort(); validAbort?.abort() }
   })
   // Key C: (re)calibrate. Starts the tracker if needed, switches to eyes, runs the 9-point screen.
   let calibAbort: AbortController | null = null
@@ -55,6 +57,25 @@ export async function startApp() {
     } finally { calibAbort = null }
   }
   ;(window as unknown as { glanceCalibStatus: () => string }).glanceCalibStatus = () => calibMsg
+  // Key T: 20-dot validation (needs a calibration). Shows mean/max error in degrees and the GO / PIVOT verdict.
+  let validAbort: AbortController | null = null
+  let validMsg = 'not validated (press T after C)'
+  const validate = async () => {
+    if (validAbort || calibAbort) return
+    if (!tracker?.running || !tracker.mapper) { validMsg = 'validation needs a calibration first (press C)'; return }
+    const ac = (validAbort = new AbortController())
+    try {
+      validMsg = 'validating...'
+      const slow = new URLSearchParams(location.search).has('slowcam') // test hook for the slow headless tracker
+      const res = await runValidation(tracker, view, geometryFromUrl(W), ac.signal, slow ? { minSamples: 1, minDots: 1, autoClose: true } : {})
+      if (res) {
+        const r = res.report
+        validMsg = `${r.verdict}: mean ${r.meanDeg.toFixed(2)} deg, max ${r.maxDeg.toFixed(2)} deg (${r.n} dots)`
+        ;(window as unknown as { glanceValidation: ValidationResult }).glanceValidation = res
+      } else validMsg = ac.signal.aborted ? 'validation cancelled' : 'validation failed (too few dots with a face)'
+    } finally { validAbort = null }
+  }
+  ;(window as unknown as { glanceValidStatus: () => string }).glanceValidStatus = () => validMsg
   // Webcam + Face Landmarker start the first time eyes are requested (triggers the camera permission prompt).
   let tracker: EyeTracker | null = null
   let trackerErr = ''
@@ -90,7 +111,7 @@ export async function startApp() {
     frames++
     const why = r.fallback ? (tracker?.latest ? ' (fallback: face found, not calibrated yet)' : ' (fallback: no face)') : ''
     const camTxt = trackerErr ? ` · tracker ERROR ${trackerErr}` : tracker ? ` · tracker ${tracker.delegate || 'loading'} face ${tracker.latest ? 'yes' : 'no'}` : ''
-    status.textContent = `source: ${src.kind} · gaze[${r.source}${why}] ${Math.round(gaze.x)},${Math.round(gaze.y)} · M toggles mouse/eyes · C calibrates: ${calibMsg} · V camera view${camTxt} · frames ${frames}`
+    status.textContent = `source: ${src.kind} · gaze[${r.source}${why}] ${Math.round(gaze.x)},${Math.round(gaze.y)} · M toggles mouse/eyes · C calibrates: ${calibMsg} · T validates: ${validMsg} · V camera view${camTxt} · frames ${frames}`
     requestAnimationFrame(loop)
   }
   requestAnimationFrame(loop)
