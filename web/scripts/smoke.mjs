@@ -12,6 +12,14 @@ const browser = await chromium.launch({
   channel: 'chrome',
   args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream', '--enable-unsafe-swiftshader'],
 })
+// Zero-external-requests guard: every page opened below reports any request that leaves localhost.
+const external = []
+const origNewPage = browser.newPage.bind(browser)
+browser.newPage = async (...a) => {
+  const pg = await origNewPage(...a)
+  pg.on('request', (r) => { if (!/^(http:\/\/localhost:4174\/|data:|blob:)/.test(r.url())) external.push(r.url()) })
+  return pg
+}
 let text = ''
 try {
   const page = await browser.newPage()
@@ -181,6 +189,7 @@ try {
   })
   try {
     const cam = await camBrowser.newPage()
+    cam.on('request', (r) => { if (!/^(http:\/\/localhost:4174\/|data:|blob:)/.test(r.url())) external.push(r.url()) })
     cam.on('pageerror', (e) => console.log('[pageerror]', e.message))
     await cam.goto('http://localhost:4174/?slowcam')
     await cam.waitForSelector('#view')
@@ -239,6 +248,9 @@ try {
     rmSync(dir, { recursive: true, force: true })
   }
 } finally {
+  const netLine = `${external.length === 0 ? 'OK  ' : 'FAIL'} network: ${external.length} external requests ${external.slice(0, 5).join(' ')}`
+  console.log(netLine)
+  text += '\n' + netLine
   await browser.close()
   server.httpServer.close()
 }
