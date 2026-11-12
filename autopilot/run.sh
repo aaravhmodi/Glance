@@ -5,9 +5,10 @@
 # and only to the `autopilot` branch. See autopilot/README.md.
 set -u
 cd "$(dirname "$0")/.."
-MAX_RUNS=${MAX_RUNS:-20}
+MAX_RUNS=${MAX_RUNS:-30}
 # Research (web search/fetch) and subagents per docs/AGENT_TEAM.md; no push, no package installs.
-TOOLS='Read,Edit,Write,Glob,Grep,TodoWrite,WebSearch,WebFetch,Agent,Task,Bash(npm ci),Bash(npm test),Bash(npm run:*),Bash(git status:*),Bash(git diff:*),Bash(git log:*),Bash(git show:*),Bash(git add:*),Bash(git commit:*),Bash(git worktree:*),Bash(ffmpeg:*),Bash(ffprobe:*)'
+# python3 = experiment harness (offline/experiments); curl only from media.xiph.org (test clips).
+TOOLS='Read,Edit,Write,Glob,Grep,TodoWrite,WebSearch,WebFetch,Agent,Task,Bash(npm ci),Bash(npm test),Bash(npm run:*),Bash(git status:*),Bash(git diff:*),Bash(git log:*),Bash(git show:*),Bash(git add:*),Bash(git commit:*),Bash(git worktree:*),Bash(ffmpeg:*),Bash(ffprobe:*),Bash(python3:*),Bash(curl -fsSL https://media.xiph.org/:*),Bash(mkdir:*),Bash(ls:*)'
 notify() { "$HOME/homelab/alerts/notify.sh" "$@" || true; }
 compose() { docker compose -f autopilot/compose.yaml "$@"; }
 
