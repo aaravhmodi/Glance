@@ -63,6 +63,36 @@ try {
   const lineSrc = `${okSrc ? 'OK  ' : 'FAIL'} video source: picker ${opts.join('/')}; keys 1-3 switch clips (mean luma ${picks.join(' ')}); key 4 webcam`
   console.log(lineSrc)
   text += '\n' + lineSrc
+  // Foveation: sharp (== source, same orientation) at the gaze point, much less detail far away, VideoFrame works.
+  await app.waitForFunction(() => /clip call-desk/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 5_000 })
+  await app.waitForFunction(() => { // clip 1 was just re-selected: wait for a real frame
+    const c = document.querySelector('#view')
+    const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data
+    let s = 0
+    for (let i = 0; i < d.length; i += 388) s += d[i]
+    return s / (d.length / 388) > 8
+  }, null, { timeout: 8_000 })
+  const fv = await app.evaluate(async () => {
+    const { fov, geom, src } = window.glanceFoveate
+    const W = 1280, H = 720
+    const gx = 300, gy = 200
+    const r = window.glanceFoveate.radius(0)
+    fov.render(src.frame, gx, gy, r)
+    const grab = (c) => { const k = document.createElement('canvas'); k.width = W; k.height = H; const g = k.getContext('2d', { willReadFrequently: true }); g.drawImage(c, 0, 0, W, H); return g }
+    const a = grab(fov.canvas), b = grab(src.frame)
+    const diff = (x, y, w, h) => { const p = a.getImageData(x, y, w, h).data, q = b.getImageData(x, y, w, h).data; let s = 0; for (let i = 0; i < p.length; i += 4) s += Math.abs(p[i] - q[i]); return s / (p.length / 4) }
+    const detail = (g, x, y, w, h) => { const p = g.getImageData(x, y, w, h).data; let s = 0; for (let i = 4; i < p.length; i += 4) s += Math.abs(p[i] - p[i - 4]); return s / (p.length / 4) }
+    const near = diff(gx - 40, gy - 40, 80, 80) // inside the fovea: must equal the source
+    const farOut = detail(a, 1100, 560, 160, 120), farSrc = detail(b, 1100, 560, 160, 120)
+    const frame = fov.frame(1000)
+    const vf = { w: frame.displayWidth, h: frame.displayHeight, ts: frame.timestamp }
+    frame.close()
+    return { r, near, farOut, farSrc, vf, bigger: window.glanceFoveate.radius(100) > r }
+  })
+  const okFov = fv.r > 150 && fv.near < 3 && fv.farOut < fv.farSrc * 0.6 && fv.vf.w === 1280 && fv.vf.h === 720 && fv.vf.ts === 1000 && fv.bigger
+  const lineF = `${okFov ? 'OK  ' : 'FAIL'} foveate: radius ${Math.round(fv.r)}px; fovea diff vs source ${fv.near.toFixed(2)}; far detail ${fv.farOut.toFixed(2)} vs source ${fv.farSrc.toFixed(2)}; VideoFrame ${JSON.stringify(fv.vf)}`
+  console.log(lineF)
+  text += '\n' + lineF
   // Key M: eyes preferred but no tracker yet -> automatic mouse fallback; M again -> plain mouse.
   await app.keyboard.press('m')
   await app.waitForFunction(() => /fallback: no face/.test(document.querySelector('#status')?.textContent ?? ''), null, { timeout: 5_000 })
