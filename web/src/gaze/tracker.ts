@@ -3,6 +3,9 @@ import { GazeFilter } from './filter'
 import { extractFeatures, type GazeFeatures } from './features'
 import type { GazeSample, GazeSource } from './types'
 
+import { W, H } from '../video/source'
+
+const BLINK_LID = 0.12 // eyelid opening (in eye widths) below this counts as a blink
 export type Mapper = (f: GazeFeatures) => { x: number; y: number; sigma: number } | null
 
 /**
@@ -22,6 +25,12 @@ export class EyeTracker implements GazeSource {
   facesSeen = 0
   delegate = ''
   mapper: Mapper | null = null
+  /** Drift correction: look at `target` and call recenter() (key X) to cancel a constant offset. */
+  offset = { x: 0, y: 0 }
+  private raw: { x: number; y: number } | null = null
+  recenter(target: { x: number; y: number }) {
+    if (this.raw) this.offset = { x: target.x - this.raw.x, y: target.y - this.raw.y }
+  }
   readonly filter = new GazeFilter()
   private sample: GazeSample | null = null
   private lm!: FaceLandmarker
@@ -39,6 +48,12 @@ export class EyeTracker implements GazeSource {
       runningMode: 'VIDEO', numFaces: 1, outputFacialTransformationMatrixes: true,
     })
     try { this.lm = await make('GPU'); this.delegate = 'GPU' } catch { this.lm = await make('CPU'); this.delegate = 'CPU' }
+    // Key X: "I'm looking at the centre of the video" -> cancel a constant offset. Key C (recalibrate) clears it.
+    addEventListener('keydown', (e) => {
+      if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return
+      if (e.key.toLowerCase() === 'x') this.recenter({ x: W / 2, y: H / 2 })
+      if (e.key.toLowerCase() === 'c') this.offset = { x: 0, y: 0 }
+    })
     this.running = true
     this.loop()
   }
@@ -73,7 +88,9 @@ export class EyeTracker implements GazeSource {
         this.latest = f
         this.lastFeatures = f
         this.latestAt = now
-        const m = this.mapper?.(f)
+        const m = f.lid < BLINK_LID ? null : this.mapper?.(f)
+        if (m) { this.raw = { x: m.x, y: m.y }; m.x += this.offset.x; m.y += this.offset.y }
+        if (!m && this.mapper && this.sample) return void requestAnimationFrame(this.loop) // blink: hold the last gaze point
         const p = m ? this.filter.update(m.x, m.y, now) : null
         this.sample = m && p ? { x: p.x, y: p.y, sigma: m.sigma, timestamp: now, confidence: 1 } : null
       } else {

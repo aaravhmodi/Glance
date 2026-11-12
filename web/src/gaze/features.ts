@@ -9,15 +9,17 @@ export interface Pt { x: number; y: number }
 export interface GazeFeatures {
   /** Iris offset along the eye axis (corner to corner, + toward the inner corner) and perpendicular (+ down), in eye widths. Right eye then left eye. */
   rx: number; ry: number; lx: number; ly: number
+  /** Eyelid opening (upper to lower lid, in eye widths), mean of both eyes: the strongest cue for looking up/down. */
+  lid: number
   /** Head pose in radians (from the facial transformation matrix). */
   yaw: number; pitch: number; roll: number
   /** Distance between the outer eye corners as a fraction of image width (face scale). */
   scale: number
 }
 
-/** Regression inputs: mean iris offset (2) + head yaw/pitch (2). */
+/** Regression inputs: mean iris offset (2) + head yaw/pitch (2) + eyelid opening (1). */
 export function featureVector(f: GazeFeatures): number[] {
-  return [(f.rx + f.lx) / 2, (f.ry + f.ly) / 2, f.yaw, f.pitch]
+  return [(f.rx + f.lx) / 2, (f.ry + f.ly) / 2, f.yaw, f.pitch, f.lid]
 }
 
 function eyeOffset(lm: Pt[], e: { iris: number; outer: number; inner: number }, aspect: number) {
@@ -32,6 +34,12 @@ function eyeOffset(lm: Pt[], e: { iris: number; outer: number; inner: number }, 
   const dx = c.x - (o.x + i.x) / 2, dy = c.y - (o.y + i.y) / 2
   const sg = ux >= 0 ? 1 : -1 // perpendicular always points image-down, for both eyes
   return { u: (dx * ux + dy * uy) / w, v: (sg * (-dx * uy + dy * ux)) / w }
+}
+
+/** Upper-lid to lower-lid distance divided by the eye's width. */
+function lidGap(lm: Pt[], up: number, low: number, e: { outer: number; inner: number }, aspect: number) {
+  const w = Math.hypot((lm[e.inner].x - lm[e.outer].x) * aspect, lm[e.inner].y - lm[e.outer].y)
+  return Math.hypot((lm[up].x - lm[low].x) * aspect, lm[up].y - lm[low].y) / (w || 1)
 }
 
 /** Euler angles (radians) from MediaPipe's column-major 4x4 facial transformation matrix `data`. */
@@ -55,6 +63,7 @@ export function extractFeatures(lm: Pt[], matrix: ArrayLike<number> | null, aspe
   const a = lm[EYES.right.outer], b = lm[EYES.left.outer]
   const f: GazeFeatures = {
     rx: r.u, ry: r.v, lx: l.u, ly: l.v, ...pose,
+    lid: (lidGap(lm, 159, 145, EYES.right, aspect) + lidGap(lm, 386, 374, EYES.left, aspect)) / 2,
     scale: Math.hypot(a.x - b.x, (a.y - b.y) / aspect),
   }
   return Object.values(f).every(Number.isFinite) ? f : null
