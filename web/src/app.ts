@@ -6,7 +6,7 @@ import { createCamView } from './ui/camview'
 import { runCalibration } from './gaze/calib'
 import { Foveator } from './video/foveate'
 import { foveaRadiusPx, revealRGBA } from './video/fovea'
-import { DualEncoder, vp9QuantizerSupported, CODEC } from './video/encoders'
+import { DualEncoder, vp9QuantizerSupported, cbrSupported, CODEC, BAD_NETWORK_KBPS, type RateMode, DEFAULT_QP } from './video/encoders'
 import { StreamDecoder, decoderConfigFor } from './video/decoder'
 import { splitPanels, panelLabel, savedLabel } from './ui/split'
 import { percentSaved } from './metrics/stats'
@@ -66,6 +66,7 @@ export async function startApp() {
     if (e.key.toLowerCase() === 'f') foveate = !foveate
     if (e.key.toLowerCase() === 'e') void toggleEncode()
     if (e.key.toLowerCase() === 's') void toggleSplit()
+    if (e.key.toLowerCase() === 'b') void toggleBadNetwork()
     if (e.key.toLowerCase() === 'c') void calibrate()
     if (e.key.toLowerCase() === 't') void validate()
     if (e.key === 'Escape') { calibAbort?.abort(); validAbort?.abort() }
@@ -116,6 +117,19 @@ export async function startApp() {
   let meter: QualityMeter | null = null // decodes both streams and compares them with the source (foveal + full-frame PSNR/SSIM)
   const disposeEnc = () => { if (enc) { enc.close(); enc = null } meter?.close(); meter = null; encMsg = 'off' }
   let encMsg = 'off'
+  // Key B: bad network. Both encoders switch to constant bitrate at BAD_NETWORK_KBPS (same cap for both); B again = same QP as before.
+  let badNet = false
+  const rateMode = (): RateMode => badNet ? { kind: 'cbr', kbps: BAD_NETWORK_KBPS } : { kind: 'qp', qp: DEFAULT_QP }
+  ;(window as unknown as { glanceBadNet: () => boolean }).glanceBadNet = () => badNet
+  const toggleBadNetwork = async () => {
+    badNet = !badNet
+    if (!enc) return // takes effect the next time E / S starts the encoders
+    const wasSplit = !!split
+    stopSplit()
+    disposeEnc()
+    await toggleEncode()
+    if (wasSplit) await toggleSplit()
+  }
   let lastPushMs = -Infinity
   const encT0 = performance.now() // chunk timestamps are relative to this, so stats seconds start at 0
   const toggleEncode = async () => {
@@ -124,9 +138,11 @@ export async function startApp() {
       disposeEnc()
       return
     }
-    if (!(await vp9QuantizerSupported(W, H))) { encMsg = 'VP9 quantizer mode not supported here'; return }
+    const mode = rateMode()
+    const ok = mode.kind === 'cbr' ? await cbrSupported(W, H, mode.kbps) : await vp9QuantizerSupported(W, H)
+    if (!ok) { encMsg = `VP9 ${mode.kind === 'cbr' ? 'constant bitrate' : 'quantizer'} mode not supported here`; return }
     if (enc) return // a second E press while the support check was pending
-    enc = new DualEncoder(W, H, 30)
+    enc = new DualEncoder(W, H, 30, mode)
     const m = (meter = new QualityMeter(W, H, CODEC))
     enc.normal.onChunk = (c) => { m.push('normal', c); split?.n.push(c) }
     enc.glance.onChunk = (c) => { m.push('glance', c); split?.g.push(c) }
@@ -241,7 +257,7 @@ export async function startApp() {
     frames++
     const why = r.fallback ? (tracker?.latest ? ' (fallback: face found, not calibrated yet)' : ' (fallback: no face)') : ''
     const camTxt = trackerErr ? ` · tracker ERROR ${trackerErr}` : tracker ? ` · tracker ${tracker.delegate || 'loading'} face ${tracker.latest ? 'yes' : 'no'}` : ''
-    status.textContent = `source: ${src.kind} ${src.current?.id ?? ''} (keys 1-${src.options.length}) · gaze[${r.source}${why}] ${Math.round(gaze.x)},${Math.round(gaze.y)} · M toggles mouse/eyes · C calibrates: ${calibMsg} · T validates: ${validMsg} · F foveate ${foveate ? 'ON' : 'off'} · E encode: ${encText(performance.now())} · S split ${split ? 'ON' : 'off'} · R reveal ${reveal ? 'ON' : 'off'} · V camera view${camTxt} · frames ${frames}`
+    status.textContent = `source: ${src.kind} ${src.current?.id ?? ''} (keys 1-${src.options.length}) · gaze[${r.source}${why}] ${Math.round(gaze.x)},${Math.round(gaze.y)} · M toggles mouse/eyes · C calibrates: ${calibMsg} · T validates: ${validMsg} · F foveate ${foveate ? 'ON' : 'off'} · E encode: ${encText(performance.now())} · S split ${split ? 'ON' : 'off'} · B bad network ${badNet ? `ON (${BAD_NETWORK_KBPS} kbps cap, both streams)` : 'off'} · R reveal ${reveal ? 'ON' : 'off'} · V camera view${camTxt} · frames ${frames}`
     requestAnimationFrame(loop)
   }
   requestAnimationFrame(loop)

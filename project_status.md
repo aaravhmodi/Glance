@@ -12,11 +12,11 @@ Not final yet (T11 pending; the experiment harness T6–T9 is not built, so ther
    2. Press **C**, follow the 9 dots (~12 s).
    3. Press **T**, look at the 20 dots; read the verdict (GO / GO-with-big-fovea / PIVOT) and the mean/max error in degrees. Press **X** to recenter if the cursor drifts.
    4. Press **1–3** to pick a clip and look around. **M** toggles mouse/eyes, **V** shows the camera view, **F** previews the foveation.
-   5. Press **E** then **S** for split screen (left normal, right Glance, live kbps and % saved); **R** shows where the bits go. Bad-network mode (B) is not built yet (P3).
+   5. Press **E** then **S** for split screen (left normal, right Glance, live kbps and % saved); **R** shows where the bits go. **B** toggles bad-network mode (both encoders constant bitrate, 500 kbps cap); the quality line then compares foveal PSNR normal vs Glance at equal bitrate.
 6. Containers: none were stopped (see `autopilot/stopped_containers.md`).
 
 ## Now
-Idle between runs; next task in `autopilot/TASKS.md` is P3 "Bad-network mode".
+Idle between runs; next task in `autopilot/TASKS.md` is P3 `recorder.ts`.
 
 ## Audit (13 Nov, after P2)
 - `npm run smoke` green (type check, unit tests, browser checks); smoke network log: 0 external requests. Source has no http(s) URLs.
@@ -29,6 +29,7 @@ Idle between runs; next task in `autopilot/TASKS.md` is P3 "Bad-network mode".
 - Smoke can flake (pixel comparisons across moving clips).
 
 ## Done (newest first)
+- P3 bad-network mode (13 Nov): key B restarts both encoders (and split screen if on) with `bitrateMode: 'constant'` at 500 kbps, identical config for both (`video/rate.ts`, `video/encoders.ts`). Verified: `tests/encoders.test.ts` (config is constant, 500000 bit/s, identical for both) and smoke green (both configs 500 kbps, no encoder errors). Caveat: headless smoke encodes only ~13 frame pairs, so achieved kbps (normal 78 / Glance 59) never reaches the cap and says nothing about quality at the cap; the real comparison needs a live run or the offline harness (T6-T8). Independent Reviewer NOT run this time; researcher not run (`bitrateMode: 'constant'` was already probed in smoke). Git commands were refused in this run, so the host script must commit.
 - P3 live quality meter (13 Nov): `metrics/quality.ts` (luma PSNR, 8x8 SSIM, circular mask), `metrics/meter.ts` (decodes both streams, compares every 6th frame with the untouched source inside the nominal 5° circle and on the full frame; rolling mean of 20; shown in the status line and under the split screen). Verified: unit tests `tests/quality.test.ts` (identical → 100 dB cap / SSIM 1, offset 5 → 34.15 dB, mask ≈ πr², blur lowers SSIM) and smoke: foveal PSNR normal 27.9 / Glance 28.0 dB, SSIM 0.984 / 0.981, full-frame PSNR 27.4 / 24.2 dB, 2 samples each (headless, same QP). Limits: few samples in headless; in-browser only, publishable numbers come from the offline harness. Reviewer PASS (round 1; fixed: offer() try/catch, label split over two lines). Researcher skipped (standard Wang 2004 formulas). No docs numbers, so no fact-check.
 - P1/P2 (commits in `git log`, see below). Details:
 - P1: gaze plumbing done (mouse source, M toggle, 0.5 s no-face fallback). Tracker done (webcam → Face Landmarker → features; verified with a fake webcam file cut from talking-heads). Calibration done (key C, 9 dots, ridge poly regression; ~12 s happy path). Filter done (One-Euro + confirmed saccade snap, applied in `EyeTracker` after the mapper, reset on face loss). Validation done (key T after C; 20 dots, deg error, GO/PIVOT; set `?screencm=` to your real screen width).

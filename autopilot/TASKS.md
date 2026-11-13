@@ -23,7 +23,7 @@ Priorities come from `docs/COURSE_CORRECTION.md` (P1 → P2 → P3). Process rul
 
 ## P3 — old Stage 3+
 - [x] Decoding + foveal PSNR/SSIM (inside the gaze circle and full frame, every Nth frame) on the dashboard.
-- [ ] Bad-network mode: both encoders `bitrateMode: 'constant'` at the same cap (500 kbps); compare foveal PSNR normal vs Glance.
+- [x] Bad-network mode: both encoders `bitrateMode: 'constant'` at the same cap (500 kbps); compare foveal PSNR normal vs Glance.
 - [ ] `recorder.ts`: export gaze trace `{t, x, y, sigma}` + clip id as JSON.
 - [ ] T6 Harness core in `offline/experiments/` (Python + ffmpeg; design in `plan.md`, sources in `docs/research.md`): port the foveation formula from `web/src/video/fovea.ts` exactly, libvpx-vp9 realtime CBR encode for baseline and Glance with identical flags, foveal/peripheral PSNR + SSIM vs the untouched source, VMAF on a gaze-following crop (skip with a logged note if ffmpeg lacks `libvmaf`), seeded gaze-trace generator, `run.py --quick`. Unit tests with numeric thresholds (identical input → infinite PSNR; mask area ≈ πr²; baseline vs itself → 0 % saved; radius ≥ diagonal → same bitrate as baseline).
 - [ ] T7 Content + matrix: fetch busy-scene, screen/text and game/motion clips (URLs in `docs/research.md` §7; record licence in `web/public/clips/CREDITS.md`; if a download fails use the synthetic pattern, labelled). Run experiment A (equal foveal quality → kbps saved, by bisection) and B (equal kbps → quality gained) over the matrix in `plan.md`. Raw CSV/JSON to `results/raw/`.
