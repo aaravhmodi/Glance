@@ -63,6 +63,11 @@ in < 2 min, `--all` = full matrix + charts + tables). Raw output `results/raw/`,
 - Verification: clean `git worktree` + `npm ci && npm run smoke`, grep built bundle for external URLs, smoke network log line (0 external requests), status checked against `git log`.
 - Docs-only; numbers come from smoke output, so fact-check = compare to smoke output.
 
+## Task: T9 charts + results doc (autopilot run, 14 Nov)
+- T7b still blocked (curl to Xiph not allowed); T9 taken. matplotlib is not installed, so charts are hand-written SVG.
+- Outcome: `offline/experiments/report.py` (`run.py --report`) regenerates `docs/results_experiments.md` + `results/charts/*.svg` from `results/raw/*.json`: Exp A/B, tracker-error and transport tables, headline table, limitations, losing conditions.
+- Verify: `test_report.py` (SVG validity, bar sign/length, doc numbers equal values recomputed from raw JSON); 26 Python tests; smoke. No new measurements.
+
 ## Task: T6 offline harness core (autopilot run, 13 Nov)
 - Finding: this image has NO numpy/cv2/pyfvvdp and ffmpeg has NO libvmaf. Harness is therefore pure Python 3 (stdlib) + ffmpeg filters
   (gblur/scale/maskedmerge/psnr/ssim); VMAF and FovVideoVDP are skipped with a logged note (never faked).

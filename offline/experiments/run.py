@@ -103,7 +103,12 @@ def main():
     ap.add_argument("--out", default=os.path.join(ROOT, "results", "raw"))
     ap.add_argument("--ab", action="store_true", help="experiments A and B over the real-clip matrix (several minutes)")
     ap.add_argument("--t8", action="store_true", help="loss/jitter transport model and tracker-error runs (~30 min)")
+    ap.add_argument("--report", action="store_true", help="regenerate docs/results_experiments.md and SVG charts from results/raw (no measurements)")
     args = ap.parse_args()
+    if args.report:
+        import report
+        report.main()
+        return
     if args.t8:
         t, e = t8_run(args.out)
         print("wrote exp_transport.json (%d rows) and exp_tracker.json (%d rows) to %s" % (len(t), len(e), args.out))

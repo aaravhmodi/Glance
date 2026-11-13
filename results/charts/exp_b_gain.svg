@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="514" font-family="sans-serif" font-size="11">
+<rect width="100%" height="100%" fill="white"/><text x="8" y="18" font-size="13" font-weight="bold">Exp. B: foveal PSNR gain of Glance at equal CBR cap (dB, synthetic gaze)</text>
+<line x1="658.6" y1="28" x2="658.6" y2="500" stroke="#333"/>
+<text x="658.6" y="512" text-anchor="middle">0 dB (right of line: Glance better)</text>
+<text x="244" y="44" text-anchor="end">desk 360p 300k 5deg s1</text>
+<rect x="306.4" y="34" width="352.1" height="12" fill="#c43"/>
+<text x="303.4" y="44" text-anchor="end">-2.73</text>
+<text x="244" y="60" text-anchor="end">desk 360p 500k 5deg s1</text>
+<rect x="365.9" y="50" width="292.6" height="12" fill="#c43"/>
+<text x="362.9" y="60" text-anchor="end">-2.27</text>
+<text x="244" y="76" text-anchor="end">desk 360p 1000k 5deg s1</text>
+<rect x="478.7" y="66" width="179.9" height="12" fill="#c43"/>
+<text x="475.7" y="76" text-anchor="end">-1.39</text>
+<text x="244" y="92" text-anchor="end">desk 720p 300k 5deg s1</text>
+<rect x="303.6" y="82" width="355.0" height="12" fill="#c43"/>
+<text x="300.6" y="92" text-anchor="end">-2.75</text>
+<text x="244" y="108" text-anchor="end">desk 720p 500k 5deg s1</text>
+<rect x="276.6" y="98" width="381.9" height="12" fill="#c43"/>
+<text x="273.6" y="108" text-anchor="end">-2.96</text>
+<text x="244" y="124" text-anchor="end">desk 720p 1000k 5deg s1</text>
+<rect x="431.9" y="114" width="226.7" height="12" fill="#c43"/>
+<text x="428.9" y="124" text-anchor="end">-1.76</text>
+<text x="244" y="140" text-anchor="end">desk 720p 2500k 5deg s1</text>
+<rect x="550.9" y="130" width="107.6" height="12" fill="#c43"/>
+<text x="547.9" y="140" text-anchor="end">-0.83</text>
+<text x="244" y="156" text-anchor="end">plants 360p 300k 5deg s1</text>
+<rect x="588.9" y="146" width="69.6" height="12" fill="#c43"/>
+<text x="585.9" y="156" text-anchor="end">-0.54</text>
+<text x="244" y="172" text-anchor="end">plants 360p 500k 5deg s1</text>
+<rect x="658.6" y="162" width="2.5" height="12" fill="#2a7"/>
+<text x="664.1" y="172">+0.02</text>
+<text x="244" y="188" text-anchor="end">plants 360p 1000k 5deg s1</text>
+<rect x="658.6" y="178" width="61.4" height="12" fill="#2a7"/>
+<text x="723.0" y="188">+0.48</text>
+<text x="244" y="204" text-anchor="end">plants 720p 300k 5deg s1</text>
+<rect x="536.7" y="194" width="121.8" height="12" fill="#c43"/>
+<text x="533.7" y="204" text-anchor="end">-0.94</text>
+<text x="244" y="220" text-anchor="end">plants 720p 500k 5deg s1</text>
+<rect x="528.1" y="210" width="130.4" height="12" fill="#c43"/>
+<text x="525.1" y="220" text-anchor="end">-1.01</text>
+<text x="244" y="236" text-anchor="end">plants 720p 1000k 5deg s1</text>
+<rect x="584.8" y="226" width="73.8" height="12" fill="#c43"/>
+<text x="581.8" y="236" text-anchor="end">-0.57</text>
+<text x="244" y="252" text-anchor="end">plants 720p 2500k 5deg s1</text>
+<rect x="658.6" y="242" width="13.2" height="12" fill="#2a7"/>
+<text x="674.8" y="252">+0.10</text>
+<text x="244" y="268" text-anchor="end">teacher 360p 300k 5deg s1</text>
+<rect x="525.0" y="258" width="133.6" height="12" fill="#c43"/>
+<text x="522.0" y="268" text-anchor="end">-1.03</text>
+<text x="244" y="284" text-anchor="end">teacher 360p 500k 5deg s1</text>
+<rect x="625.1" y="274" width="33.5" height="12" fill="#c43"/>
+<text x="622.1" y="284" text-anchor="end">-0.26</text>
+<text x="244" y="300" text-anchor="end">teacher 360p 1000k 5deg s1</text>
+<rect x="658.6" y="290" width="17.4" height="12" fill="#2a7"/>
+<text x="679.0" y="300">+0.13</text>
+<text x="244" y="316" text-anchor="end">teacher 720p 300k 5deg s1</text>
+<rect x="464.4" y="306" width="194.1" height="12" fill="#c43"/>
+<text x="461.4" y="316" text-anchor="end">-1.50</text>
+<text x="244" y="332" text-anchor="end">teacher 720p 500k 5deg s1</text>
+<rect x="512.7" y="322" width="145.8" height="12" fill="#c43"/>
+<text x="509.7" y="332" text-anchor="end">-1.13</text>
+<text x="244" y="348" text-anchor="end">teacher 720p 1000k 5deg s1</text>
+<rect x="613.7" y="338" width="44.9" height="12" fill="#c43"/>
+<text x="610.7" y="348" text-anchor="end">-0.35</text>
+<text x="244" y="364" text-anchor="end">teacher 720p 2500k 5deg s1</text>
+<rect x="658.6" y="354" width="13.6" height="12" fill="#2a7"/>
+<text x="675.1" y="364">+0.11</text>
+<text x="244" y="380" text-anchor="end">desk 720p 500k 3deg s1</text>
+<rect x="462.7" y="370" width="195.8" height="12" fill="#c43"/>
+<text x="459.7" y="380" text-anchor="end">-1.52</text>
+<text x="244" y="396" text-anchor="end">desk 720p 1000k 3deg s1</text>
+<rect x="628.4" y="386" width="30.2" height="12" fill="#c43"/>
+<text x="625.4" y="396" text-anchor="end">-0.23</text>
+<text x="244" y="412" text-anchor="end">desk 720p 500k 8deg s1</text>
+<rect x="250.0" y="402" width="408.6" height="12" fill="#c43"/>
+<text x="247.0" y="412" text-anchor="end">-3.17</text>
+<text x="244" y="428" text-anchor="end">desk 720p 1000k 8deg s1</text>
+<rect x="379.3" y="418" width="279.2" height="12" fill="#c43"/>
+<text x="376.3" y="428" text-anchor="end">-2.16</text>
+<text x="244" y="444" text-anchor="end">desk 720p 500k 5deg s2</text>
+<rect x="532.4" y="434" width="126.1" height="12" fill="#c43"/>
+<text x="529.4" y="444" text-anchor="end">-0.98</text>
+<text x="244" y="460" text-anchor="end">desk 720p 1000k 5deg s2</text>
+<rect x="630.0" y="450" width="28.6" height="12" fill="#c43"/>
+<text x="627.0" y="460" text-anchor="end">-0.22</text>
+<text x="244" y="476" text-anchor="end">desk 720p 500k 5deg s3</text>
+<rect x="340.7" y="466" width="317.9" height="12" fill="#c43"/>
+<text x="337.7" y="476" text-anchor="end">-2.46</text>
+<text x="244" y="492" text-anchor="end">desk 720p 1000k 5deg s3</text>
+<rect x="474.4" y="482" width="184.2" height="12" fill="#c43"/>
+<text x="471.4" y="492" text-anchor="end">-1.43</text>
+</svg>

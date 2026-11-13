@@ -21,3 +21,7 @@ Run: `cd offline/unisal && TRAIN_DIR=training_runs ../../.venv/Scripts/python ru
 
 ## Stage 1 — gaze accuracy
 _TODO_
+
+## Experiments (Stages 3–4, offline harness)
+Generated, regenerable report: [results_experiments.md](results_experiments.md) (`python3 offline/experiments/run.py --report`; raw data in `results/raw/`, charts in `results/charts/`).
+Short version (synthetic gaze, call clips only): the equal-bandwidth quality claim is not supported (mean foveal PSNR gain -1.15 dB, positive in 5 of 29 conditions); equal-quality saving 1.5–15.9 % in 6 of 10 conditions, not reached in 4; simulated tracker error makes Glance lose in 21 of 21 conditions.
