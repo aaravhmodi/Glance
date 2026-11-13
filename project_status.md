@@ -16,7 +16,17 @@ Not final yet (T11 pending; the experiment harness T6–T9 is not built, so ther
 6. Containers: none were stopped (see `autopilot/stopped_containers.md`).
 
 ## Now
-Idle between runs; next task in `autopilot/TASKS.md` is T7 (content + experiment A/B matrix).
+Idle between runs; next task in `autopilot/TASKS.md` is T7b (blocked on downloads), then T8.
+
+## Blocked
+- **T7b (Xiph busy/screen/game clips):** every `curl` to media.xiph.org needed approval and was refused in the 13 Nov run (even without `cd`/`$?`). Not worked around. Aarav/host: allow `curl -fsSL https://media.xiph.org/...` for the autopilot, or run the three range downloads from `docs/research.md` §7 into `offline/experiments/media/` by hand, then add them to `AB_CLIPS` in `run.py` and rerun `python3 offline/experiments/run.py --ab`. Next runs: take T8 meanwhile.
+
+## T7a result (13 Nov, synthetic gaze, 3 call clips only, 90 frames, VP9 CBR realtime)
+Reproduce: `python3 offline/experiments/run.py --ab && python3 offline/experiments/summarize.py`.
+- Exp. B (equal cap, 31 rows): Glance foveal PSNR vs baseline ranged -3.17 to +0.48 dB; positive in only 6 rows (plants/teacher at 500–2500 kbps), worst case call-desk 8° at 500 kbps -3.17 dB. Worst-frame values are in the JSON.
+- Exp. A (equal foveal PSNR within 0.5 dB, 10 rows): reached in 6, saving 1.5–15.9 % (720p plants 11.8 %, teacher 12.3 %, desk 3° 15.9 %); NOT reached in 4 (desk 360p/720p/8°, desk seed 3). Not a pitch-grade saving.
+- Glance does not currently show the hoped-for gain on these easy talking-head clips; do not claim it. Unverified hypothesis for the loss: encoder rate control and inter-prediction cost when the fovea moves (pre-encode frames are 100 dB inside the fovea).
+- Review: the independent reviewer could not run Bash and returned INCOMPLETE (static notes only: bisection assumes monotonic PSNR; savings compares achieved kbps). My own re-run of call-desk 720p 500 kbps (`--quick`) reproduced the JSON row exactly (519/507 kbps, 43.46/40.50 dB). Unit tests 15 green; smoke green. No Fact-check yet (no docs/results.md numbers written).
 
 ## Audit (13 Nov, after P2)
 - `npm run smoke` green (type check, unit tests, browser checks); smoke network log: 0 external requests. Source has no http(s) URLs.

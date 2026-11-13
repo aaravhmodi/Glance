@@ -132,5 +132,41 @@ class PipelineGates(unittest.TestCase):
         self.assertLess(res["glance"]["periph_psnr"]["mean"], res["baseline"]["periph_psnr"]["mean"])
 
 
+class ExperimentLogic(unittest.TestCase):
+    """Experiments A/B on ffmpeg's testsrc2 (test content only; real-clip numbers come from run.py --ab)."""
+
+    @classmethod
+    def setUpClass(cls):
+        import experiments
+        cls.ex = experiments
+        cls.tmp = tempfile.TemporaryDirectory()
+        cls.clip = os.path.join(cls.tmp.name, "src.mkv")
+        pipeline.ffmpeg("-f", "lavfi", "-i", "testsrc2=size=640x360:rate=30:duration=2", "-c:v", "ffv1", cls.clip)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def test_experiment_b_rows_are_consistent(self):
+        rows = self.ex.experiment_b(self.clip, 360, [200, 400], n=30, tmp=os.path.join(self.tmp.name, "b"))
+        self.assertEqual([r["cap_kbps"] for r in rows], [200, 400])
+        for r in rows:
+            self.assertTrue(r["synthetic_gaze"])
+            self.assertAlmostEqual(r["foveal_psnr_gain_db"], r["glance"]["foveal_psnr"]["mean"] - r["baseline"]["foveal_psnr"]["mean"], places=9)
+            self.assertGreater(r["baseline"]["kbps"], 0)
+            self.assertGreater(r["glance"]["kbps"], 0)
+
+    def test_experiment_a_result_is_self_consistent(self):
+        r = self.ex.experiment_a(self.clip, 360, n=30, base_kbps=400, tmp=os.path.join(self.tmp.name, "a"))
+        self.assertEqual(r["reached"], r["glance"] is not None)
+        self.assertLessEqual(len(r["probes"]), 1 + self.ex.BISECT_STEPS)
+        if r["reached"]:
+            self.assertGreaterEqual(r["glance"]["foveal_psnr"]["mean"], r["goal_foveal_psnr"])
+            self.assertAlmostEqual(r["percent_saved"], 100 * (1 - r["glance"]["kbps"] / r["baseline"]["kbps"]), places=9)
+        else:
+            self.assertIsNone(r["percent_saved"])
+            self.assertLess(r["probes"][0]["foveal_psnr"]["mean"], r["goal_foveal_psnr"])
+
+
 if __name__ == "__main__":
     unittest.main()

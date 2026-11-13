@@ -73,3 +73,9 @@ in < 2 min, `--all` = full matrix + charts + tables). Raw output `results/raw/`,
   foveal PSNR 43.5 vs 40.5 dB: at this easy content/bitrate Glance does NOT win; the bisection in T7 decides. Not a headline number.
 - Verify: `python3 -m unittest discover -s offline/experiments -p "test_*.py"`: identical -> PSNR cap, mask area within 1 % of pi r^2, baseline vs itself 0 % saved,
   radius >= diagonal -> Glance bytes == baseline bytes, trace determinism; `run.py --quick` writes results/raw/quick.json. Smoke stays green.
+
+## Task: T7 content + experiments A/B (autopilot run, 13 Nov)
+- Blocker: every `curl` to media.xiph.org needed approval and was refused in this run, so the busy / screen-text / game clips were NOT fetched (not retried, not worked around). T7 is split: T7a (this run) = experiments A and B on the three real call clips in `web/public/clips/`; T7b = fetch the Xiph clips and rerun (Blocked until curl is allowed).
+- Outcome: `offline/experiments/experiments.py` (A: bisection for the lowest Glance kbps whose foveal PSNR is within 0.5 dB of baseline, else "not reached"; B: equal CBR caps), `run.py --ab` writes `results/raw/exp_a.json`, `exp_b.json`. Matrix: 3 clips x {360p, 720p} x caps {300,500,1000,2500} (360p <= 1000), fovea 3/5/8 deg, 3 seeded synthetic traces on one clip.
+- Verify: unit tests (15, incl. A/B self-consistency), `python3 offline/experiments/run.py --ab`, smoke. Skeptic re-runs one condition.
+- Finding: Glance frames are bit-exact inside the fovea before encoding (100 dB, `probe_pre.py`), yet after VP9 CBR foveal PSNR is 0.8-3 dB BELOW baseline at equal bitrate on call-desk (2500: 48.0 vs 48.8; 1000: 44.2 vs 46.0; 500: 40.5 vs 43.5).
