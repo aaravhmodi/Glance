@@ -2,21 +2,32 @@
 _Last updated: 13 Nov 2026 (Helsinki) by autopilot_
 
 ## FINAL REPORT
-Not final yet (T11 pending; the experiment harness T6–T9 is not built, so there are no bandwidth numbers beyond the in-browser smoke ones). Interim state:
-1. Works (all verified by `cd web && npm run smoke`, green on 13 Nov): gaze source plumbing with mouse fallback, webcam tracker (Face Landmarker, vendored), 9-point calibration (C), 20-dot validation (T), One-Euro filter, real clip source, WebGL foveation (F), two VP9 encoders (E), split screen (S), Reveal (R). Smoke: Glance 319 kbps vs normal 634 kbps = 49.7 % saved on call-desk (11 frame pairs, headless, same QP, synthetic fovea at the mouse position).
-2. Headline results: none yet at pitch quality (waiting on T6–T9).
-3. Where Glance does NOT help: not measured yet. Known: in-browser QP is per frame, so gains come only from pre-filtering.
-4. Blocked: nothing. Audit limitation below.
-5. Test this first when you land (5 min):
-   1. `cd web && npm ci && npm run dev`, open the app in Chrome, allow the webcam. Add `?screencm=<your screen width in cm>`.
-   2. Press **C**, follow the 9 dots (~12 s).
-   3. Press **T**, look at the 20 dots; read the verdict (GO / GO-with-big-fovea / PIVOT) and the mean/max error in degrees. Press **X** to recenter if the cursor drifts.
-   4. Press **1–3** to pick a clip and look around. **M** toggles mouse/eyes, **V** shows the camera view, **F** previews the foveation.
-   5. Press **E** then **S** for split screen (left normal, right Glance, live kbps and % saved); **R** shows where the bits go. **B** toggles bad-network mode (both encoders constant bitrate, 500 kbps cap); the quality line then compares foveal PSNR normal vs Glance at equal bitrate.
-6. Containers: none were stopped (see `autopilot/stopped_containers.md`).
+(13 Nov run 19; T7b still Blocked, so this is the report with that gap stated. Smoke green, 26 Python tests green.)
+1. **What works** (verified by `cd web && npm run smoke`, `python3 -m unittest discover -s offline/experiments -p "test_*.py"`): mouse/webcam gaze with fallback, Face Landmarker tracker, calibration (C), validation (T), recenter (X), camera view (V), One-Euro filter, real clips, WebGL foveation (F), two VP9 encoders (E), split screen (S), Reveal (R), live foveal PSNR/SSIM, bad-network mode (B), gaze recorder (G); offline harness (commits 537f3c3 T6, then the autopilot commits in `git log`) with Exp. A/B, tracker-error and transport runs, `docs/results_experiments.md` + SVG charts.
+2. **Headline results for the pitch** (all synthetic gaze, 3 talking-head clips, VP9 CBR, PSNR only; no VMAF):
+   - Equal foveal PSNR (within 0.5 dB), Glance saves 1.5-15.9 % kbps (mean 9.1 %) in 6 of 10 conditions: `python3 offline/experiments/run.py --ab && python3 offline/experiments/report.py`.
+   - In-browser same-QP size: Glance about 50 % fewer kbps than normal (11 frame pairs, call-desk): `cd web && npm run smoke`. This is not an equal-quality CBR result; do not pitch it as bandwidth saving.
+   - Equal bandwidth quality gain: NOT shown. Mean -1.15 dB, best +0.48 dB, worst -3.17 dB, better in 5 of 29 conditions (same command).
+3. **Where Glance does NOT help:** equal-bandwidth quality (above); every simulated tracker-error condition (0 of 21 wins, mean -6.17 dB with 100 ms lag, `run.py --t8`); lossy transport model (mixed, inside noise). Pre-filtering only: WebCodecs has no per-region QP.
+4. **Blocked:** T7b (busy/screen/game Xiph clips): `curl` to media.xiph.org needs approval and the sandbox refused it in runs 13-19. Aarav: run the three range downloads from `docs/research.md` section 7 into `offline/experiments/media/`, add them to `AB_CLIPS` in `run.py`, run `python3 offline/experiments/run.py --ab`. Busy content is where Glance is most likely to win, so this is the most valuable missing experiment. Also missing: VMAF/FovVideoVDP (no libvmaf/pyfvvdp), real webcam traces (use G to record), independent Skeptic/Fact-checker agents for T8/T9.
+5. **Test this first when you land (5 min):**
+   1. `cd web && npm ci && npm run dev`, open in Chrome, allow the webcam, add `?screencm=<screen width in cm>`.
+   2. **C**: follow the 9 dots (~12 s).
+   3. **T**: look at the 20 dots; read GO / GO-with-big-fovea / PIVOT and the error in degrees. **X** recenters.
+   4. **1-3** pick a clip and look around; **M** mouse/eyes, **V** camera view, **F** foveation preview.
+   5. **E** then **S**: split screen with live kbps and % saved; **R** shows where bits go. **B**: bad-network mode (500 kbps CBR both) with foveal PSNR comparison.
+6. **Containers:** none were stopped (see `autopilot/stopped_containers.md`).
 
 ## Now
-Idle between runs; T8 done (14 Nov). Next unchecked task is T7b (blocked: curl to Xiph refused again in the 14 Nov run), so the next run takes T9 (charts + docs/results.md).
+Idle. All tasks ticked except Blocked T7b. After feature freeze (14 Nov 13:00 Helsinki) only bug fixes.
+
+## Headline numbers
+| Content | Res | Network | Codec | Fovea | Baseline kbps | Glance kbps | % saved | Foveal PSNR base/Glance | Foveal VMAF base/Glance |
+|---|---|---|---|---|---|---|---|---|---|
+| call-desk | 720p | clean, Exp. A | VP9 | 3 deg | 2296 | 1931 | 15.9 | 48.90 / 48.48 | n/a |
+| call-teacher | 720p | clean, Exp. A | VP9 | 5 deg | 2358 | 2067 | 12.3 | 47.06 / 46.59 | n/a |
+| call-plants | 720p | clean, Exp. A | VP9 | 5 deg | 2392 | 2110 | 11.8 | 45.86 / 45.41 | n/a |
+| call-desk | 720p | CBR 500, Exp. B worst | VP9 | 8 deg | 519 | 516 | 0.7 | 42.92 / 39.75 | n/a |
 
 ## T8 result (14 Nov; synthetic gaze, 3 call clips, 720p, VP9 CBR realtime, 150 / 90 frames)
 Reproduce: `python3 offline/experiments/run.py --t8` (~35 min). Raw: `results/raw/exp_transport.json`, `exp_tracker.json`. Tests: `python3 -m unittest discover -s offline/experiments -p "test_*.py"` (24 green); smoke green.
