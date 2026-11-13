@@ -1,9 +1,6 @@
 {
  "synthetic_gaze": true,
- "notes": [
-  "VMAF skipped: this ffmpeg has no libvmaf filter",
-  "FovVideoVDP skipped: pyfvvdp is not installed"
- ],
+ "notes": [],
  "rows": [
   {
    "experiment": "A",
@@ -12,6 +9,7 @@
    "frames": 90,
    "fovea_deg": 5.0,
    "seed": 1,
+   "start_s": 0.0,
    "synthetic_gaze": true,
    "baseline_target_kbps": 500,
    "baseline": {
@@ -99,6 +97,7 @@
    "frames": 90,
    "fovea_deg": 5.0,
    "seed": 1,
+   "start_s": 0.0,
    "synthetic_gaze": true,
    "baseline_target_kbps": 2500,
    "baseline": {
@@ -186,44 +185,45 @@
    "frames": 90,
    "fovea_deg": 5.0,
    "seed": 1,
+   "start_s": 0.0,
    "synthetic_gaze": true,
    "baseline_target_kbps": 500,
    "baseline": {
-    "bytes": 179426,
-    "kbps": 478.46933333333334,
+    "bytes": 179630,
+    "kbps": 479.0133333333333,
     "frames_encoded": 90,
     "frames_dropped": 0,
     "keyframes": 2,
     "max_frame_bytes": 12109,
     "foveal_psnr": {
-     "mean": 40.48396925674413,
+     "mean": 40.49604101642803,
      "worst": 32.71804364161304
     },
     "full_psnr": {
-     "mean": 40.20827882145538,
+     "mean": 40.205108886191525,
      "worst": 36.3439112109232
     },
     "periph_psnr": {
-     "mean": 40.42195558015775,
+     "mean": 40.41415263360138,
      "worst": 36.22370348929319
     },
     "foveal_ssim": {
-     "mean": 0.9777719447935335,
+     "mean": 0.9778689433592127,
      "worst": 0.9263279408178194
     },
     "full_ssim": {
-     "mean": 0.979208133333333,
+     "mean": 0.9792342777777776,
      "worst": 0.959016
     },
     "periph_ssim": {
-     "mean": 0.9795222996269333,
+     "mean": 0.9795350351422624,
      "worst": 0.9564240682940945
     },
-    "foveal_psnr_of_mean_mse": 38.998115009347124,
+    "foveal_psnr_of_mean_mse": 39.01717755833014,
     "disc_area_frac_mean": 0.15201075424382718,
     "kbps_target": 500
    },
-   "goal_foveal_psnr": 39.98396925674413,
+   "goal_foveal_psnr": 39.99604101642803,
    "tol_db": 0.5,
    "probes": [
     {
@@ -262,37 +262,37 @@
      "kbps_target": 500
     },
     {
-     "bytes": 101096,
-     "kbps": 269.5893333333333,
+     "bytes": 101222,
+     "kbps": 269.9253333333333,
      "frames_encoded": 90,
      "frames_dropped": 0,
      "keyframes": 2,
      "max_frame_bytes": 5379,
      "foveal_psnr": {
-      "mean": 36.90661208759813,
+      "mean": 36.90641200434636,
       "worst": 30.085161158863794
      },
      "full_psnr": {
-      "mean": 26.226224998885215,
+      "mean": 26.227491825181378,
       "worst": 24.760206345473858
      },
      "periph_psnr": {
-      "mean": 25.603155970244025,
+      "mean": 25.60463950069,
       "worst": 24.14699617306436
      },
      "foveal_ssim": {
-      "mean": 0.9534696521314306,
+      "mean": 0.9533735912277795,
       "worst": 0.8550390372157319
      },
      "full_ssim": {
-      "mean": 0.8133133111111116,
+      "mean": 0.8134561888888894,
       "worst": 0.757581
      },
      "periph_ssim": {
-      "mean": 0.7889076155906207,
+      "mean": 0.7890960415099574,
       "worst": 0.7261339411135401
      },
-     "foveal_psnr_of_mean_mse": 35.57293721318437,
+     "foveal_psnr_of_mean_mse": 35.567253008561835,
      "disc_area_frac_mean": 0.15201075424382718,
      "kbps_target": 270.0
     },
@@ -332,37 +332,37 @@
      "kbps_target": 385.0
     },
     {
-     "bytes": 162411,
-     "kbps": 433.096,
+     "bytes": 162361,
+     "kbps": 432.9626666666667,
      "frames_encoded": 90,
      "frames_dropped": 0,
      "keyframes": 2,
      "max_frame_bytes": 9966,
      "foveal_psnr": {
-      "mean": 39.680779543121446,
+      "mean": 39.68246600687874,
       "worst": 33.246949386960594
      },
      "full_psnr": {
-      "mean": 26.386292982962917,
+      "mean": 26.386247399331932,
       "worst": 24.827274741905818
      },
      "periph_psnr": {
-      "mean": 25.720009632521865,
+      "mean": 25.719933302884122,
       "worst": 24.22729398022765
      },
      "foveal_ssim": {
-      "mean": 0.9736176894440155,
+      "mean": 0.9736199784158536,
       "worst": 0.9263329520505243
      },
      "full_ssim": {
-      "mean": 0.8250965888888889,
+      "mean": 0.8250945444444445,
       "worst": 0.765514
      },
      "periph_ssim": {
-      "mean": 0.7991278247774967,
+      "mean": 0.79912495395337,
       "worst": 0.7383886011627283
      },
-     "foveal_psnr_of_mean_mse": 38.40569661412845,
+     "foveal_psnr_of_mean_mse": 38.407623371374235,
      "disc_area_frac_mean": 0.15201075424382718,
      "kbps_target": 442.5
     },
@@ -402,113 +402,113 @@
      "kbps_target": 471.25
     },
     {
-     "bytes": 167891,
-     "kbps": 447.7093333333333,
+     "bytes": 167581,
+     "kbps": 446.8826666666667,
      "frames_encoded": 90,
      "frames_dropped": 0,
      "keyframes": 2,
-     "max_frame_bytes": 10950,
+     "max_frame_bytes": 10856,
      "foveal_psnr": {
-      "mean": 39.92969220771978,
+      "mean": 39.95184920043486,
       "worst": 33.371828004579996
      },
      "full_psnr": {
-      "mean": 26.396134179905957,
-      "worst": 24.84945499324578
+      "mean": 26.3956108314753,
+      "worst": 24.857214264815802
      },
      "periph_psnr": {
-      "mean": 25.728037893243304,
-      "worst": 24.260257666519934
+      "mean": 25.72716570235179,
+      "worst": 24.249665112929716
      },
      "foveal_ssim": {
-      "mean": 0.9745540278206807,
+      "mean": 0.9746919113442288,
       "worst": 0.9290020004879236
      },
      "full_ssim": {
-      "mean": 0.8258682888888887,
-      "worst": 0.766206
+      "mean": 0.8258192333333333,
+      "worst": 0.765779
      },
      "periph_ssim": {
-      "mean": 0.7998723954282982,
-      "worst": 0.738931809062642
+      "mean": 0.7997887502296532,
+      "worst": 0.7384931939881775
      },
-     "foveal_psnr_of_mean_mse": 38.588992579835846,
+     "foveal_psnr_of_mean_mse": 38.619657910207145,
      "disc_area_frac_mean": 0.15201075424382718,
      "kbps_target": 456.875
     },
     {
-     "bytes": 170716,
-     "kbps": 455.2426666666667,
+     "bytes": 170616,
+     "kbps": 454.976,
      "frames_encoded": 90,
      "frames_dropped": 0,
      "keyframes": 2,
      "max_frame_bytes": 11324,
      "foveal_psnr": {
-      "mean": 40.05220863003928,
+      "mean": 40.046682288556966,
       "worst": 33.03212098228057
      },
      "full_psnr": {
-      "mean": 26.398121926401537,
+      "mean": 26.397415564046707,
       "worst": 24.855375289353884
      },
      "periph_psnr": {
-      "mean": 25.729346272866117,
+      "mean": 25.728767581419838,
       "worst": 24.229610161369518
      },
      "foveal_ssim": {
-      "mean": 0.9750917373423492,
+      "mean": 0.975052742202404,
       "worst": 0.9257209335104223
      },
      "full_ssim": {
-      "mean": 0.826062,
+      "mean": 0.8260516222222224,
       "worst": 0.766487
      },
      "periph_ssim": {
-      "mean": 0.8000064058293365,
+      "mean": 0.8000014842634992,
       "worst": 0.7391499919458371
      },
-     "foveal_psnr_of_mean_mse": 38.65887274684036,
+     "foveal_psnr_of_mean_mse": 38.65003431722758,
      "disc_area_frac_mean": 0.15201075424382718,
      "kbps_target": 464.0625
     }
    ],
    "glance": {
-    "bytes": 170716,
-    "kbps": 455.2426666666667,
+    "bytes": 170616,
+    "kbps": 454.976,
     "frames_encoded": 90,
     "frames_dropped": 0,
     "keyframes": 2,
     "max_frame_bytes": 11324,
     "foveal_psnr": {
-     "mean": 40.05220863003928,
+     "mean": 40.046682288556966,
      "worst": 33.03212098228057
     },
     "full_psnr": {
-     "mean": 26.398121926401537,
+     "mean": 26.397415564046707,
      "worst": 24.855375289353884
     },
     "periph_psnr": {
-     "mean": 25.729346272866117,
+     "mean": 25.728767581419838,
      "worst": 24.229610161369518
     },
     "foveal_ssim": {
-     "mean": 0.9750917373423492,
+     "mean": 0.975052742202404,
      "worst": 0.9257209335104223
     },
     "full_ssim": {
-     "mean": 0.826062,
+     "mean": 0.8260516222222224,
      "worst": 0.766487
     },
     "periph_ssim": {
-     "mean": 0.8000064058293365,
+     "mean": 0.8000014842634992,
      "worst": 0.7391499919458371
     },
-    "foveal_psnr_of_mean_mse": 38.65887274684036,
+    "foveal_psnr_of_mean_mse": 38.65003431722758,
     "disc_area_frac_mean": 0.15201075424382718,
     "kbps_target": 464.0625
    },
    "reached": true,
-   "percent_saved": 4.854368932038833
+   "percent_saved": 5.018092746200519
   },
   {
    "experiment": "A",
@@ -517,6 +517,7 @@
    "frames": 90,
    "fovea_deg": 5.0,
    "seed": 1,
+   "start_s": 0.0,
    "synthetic_gaze": true,
    "baseline_target_kbps": 2500,
    "baseline": {
@@ -593,139 +594,139 @@
      "kbps_target": 2500
     },
     {
-     "bytes": 460367,
-     "kbps": 1227.6453333333332,
+     "bytes": 460219,
+     "kbps": 1227.2506666666668,
      "frames_encoded": 90,
      "frames_dropped": 0,
      "keyframes": 2,
      "max_frame_bytes": 25934,
      "foveal_psnr": {
-      "mean": 42.76533358400877,
-      "worst": 35.846402492795065
+      "mean": 42.76631106703765,
+      "worst": 35.84640249279507
      },
      "full_psnr": {
-      "mean": 29.2110436126757,
+      "mean": 29.21061882497325,
       "worst": 27.741821487533777
      },
      "periph_psnr": {
-      "mean": 28.544520175580626,
+      "mean": 28.54407510242266,
       "worst": 27.111666828383832
      },
      "foveal_ssim": {
-      "mean": 0.9815611578144021,
+      "mean": 0.9815761435657497,
       "worst": 0.9437009209001647
      },
      "full_ssim": {
-      "mean": 0.8764944888888889,
+      "mean": 0.8764795000000002,
       "worst": 0.827207
      },
      "periph_ssim": {
-      "mean": 0.858216965226007,
+      "mean": 0.8581962606285242,
       "worst": 0.8049442604990555
      },
-     "foveal_psnr_of_mean_mse": 41.31856171803689,
+     "foveal_psnr_of_mean_mse": 41.32170193444374,
      "disc_area_frac_mean": 0.1520101273148148,
      "kbps_target": 1270.0
     },
     {
-     "bytes": 681447,
-     "kbps": 1817.192,
+     "bytes": 681399,
+     "kbps": 1817.064,
      "frames_encoded": 90,
      "frames_dropped": 0,
      "keyframes": 2,
      "max_frame_bytes": 39319,
      "foveal_psnr": {
-      "mean": 44.737292436310945,
+      "mean": 44.738161918256715,
       "worst": 37.74571491467618
      },
      "full_psnr": {
-      "mean": 29.281086451711325,
+      "mean": 29.28110721161255,
       "worst": 27.764115505678134
      },
      "periph_psnr": {
-      "mean": 28.59668190853466,
+      "mean": 28.596692685509858,
       "worst": 27.177555874185828
      },
      "foveal_ssim": {
-      "mean": 0.9868162184962347,
+      "mean": 0.9868132351771294,
       "worst": 0.9576773312191252
      },
      "full_ssim": {
-      "mean": 0.8797202555555554,
+      "mean": 0.8797183999999998,
       "worst": 0.829029
      },
      "periph_ssim": {
-      "mean": 0.86106356395313,
+      "mean": 0.8610619234490511,
       "worst": 0.8085572551948337
      },
-     "foveal_psnr_of_mean_mse": 43.22566146298569,
+     "foveal_psnr_of_mean_mse": 43.2266354430071,
      "disc_area_frac_mean": 0.1520101273148148,
      "kbps_target": 1885.0
     },
     {
-     "bytes": 791173,
-     "kbps": 2109.7946666666667,
+     "bytes": 792222,
+     "kbps": 2112.592,
      "frames_encoded": 90,
      "frames_dropped": 0,
      "keyframes": 2,
      "max_frame_bytes": 43106,
      "foveal_psnr": {
-      "mean": 45.41349753378689,
+      "mean": 45.40885233031093,
       "worst": 37.94828329748554
      },
      "full_psnr": {
-      "mean": 29.29877840828681,
+      "mean": 29.298314243278192,
       "worst": 27.770906039314838
      },
      "periph_psnr": {
-      "mean": 28.61003875461669,
+      "mean": 28.60961104898095,
       "worst": 27.178801639309548
      },
      "foveal_ssim": {
-      "mean": 0.988115579776331,
+      "mean": 0.9880996231424035,
       "worst": 0.9584204915533326
      },
      "full_ssim": {
-      "mean": 0.8805787111111107,
+      "mean": 0.8805810888888886,
       "worst": 0.829223
      },
      "periph_ssim": {
-      "mean": 0.8618384155626585,
+      "mean": 0.861844289784132,
       "worst": 0.8087304485349032
      },
-     "foveal_psnr_of_mean_mse": 43.83674905500967,
+     "foveal_psnr_of_mean_mse": 43.83114745911528,
      "disc_area_frac_mean": 0.1520101273148148,
      "kbps_target": 2192.5
     },
     {
-     "bytes": 736209,
-     "kbps": 1963.224,
+     "bytes": 736579,
+     "kbps": 1964.2106666666668,
      "frames_encoded": 90,
      "frames_dropped": 0,
      "keyframes": 2,
      "max_frame_bytes": 41935,
      "foveal_psnr": {
-      "mean": 45.08145242450044,
+      "mean": 45.080802448299536,
       "worst": 37.82081093246364
      },
      "full_psnr": {
-      "mean": 29.290731235038372,
+      "mean": 29.290194594845822,
       "worst": 27.767709171434728
      },
      "periph_psnr": {
-      "mean": 28.603915088566715,
+      "mean": 28.603371471169115,
       "worst": 27.17672556258421
      },
      "foveal_ssim": {
-      "mean": 0.9875220253972214,
+      "mean": 0.9875129371081446,
       "worst": 0.9578584375190585
      },
      "full_ssim": {
-      "mean": 0.8800829444444442,
+      "mean": 0.8800952666666666,
       "worst": 0.829135
      },
      "periph_ssim": {
-      "mean": 0.8613611411241634,
+      "mean": 0.861377546180591,
       "worst": 0.8086674691385142
      },
      "foveal_psnr_of_mean_mse": 43.548232740972026,
@@ -733,113 +734,113 @@
      "kbps_target": 2038.75
     },
     {
-     "bytes": 764704,
-     "kbps": 2039.2106666666668,
+     "bytes": 763386,
+     "kbps": 2035.696,
      "frames_encoded": 90,
      "frames_dropped": 0,
      "keyframes": 2,
-     "max_frame_bytes": 44364,
+     "max_frame_bytes": 44325,
      "foveal_psnr": {
-      "mean": 45.190206963545414,
+      "mean": 45.20662258980878,
       "worst": 37.77060291871313
      },
      "full_psnr": {
-      "mean": 29.29364404731552,
-      "worst": 27.767709171434728
+      "mean": 29.294474947451675,
+      "worst": 27.766910322022184
      },
      "periph_psnr": {
-      "mean": 28.60639303488329,
+      "mean": 28.6069442007798,
       "worst": 27.179632347961476
      },
      "foveal_ssim": {
-      "mean": 0.9876840172562973,
+      "mean": 0.9877703379489832,
       "worst": 0.9583830212843812
      },
      "full_ssim": {
-      "mean": 0.8803036111111113,
-      "worst": 0.829116
+      "mean": 0.8803485777777779,
+      "worst": 0.829028
      },
      "periph_ssim": {
-      "mean": 0.8615946824164872,
-      "worst": 0.8086089882704388
+      "mean": 0.8616310744482528,
+      "worst": 0.8085201423362475
      },
-     "foveal_psnr_of_mean_mse": 43.619326208379164,
+     "foveal_psnr_of_mean_mse": 43.65907848254014,
      "disc_area_frac_mean": 0.1520101273148148,
      "kbps_target": 2115.625
     },
     {
-     "bytes": 776837,
-     "kbps": 2071.5653333333335,
+     "bytes": 776824,
+     "kbps": 2071.5306666666665,
      "frames_encoded": 90,
      "frames_dropped": 0,
      "keyframes": 2,
      "max_frame_bytes": 42118,
      "foveal_psnr": {
-      "mean": 45.32205642697994,
+      "mean": 45.31164530400829,
       "worst": 37.923002584280496
      },
      "full_psnr": {
-      "mean": 29.29660724480149,
+      "mean": 29.296426378362785,
       "worst": 27.77130581331236
      },
      "periph_psnr": {
-      "mean": 28.608298394824825,
+      "mean": 28.608221593513598,
       "worst": 27.178801639309548
      },
      "foveal_ssim": {
-      "mean": 0.9879828047609744,
+      "mean": 0.9879648359096069,
       "worst": 0.958532902360188
      },
      "full_ssim": {
-      "mean": 0.8805109444444442,
+      "mean": 0.8804889555555557,
       "worst": 0.829375
      },
      "periph_ssim": {
-      "mean": 0.8617831344626824,
+      "mean": 0.8617603789792413,
       "worst": 0.8089058911391294
      },
-     "foveal_psnr_of_mean_mse": 43.76951386826752,
+     "foveal_psnr_of_mean_mse": 43.75738932414242,
      "disc_area_frac_mean": 0.1520101273148148,
      "kbps_target": 2154.0625
     }
    ],
    "glance": {
-    "bytes": 791173,
-    "kbps": 2109.7946666666667,
+    "bytes": 792222,
+    "kbps": 2112.592,
     "frames_encoded": 90,
     "frames_dropped": 0,
     "keyframes": 2,
     "max_frame_bytes": 43106,
     "foveal_psnr": {
-     "mean": 45.41349753378689,
+     "mean": 45.40885233031093,
      "worst": 37.94828329748554
     },
     "full_psnr": {
-     "mean": 29.29877840828681,
+     "mean": 29.298314243278192,
      "worst": 27.770906039314838
     },
     "periph_psnr": {
-     "mean": 28.61003875461669,
+     "mean": 28.60961104898095,
      "worst": 27.178801639309548
     },
     "foveal_ssim": {
-     "mean": 0.988115579776331,
+     "mean": 0.9880996231424035,
      "worst": 0.9584204915533326
     },
     "full_ssim": {
-     "mean": 0.8805787111111107,
+     "mean": 0.8805810888888886,
      "worst": 0.829223
     },
     "periph_ssim": {
-     "mean": 0.8618384155626585,
+     "mean": 0.861844289784132,
      "worst": 0.8087304485349032
     },
-    "foveal_psnr_of_mean_mse": 43.83674905500967,
+    "foveal_psnr_of_mean_mse": 43.83114745911528,
     "disc_area_frac_mean": 0.1520101273148148,
     "kbps_target": 2192.5
    },
    "reached": true,
-   "percent_saved": 11.815282826019846
+   "percent_saved": 11.69836052417751
   },
   {
    "experiment": "A",
@@ -848,6 +849,7 @@
    "frames": 90,
    "fovea_deg": 5.0,
    "seed": 1,
+   "start_s": 0.0,
    "synthetic_gaze": true,
    "baseline_target_kbps": 500,
    "baseline": {
@@ -889,107 +891,107 @@
    "tol_db": 0.5,
    "probes": [
     {
-     "bytes": 184879,
-     "kbps": 493.0106666666667,
+     "bytes": 184830,
+     "kbps": 492.88,
      "frames_encoded": 90,
      "frames_dropped": 0,
      "keyframes": 2,
      "max_frame_bytes": 12799,
      "foveal_psnr": {
-      "mean": 42.5189878443732,
-      "worst": 35.78185620042299
+      "mean": 42.53473273845635,
+      "worst": 35.781856200423
      },
      "full_psnr": {
-      "mean": 28.015239180161103,
+      "mean": 28.01441883959727,
       "worst": 25.40194916110341
      },
      "periph_psnr": {
-      "mean": 27.342067529853836,
+      "mean": 27.341033625823865,
       "worst": 24.647672545699777
      },
      "foveal_ssim": {
-      "mean": 0.9850835092164029,
+      "mean": 0.9851431881428893,
       "worst": 0.9648871473863916
      },
      "full_ssim": {
-      "mean": 0.880857222222222,
+      "mean": 0.8808462777777781,
       "worst": 0.808377
      },
      "periph_ssim": {
-      "mean": 0.8626539925180196,
+      "mean": 0.8626295840427686,
       "worst": 0.7730210335364436
      },
-     "foveal_psnr_of_mean_mse": 41.18009663824211,
+     "foveal_psnr_of_mean_mse": 41.20021276245239,
      "disc_area_frac_mean": 0.15201075424382718,
      "kbps_target": 500
     },
     {
-     "bytes": 101399,
-     "kbps": 270.39733333333334,
+     "bytes": 101327,
+     "kbps": 270.20533333333333,
      "frames_encoded": 90,
      "frames_dropped": 0,
      "keyframes": 2,
-     "max_frame_bytes": 5960,
+     "max_frame_bytes": 5970,
      "foveal_psnr": {
-      "mean": 39.0456620022616,
-      "worst": 33.81195199426606
+      "mean": 39.046854756290195,
+      "worst": 33.84214640200385
      },
      "full_psnr": {
-      "mean": 27.84352851262174,
+      "mean": 27.84809716074985,
       "worst": 25.29756513249124
      },
      "periph_psnr": {
-      "mean": 27.20928266390511,
+      "mean": 27.214016306514157,
       "worst": 24.55248655916492
      },
      "foveal_ssim": {
-      "mean": 0.9739925094206222,
-      "worst": 0.9494624576615637
+      "mean": 0.9737218632721064,
+      "worst": 0.9475494930875575
      },
      "full_ssim": {
-      "mean": 0.8730830111111106,
+      "mean": 0.8730558555555554,
       "worst": 0.799496
      },
      "periph_ssim": {
-      "mean": 0.855482055084581,
+      "mean": 0.8554936736889396,
       "worst": 0.7636331364249499
      },
-     "foveal_psnr_of_mean_mse": 38.097974579038805,
+     "foveal_psnr_of_mean_mse": 38.09157434378422,
      "disc_area_frac_mean": 0.15201075424382718,
      "kbps_target": 270.0
     },
     {
-     "bytes": 142080,
-     "kbps": 378.88,
+     "bytes": 142103,
+     "kbps": 378.9413333333333,
      "frames_encoded": 90,
      "frames_dropped": 0,
      "keyframes": 2,
      "max_frame_bytes": 8976,
      "foveal_psnr": {
-      "mean": 41.077057932431785,
+      "mean": 41.07702937002634,
       "worst": 35.16459051654812
      },
      "full_psnr": {
-      "mean": 27.962084166844022,
+      "mean": 27.962741916139894,
       "worst": 25.356774567910833
      },
      "periph_psnr": {
-      "mean": 27.30058001607245,
+      "mean": 27.301256546136997,
       "worst": 24.606590017009026
      },
      "foveal_ssim": {
-      "mean": 0.9813848125385258,
+      "mean": 0.9813843948037582,
       "worst": 0.9621714564527934
      },
      "full_ssim": {
-      "mean": 0.8781142555555561,
+      "mean": 0.8781101333333334,
       "worst": 0.803966
      },
      "periph_ssim": {
-      "mean": 0.8600866792227131,
+      "mean": 0.8600818503347245,
       "worst": 0.7682806456114237
      },
-     "foveal_psnr_of_mean_mse": 40.00994067714943,
+     "foveal_psnr_of_mean_mse": 40.0090114944005,
      "disc_area_frac_mean": 0.15201075424382718,
      "kbps_target": 385.0
     },
@@ -1099,78 +1101,78 @@
      "kbps_target": 485.625
     },
     {
-     "bytes": 177293,
-     "kbps": 472.7813333333333,
+     "bytes": 178545,
+     "kbps": 476.12,
      "frames_encoded": 90,
      "frames_dropped": 0,
      "keyframes": 2,
      "max_frame_bytes": 12380,
      "foveal_psnr": {
-      "mean": 42.333592781331646,
+      "mean": 42.3745666237329,
       "worst": 35.67269205553202
      },
      "full_psnr": {
-      "mean": 28.004578739611652,
-      "worst": 25.394772842773744
+      "mean": 28.011463503114438,
+      "worst": 25.39616088246564
      },
      "periph_psnr": {
-      "mean": 27.331907281739777,
-      "worst": 24.640952768462
+      "mean": 27.338130524878625,
+      "worst": 24.642342214400813
      },
      "foveal_ssim": {
-      "mean": 0.9847838473428292,
+      "mean": 0.9849519401332772,
       "worst": 0.9646528067655111
      },
      "full_ssim": {
-      "mean": 0.8804320444444445,
-      "worst": 0.808001
+      "mean": 0.8806766666666668,
+      "worst": 0.807926
      },
      "periph_ssim": {
-      "mean": 0.8622096413052784,
-      "worst": 0.7726221312619191
+      "mean": 0.8624688740589556,
+      "worst": 0.7725756918926463
      },
-     "foveal_psnr_of_mean_mse": 41.07491385203927,
+     "foveal_psnr_of_mean_mse": 41.15217916424755,
      "disc_area_frac_mean": 0.15201075424382718,
      "kbps_target": 478.4375
     }
    ],
    "glance": {
-    "bytes": 177293,
-    "kbps": 472.7813333333333,
+    "bytes": 178545,
+    "kbps": 476.12,
     "frames_encoded": 90,
     "frames_dropped": 0,
     "keyframes": 2,
     "max_frame_bytes": 12380,
     "foveal_psnr": {
-     "mean": 42.333592781331646,
+     "mean": 42.3745666237329,
      "worst": 35.67269205553202
     },
     "full_psnr": {
-     "mean": 28.004578739611652,
-     "worst": 25.394772842773744
+     "mean": 28.011463503114438,
+     "worst": 25.39616088246564
     },
     "periph_psnr": {
-     "mean": 27.331907281739777,
-     "worst": 24.640952768462
+     "mean": 27.338130524878625,
+     "worst": 24.642342214400813
     },
     "foveal_ssim": {
-     "mean": 0.9847838473428292,
+     "mean": 0.9849519401332772,
      "worst": 0.9646528067655111
     },
     "full_ssim": {
-     "mean": 0.8804320444444445,
-     "worst": 0.808001
+     "mean": 0.8806766666666668,
+     "worst": 0.807926
     },
     "periph_ssim": {
-     "mean": 0.8622096413052784,
-     "worst": 0.7726221312619191
+     "mean": 0.8624688740589556,
+     "worst": 0.7725756918926463
     },
-    "foveal_psnr_of_mean_mse": 41.07491385203927,
+    "foveal_psnr_of_mean_mse": 41.15217916424755,
     "disc_area_frac_mean": 0.15201075424382718,
     "kbps_target": 478.4375
    },
    "reached": true,
-   "percent_saved": 1.4896596175003163
+   "percent_saved": 0.7940035782946442
   },
   {
    "experiment": "A",
@@ -1179,6 +1181,7 @@
    "frames": 90,
    "fovea_deg": 5.0,
    "seed": 1,
+   "start_s": 0.0,
    "synthetic_gaze": true,
    "baseline_target_kbps": 2500,
    "baseline": {
@@ -1193,7 +1196,7 @@
      "worst": 40.307730666298916
     },
     "full_psnr": {
-     "mean": 47.47309007526486,
+     "mean": 47.473090075264864,
      "worst": 42.495992754735
     },
     "periph_psnr": {
@@ -1372,7 +1375,7 @@
      },
      "full_psnr": {
       "mean": 31.02619327791829,
-      "worst": 28.517067332731088
+      "worst": 28.517067332731095
      },
      "periph_psnr": {
       "mean": 30.3484902894326,
@@ -1407,7 +1410,7 @@
      },
      "full_psnr": {
       "mean": 31.030373753898687,
-      "worst": 28.518966510554744
+      "worst": 28.518966510554748
      },
      "periph_psnr": {
       "mean": 30.351675155983983,
@@ -1442,7 +1445,7 @@
      },
      "full_psnr": {
       "mean": 31.031844190042197,
-      "worst": 28.518966510554744
+      "worst": 28.518966510554748
      },
      "periph_psnr": {
       "mean": 30.35249334628331,
@@ -1478,7 +1481,7 @@
     },
     "full_psnr": {
      "mean": 31.031844190042197,
-     "worst": 28.518966510554744
+     "worst": 28.518966510554748
     },
     "periph_psnr": {
      "mean": 30.35249334628331,
@@ -1505,11 +1508,2004 @@
   },
   {
    "experiment": "A",
+   "clip": "riverbed_1080p25.y4m",
+   "res": 720,
+   "frames": 90,
+   "fovea_deg": 5.0,
+   "seed": 1,
+   "start_s": 0.0,
+   "synthetic_gaze": true,
+   "baseline_target_kbps": 2500,
+   "baseline": {
+    "bytes": 1029846,
+    "kbps": 2746.256,
+    "frames_encoded": 69,
+    "frames_dropped": 21,
+    "keyframes": 2,
+    "max_frame_bytes": 77776,
+    "foveal_psnr": {
+     "mean": 28.524220018759046,
+     "worst": 16.49320657177517
+    },
+    "full_psnr": {
+     "mean": 28.78199244405794,
+     "worst": 19.409007709210453
+    },
+    "periph_psnr": {
+     "mean": 28.870313969650788,
+     "worst": 19.11497771256999
+    },
+    "foveal_ssim": {
+     "mean": 0.7108426967203436,
+     "worst": 0.24865730257139962
+    },
+    "full_ssim": {
+     "mean": 0.737831788888889,
+     "worst": 0.411492
+    },
+    "periph_ssim": {
+     "mean": 0.742399454927846,
+     "worst": 0.3987343315052033
+    },
+    "foveal_psnr_of_mean_mse": 24.965184480372386,
+    "disc_area_frac_mean": 0.1520101273148148,
+    "kbps_target": 2500
+   },
+   "goal_foveal_psnr": 28.024220018759046,
+   "tol_db": 0.5,
+   "probes": [
+    {
+     "bytes": 911339,
+     "kbps": 2430.2373333333335,
+     "frames_encoded": 90,
+     "frames_dropped": 0,
+     "keyframes": 2,
+     "max_frame_bytes": 40030,
+     "foveal_psnr": {
+      "mean": 31.39715271303031,
+      "worst": 29.456981071087757
+     },
+     "full_psnr": {
+      "mean": 26.090503290180486,
+      "worst": 25.18217498589943
+     },
+     "periph_psnr": {
+      "mean": 25.587805417223596,
+      "worst": 24.754061225661705
+     },
+     "foveal_ssim": {
+      "mean": 0.8234145863906813,
+      "worst": 0.7600099522309176
+     },
+     "full_ssim": {
+      "mean": 0.6235478333333334,
+      "worst": 0.585835
+     },
+     "periph_ssim": {
+      "mean": 0.5878425623327375,
+      "worst": 0.558250142775557
+     },
+     "foveal_psnr_of_mean_mse": 31.17823694163039,
+     "disc_area_frac_mean": 0.1520101273148148,
+     "kbps_target": 2500
+    },
+    {
+     "bytes": 527268,
+     "kbps": 1406.048,
+     "frames_encoded": 64,
+     "frames_dropped": 26,
+     "keyframes": 2,
+     "max_frame_bytes": 23838,
+     "foveal_psnr": {
+      "mean": 27.189278687924535,
+      "worst": 16.79511127325084
+     },
+     "full_psnr": {
+      "mean": 24.280447219143827,
+      "worst": 19.983002151221058
+     },
+     "periph_psnr": {
+      "mean": 24.072000113721923,
+      "worst": 20.01553798612198
+     },
+     "foveal_ssim": {
+      "mean": 0.6599021245618404,
+      "worst": 0.24878219331232865
+     },
+     "full_ssim": {
+      "mean": 0.5513389666666666,
+      "worst": 0.405313
+     },
+     "periph_ssim": {
+      "mean": 0.5319647821270856,
+      "worst": 0.4147754212116789
+     },
+     "foveal_psnr_of_mean_mse": 23.496721197515974,
+     "disc_area_frac_mean": 0.1520101273148148,
+     "kbps_target": 1270.0
+    },
+    {
+     "bytes": 750184,
+     "kbps": 2000.4906666666668,
+     "frames_encoded": 90,
+     "frames_dropped": 0,
+     "keyframes": 2,
+     "max_frame_bytes": 31646,
+     "foveal_psnr": {
+      "mean": 30.532531440285478,
+      "worst": 28.68378657442177
+     },
+     "full_psnr": {
+      "mean": 25.916119254892617,
+      "worst": 25.008395157236983
+     },
+     "periph_psnr": {
+      "mean": 25.446839693062252,
+      "worst": 24.59563483187385
+     },
+     "foveal_ssim": {
+      "mean": 0.7923139414012704,
+      "worst": 0.7328648572435674
+     },
+     "full_ssim": {
+      "mean": 0.6090487333333332,
+      "worst": 0.561391
+     },
+     "periph_ssim": {
+      "mean": 0.576130644747125,
+      "worst": 0.5382294425163643
+     },
+     "foveal_psnr_of_mean_mse": 30.363032361711454,
+     "disc_area_frac_mean": 0.1520101273148148,
+     "kbps_target": 1885.0
+    },
+    {
+     "bytes": 650622,
+     "kbps": 1734.992,
+     "frames_encoded": 79,
+     "frames_dropped": 11,
+     "keyframes": 2,
+     "max_frame_bytes": 28365,
+     "foveal_psnr": {
+      "mean": 29.130915575734853,
+      "worst": 16.77382862305928
+     },
+     "full_psnr": {
+      "mean": 25.307173138347896,
+      "worst": 19.951713934284935
+     },
+     "periph_psnr": {
+      "mean": 24.955995664265906,
+      "worst": 20.634126942604873
+     },
+     "foveal_ssim": {
+      "mean": 0.7350078677221832,
+      "worst": 0.2647244963919094
+     },
+     "full_ssim": {
+      "mean": 0.5862997444444443,
+      "worst": 0.411155
+     },
+     "periph_ssim": {
+      "mean": 0.5596424085282767,
+      "worst": 0.4251101781785247
+     },
+     "foveal_psnr_of_mean_mse": 26.172952520361648,
+     "disc_area_frac_mean": 0.1520101273148148,
+     "kbps_target": 1577.5
+    },
+    {
+     "bytes": 581503,
+     "kbps": 1550.6746666666668,
+     "frames_encoded": 71,
+     "frames_dropped": 19,
+     "keyframes": 2,
+     "max_frame_bytes": 26237,
+     "foveal_psnr": {
+      "mean": 28.0259916785967,
+      "worst": 16.79948345686697
+     },
+     "full_psnr": {
+      "mean": 24.75872549146462,
+      "worst": 19.804820437949452
+     },
+     "periph_psnr": {
+      "mean": 24.494985025969346,
+      "worst": 20.22161755662365
+     },
+     "foveal_ssim": {
+      "mean": 0.6929399512321878,
+      "worst": 0.25116760646407166
+     },
+     "full_ssim": {
+      "mean": 0.5674959000000004,
+      "worst": 0.407043
+     },
+     "periph_ssim": {
+      "mean": 0.5451224612712784,
+      "worst": 0.414612973918571
+     },
+     "foveal_psnr_of_mean_mse": 24.380169357218527,
+     "disc_area_frac_mean": 0.1520101273148148,
+     "kbps_target": 1423.75
+    },
+    {
+     "bytes": 556304,
+     "kbps": 1483.4773333333333,
+     "frames_encoded": 67,
+     "frames_dropped": 23,
+     "keyframes": 2,
+     "max_frame_bytes": 25196,
+     "foveal_psnr": {
+      "mean": 27.57709619010918,
+      "worst": 16.76645035672161
+     },
+     "full_psnr": {
+      "mean": 24.499415418326194,
+      "worst": 19.80092710855908
+     },
+     "periph_psnr": {
+      "mean": 24.270447470234352,
+      "worst": 20.012825340925083
+     },
+     "foveal_ssim": {
+      "mean": 0.6740686300572286,
+      "worst": 0.2524102693363145
+     },
+     "full_ssim": {
+      "mean": 0.5582022000000002,
+      "worst": 0.407359
+     },
+     "periph_ssim": {
+      "mean": 0.537782065006725,
+      "worst": 0.4151957282591985
+     },
+     "foveal_psnr_of_mean_mse": 23.9472481478067,
+     "disc_area_frac_mean": 0.1520101273148148,
+     "kbps_target": 1346.875
+    },
+    {
+     "bytes": 570957,
+     "kbps": 1522.552,
+     "frames_encoded": 69,
+     "frames_dropped": 21,
+     "keyframes": 2,
+     "max_frame_bytes": 25504,
+     "foveal_psnr": {
+      "mean": 28.059933698804763,
+      "worst": 16.779373046738904
+     },
+     "full_psnr": {
+      "mean": 24.74345715809227,
+      "worst": 19.796782316360517
+     },
+     "periph_psnr": {
+      "mean": 24.470973211182358,
+      "worst": 20.21701720056642
+     },
+     "foveal_ssim": {
+      "mean": 0.6937589662504973,
+      "worst": 0.24659660534607153
+     },
+     "full_ssim": {
+      "mean": 0.5669626888888889,
+      "worst": 0.409182
+     },
+     "periph_ssim": {
+      "mean": 0.5443252963656556,
+      "worst": 0.4167288464196982
+     },
+     "foveal_psnr_of_mean_mse": 24.505198474777494,
+     "disc_area_frac_mean": 0.1520101273148148,
+     "kbps_target": 1385.3125
+    }
+   ],
+   "glance": {
+    "bytes": 570957,
+    "kbps": 1522.552,
+    "frames_encoded": 69,
+    "frames_dropped": 21,
+    "keyframes": 2,
+    "max_frame_bytes": 25504,
+    "foveal_psnr": {
+     "mean": 28.059933698804763,
+     "worst": 16.779373046738904
+    },
+    "full_psnr": {
+     "mean": 24.74345715809227,
+     "worst": 19.796782316360517
+    },
+    "periph_psnr": {
+     "mean": 24.470973211182358,
+     "worst": 20.21701720056642
+    },
+    "foveal_ssim": {
+     "mean": 0.6937589662504973,
+     "worst": 0.24659660534607153
+    },
+    "full_ssim": {
+     "mean": 0.5669626888888889,
+     "worst": 0.409182
+    },
+    "periph_ssim": {
+     "mean": 0.5443252963656556,
+     "worst": 0.4167288464196982
+    },
+    "foveal_psnr_of_mean_mse": 24.505198474777494,
+    "disc_area_frac_mean": 0.1520101273148148,
+    "kbps_target": 1385.3125
+   },
+   "reached": true,
+   "percent_saved": 44.558992315355894
+  },
+  {
+   "experiment": "A",
+   "clip": "riverbed_1080p25.y4m",
+   "res": 1080,
+   "frames": 90,
+   "fovea_deg": 5.0,
+   "seed": 1,
+   "start_s": 0.0,
+   "synthetic_gaze": true,
+   "baseline_target_kbps": 4000,
+   "baseline": {
+    "bytes": 1657679,
+    "kbps": 4420.477333333333,
+    "frames_encoded": 59,
+    "frames_dropped": 31,
+    "keyframes": 2,
+    "max_frame_bytes": 99555,
+    "foveal_psnr": {
+     "mean": 28.072985331862256,
+     "worst": 16.392766761442516
+    },
+    "full_psnr": {
+     "mean": 28.3275275555545,
+     "worst": 19.46539019032763
+    },
+    "periph_psnr": {
+     "mean": 28.43991785131152,
+     "worst": 19.15527766402998
+    },
+    "foveal_ssim": {
+     "mean": 0.6889411709589479,
+     "worst": 0.2839474722653851
+    },
+    "full_ssim": {
+     "mean": 0.7158254333333335,
+     "worst": 0.452563
+    },
+    "periph_ssim": {
+     "mean": 0.7204510124594881,
+     "worst": 0.4384040433667391
+    },
+    "foveal_psnr_of_mean_mse": 23.469266915142526,
+    "disc_area_frac_mean": 0.15200748028120714,
+    "kbps_target": 4000
+   },
+   "goal_foveal_psnr": 27.572985331862256,
+   "tol_db": 0.5,
+   "probes": [
+    {
+     "bytes": 1532052,
+     "kbps": 4085.472,
+     "frames_encoded": 90,
+     "frames_dropped": 0,
+     "keyframes": 2,
+     "max_frame_bytes": 61743,
+     "foveal_psnr": {
+      "mean": 32.07239980109554,
+      "worst": 30.467812549407437
+     },
+     "full_psnr": {
+      "mean": 27.358414131379053,
+      "worst": 26.56470642702211
+     },
+     "periph_psnr": {
+      "mean": 26.881519464017835,
+      "worst": 26.01610399237984
+     },
+     "foveal_ssim": {
+      "mean": 0.8213571129633307,
+      "worst": 0.7677471991227273
+     },
+     "full_ssim": {
+      "mean": 0.6822410666666665,
+      "worst": 0.647926
+     },
+     "periph_ssim": {
+      "mean": 0.6571425908220294,
+      "worst": 0.6310182606870496
+     },
+     "foveal_psnr_of_mean_mse": 31.908093203619302,
+     "disc_area_frac_mean": 0.15200748028120714,
+     "kbps_target": 4000
+    },
+    {
+     "bytes": 866306,
+     "kbps": 2310.1493333333333,
+     "frames_encoded": 51,
+     "frames_dropped": 39,
+     "keyframes": 2,
+     "max_frame_bytes": 35148,
+     "foveal_psnr": {
+      "mean": 27.9909373364005,
+      "worst": 16.696750636706344
+     },
+     "full_psnr": {
+      "mean": 25.201220562364174,
+      "worst": 19.733698302046626
+     },
+     "periph_psnr": {
+      "mean": 24.989740206520537,
+      "worst": 19.903108158726994
+     },
+     "foveal_ssim": {
+      "mean": 0.6857974157017165,
+      "worst": 0.31180353413074147
+     },
+     "full_ssim": {
+      "mean": 0.6189533666666669,
+      "worst": 0.472045
+     },
+     "periph_ssim": {
+      "mean": 0.6068049665380135,
+      "worst": 0.4761928031792936
+     },
+     "foveal_psnr_of_mean_mse": 23.799785024888923,
+     "disc_area_frac_mean": 0.15200748028120714,
+     "kbps_target": 2020.0
+    },
+    {
+     "bytes": 458311,
+     "kbps": 1222.1626666666668,
+     "frames_encoded": 27,
+     "frames_dropped": 63,
+     "keyframes": 2,
+     "max_frame_bytes": 22689,
+     "foveal_psnr": {
+      "mean": 22.88164733852774,
+      "worst": 12.700553817665636
+     },
+     "full_psnr": {
+      "mean": 21.833721261190963,
+      "worst": 16.63257967286219
+     },
+     "periph_psnr": {
+      "mean": 21.917951328452578,
+      "worst": 17.16061206744373
+     },
+     "foveal_ssim": {
+      "mean": 0.5242506126500653,
+      "worst": 0.24245374191450153
+     },
+     "full_ssim": {
+      "mean": 0.5322178999999997,
+      "worst": 0.415909
+     },
+     "periph_ssim": {
+      "mean": 0.5335295304846107,
+      "worst": 0.4143784078152464
+     },
+     "foveal_psnr_of_mean_mse": 19.101211800673678,
+     "disc_area_frac_mean": 0.15200748028120714,
+     "kbps_target": 1030.0
+    },
+    {
+     "bytes": 665378,
+     "kbps": 1774.3413333333333,
+     "frames_encoded": 39,
+     "frames_dropped": 51,
+     "keyframes": 2,
+     "max_frame_bytes": 29023,
+     "foveal_psnr": {
+      "mean": 24.98484407091872,
+      "worst": 13.839020655522123
+     },
+     "full_psnr": {
+      "mean": 23.44058163667212,
+      "worst": 17.46322220093298
+     },
+     "periph_psnr": {
+      "mean": 23.447460159470882,
+      "worst": 18.533690106549493
+     },
+     "foveal_ssim": {
+      "mean": 0.5905104167709314,
+      "worst": 0.2417435631817002
+     },
+     "full_ssim": {
+      "mean": 0.5716142666666664,
+      "worst": 0.421811
+     },
+     "periph_ssim": {
+      "mean": 0.5682911408826479,
+      "worst": 0.444598197991273
+     },
+     "foveal_psnr_of_mean_mse": 20.634230126702448,
+     "disc_area_frac_mean": 0.15200748028120714,
+     "kbps_target": 1525.0
+    },
+    {
+     "bytes": 768487,
+     "kbps": 2049.2986666666666,
+     "frames_encoded": 44,
+     "frames_dropped": 46,
+     "keyframes": 2,
+     "max_frame_bytes": 31960,
+     "foveal_psnr": {
+      "mean": 25.693492632316534,
+      "worst": 13.846092211802661
+     },
+     "full_psnr": {
+      "mean": 23.727922051799585,
+      "worst": 17.497019607446788
+     },
+     "periph_psnr": {
+      "mean": 23.656965287903127,
+      "worst": 17.868128863814604
+     },
+     "foveal_ssim": {
+      "mean": 0.6149412968826675,
+      "worst": 0.2502404509811007
+     },
+     "full_ssim": {
+      "mean": 0.5793795888888891,
+      "worst": 0.421634
+     },
+     "periph_ssim": {
+      "mean": 0.5727811205590182,
+      "worst": 0.42499455245679196
+     },
+     "foveal_psnr_of_mean_mse": 21.192700686926955,
+     "disc_area_frac_mean": 0.15200748028120714,
+     "kbps_target": 1772.5
+    },
+    {
+     "bytes": 829002,
+     "kbps": 2210.672,
+     "frames_encoded": 47,
+     "frames_dropped": 43,
+     "keyframes": 2,
+     "max_frame_bytes": 33485,
+     "foveal_psnr": {
+      "mean": 26.127409283743667,
+      "worst": 15.441736612546524
+     },
+     "full_psnr": {
+      "mean": 24.033324216997354,
+      "worst": 17.886234281587896
+     },
+     "periph_psnr": {
+      "mean": 23.934240236260777,
+      "worst": 18.561980410921784
+     },
+     "foveal_ssim": {
+      "mean": 0.6273770248140909,
+      "worst": 0.2470495862392943
+     },
+     "full_ssim": {
+      "mean": 0.5866299111111112,
+      "worst": 0.426265
+     },
+     "periph_ssim": {
+      "mean": 0.5790345565240202,
+      "worst": 0.4385188694066361
+     },
+     "foveal_psnr_of_mean_mse": 21.815648412987343,
+     "disc_area_frac_mean": 0.15200748028120714,
+     "kbps_target": 1896.25
+    },
+    {
+     "bytes": 854199,
+     "kbps": 2277.864,
+     "frames_encoded": 51,
+     "frames_dropped": 39,
+     "keyframes": 2,
+     "max_frame_bytes": 34318,
+     "foveal_psnr": {
+      "mean": 28.03344548146887,
+      "worst": 16.701431375243544
+     },
+     "full_psnr": {
+      "mean": 25.26661299451079,
+      "worst": 19.717584391095848
+     },
+     "periph_psnr": {
+      "mean": 25.05994587826938,
+      "worst": 19.95966505756519
+     },
+     "foveal_ssim": {
+      "mean": 0.6879006309636583,
+      "worst": 0.31003638203302875
+     },
+     "full_ssim": {
+      "mean": 0.6206729333333333,
+      "worst": 0.471001
+     },
+     "periph_ssim": {
+      "mean": 0.6084365763446166,
+      "worst": 0.47655953406193097
+     },
+     "foveal_psnr_of_mean_mse": 23.77433545422766,
+     "disc_area_frac_mean": 0.15200748028120714,
+     "kbps_target": 1958.125
+    }
+   ],
+   "glance": {
+    "bytes": 854199,
+    "kbps": 2277.864,
+    "frames_encoded": 51,
+    "frames_dropped": 39,
+    "keyframes": 2,
+    "max_frame_bytes": 34318,
+    "foveal_psnr": {
+     "mean": 28.03344548146887,
+     "worst": 16.701431375243544
+    },
+    "full_psnr": {
+     "mean": 25.26661299451079,
+     "worst": 19.717584391095848
+    },
+    "periph_psnr": {
+     "mean": 25.05994587826938,
+     "worst": 19.95966505756519
+    },
+    "foveal_ssim": {
+     "mean": 0.6879006309636583,
+     "worst": 0.31003638203302875
+    },
+    "full_ssim": {
+     "mean": 0.6206729333333333,
+     "worst": 0.471001
+    },
+    "periph_ssim": {
+     "mean": 0.6084365763446166,
+     "worst": 0.47655953406193097
+    },
+    "foveal_psnr_of_mean_mse": 23.77433545422766,
+    "disc_area_frac_mean": 0.15200748028120714,
+    "kbps_target": 1958.125
+   },
+   "reached": true,
+   "percent_saved": 48.470180294254796
+  },
+  {
+   "experiment": "A",
+   "clip": "spreadsheet_1080p30.y4m",
+   "res": 720,
+   "frames": 90,
+   "fovea_deg": 5.0,
+   "seed": 1,
+   "start_s": 0.0,
+   "synthetic_gaze": true,
+   "baseline_target_kbps": 2500,
+   "baseline": {
+    "bytes": 1058366,
+    "kbps": 2822.3093333333336,
+    "frames_encoded": 57,
+    "frames_dropped": 33,
+    "keyframes": 2,
+    "max_frame_bytes": 98759,
+    "foveal_psnr": {
+     "mean": 26.511545779644667,
+     "worst": 13.425765739353974
+    },
+    "full_psnr": {
+     "mean": 26.408190200038355,
+     "worst": 14.5153761149865
+    },
+    "periph_psnr": {
+     "mean": 26.4403828439855,
+     "worst": 14.236578064719506
+    },
+    "foveal_ssim": {
+     "mean": 0.8281479770130078,
+     "worst": 0.29614076227258834
+    },
+    "full_ssim": {
+     "mean": 0.8371768666666661,
+     "worst": 0.456469
+    },
+    "periph_ssim": {
+     "mean": 0.8390468738184003,
+     "worst": 0.4531588982120107
+    },
+    "foveal_psnr_of_mean_mse": 22.021663763042124,
+    "disc_area_frac_mean": 0.1520101273148148,
+    "kbps_target": 2500
+   },
+   "goal_foveal_psnr": 26.011545779644667,
+   "tol_db": 0.5,
+   "probes": [
+    {
+     "bytes": 991392,
+     "kbps": 2643.712,
+     "frames_encoded": 90,
+     "frames_dropped": 0,
+     "keyframes": 2,
+     "max_frame_bytes": 46929,
+     "foveal_psnr": {
+      "mean": 31.10641846332553,
+      "worst": 25.189939055973834
+     },
+     "full_psnr": {
+      "mean": 20.94339480377002,
+      "worst": 19.621830547779275
+     },
+     "periph_psnr": {
+      "mean": 20.319207682556282,
+      "worst": 18.919349910225375
+     },
+     "foveal_ssim": {
+      "mean": 0.921105276514011,
+      "worst": 0.8354064925297287
+     },
+     "full_ssim": {
+      "mean": 0.6863588555555556,
+      "worst": 0.607362
+     },
+     "periph_ssim": {
+      "mean": 0.6451237240567401,
+      "worst": 0.5724621183499539
+     },
+     "foveal_psnr_of_mean_mse": 29.775075111425178,
+     "disc_area_frac_mean": 0.1520101273148148,
+     "kbps_target": 2500
+    },
+    {
+     "bytes": 520944,
+     "kbps": 1389.184,
+     "frames_encoded": 53,
+     "frames_dropped": 37,
+     "keyframes": 2,
+     "max_frame_bytes": 31178,
+     "foveal_psnr": {
+      "mean": 24.734318189848803,
+      "worst": 13.614862794267227
+     },
+     "full_psnr": {
+      "mean": 19.437847827674357,
+      "worst": 15.206271291241078
+     },
+     "periph_psnr": {
+      "mean": 19.06206998213844,
+      "worst": 15.095895086623068
+     },
+     "foveal_ssim": {
+      "mean": 0.7618936939092634,
+      "worst": 0.29008356133753455
+     },
+     "full_ssim": {
+      "mean": 0.6177467777777778,
+      "worst": 0.42492
+     },
+     "periph_ssim": {
+      "mean": 0.5922366696867342,
+      "worst": 0.4506298839169782
+     },
+     "foveal_psnr_of_mean_mse": 20.231155484715956,
+     "disc_area_frac_mean": 0.1520101273148148,
+     "kbps_target": 1270.0
+    },
+    {
+     "bytes": 771650,
+     "kbps": 2057.733333333333,
+     "frames_encoded": 84,
+     "frames_dropped": 6,
+     "keyframes": 2,
+     "max_frame_bytes": 39142,
+     "foveal_psnr": {
+      "mean": 29.207066407545327,
+      "worst": 15.278043863244266
+     },
+     "full_psnr": {
+      "mean": 20.74040436867713,
+      "worst": 15.928074814919452
+     },
+     "periph_psnr": {
+      "mean": 20.157499234142414,
+      "worst": 16.06387680882679
+     },
+     "foveal_ssim": {
+      "mean": 0.8925713362124815,
+      "worst": 0.5266141355828845
+     },
+     "full_ssim": {
+      "mean": 0.6745053222222224,
+      "worst": 0.504953
+     },
+     "periph_ssim": {
+      "mean": 0.6361238997028204,
+      "worst": 0.5008227716517122
+     },
+     "foveal_psnr_of_mean_mse": 27.2110212223105,
+     "disc_area_frac_mean": 0.1520101273148148,
+     "kbps_target": 1885.0
+    },
+    {
+     "bytes": 647766,
+     "kbps": 1727.376,
+     "frames_encoded": 74,
+     "frames_dropped": 16,
+     "keyframes": 2,
+     "max_frame_bytes": 35866,
+     "foveal_psnr": {
+      "mean": 27.277069675297824,
+      "worst": 13.631781655584591
+     },
+     "full_psnr": {
+      "mean": 20.27389609859404,
+      "worst": 15.232863484673878
+     },
+     "periph_psnr": {
+      "mean": 19.77817176177093,
+      "worst": 15.48752502050479
+     },
+     "foveal_ssim": {
+      "mean": 0.8424625048222651,
+      "worst": 0.3037840756174405
+     },
+     "full_ssim": {
+      "mean": 0.6522906666666668,
+      "worst": 0.43892
+     },
+     "periph_ssim": {
+      "mean": 0.6191279855757745,
+      "worst": 0.4646869882366621
+     },
+     "foveal_psnr_of_mean_mse": 23.323608154105155,
+     "disc_area_frac_mean": 0.1520101273148148,
+     "kbps_target": 1577.5
+    },
+    {
+     "bytes": 597077,
+     "kbps": 1592.2053333333333,
+     "frames_encoded": 62,
+     "frames_dropped": 28,
+     "keyframes": 2,
+     "max_frame_bytes": 33689,
+     "foveal_psnr": {
+      "mean": 26.540675700593603,
+      "worst": 13.610838265982416
+     },
+     "full_psnr": {
+      "mean": 20.117608836537006,
+      "worst": 15.249988921312953
+     },
+     "periph_psnr": {
+      "mean": 19.64767009649288,
+      "worst": 15.490339449233339
+     },
+     "foveal_ssim": {
+      "mean": 0.8237808649317004,
+      "worst": 0.29611578412440254
+     },
+     "full_ssim": {
+      "mean": 0.6449395888888888,
+      "worst": 0.436493
+     },
+     "periph_ssim": {
+      "mean": 0.6137191909323396,
+      "worst": 0.46325936939206613
+     },
+     "foveal_psnr_of_mean_mse": 22.67153814089458,
+     "disc_area_frac_mean": 0.1520101273148148,
+     "kbps_target": 1423.75
+    },
+    {
+     "bytes": 570382,
+     "kbps": 1521.0186666666668,
+     "frames_encoded": 59,
+     "frames_dropped": 31,
+     "keyframes": 2,
+     "max_frame_bytes": 32547,
+     "foveal_psnr": {
+      "mean": 26.004798442515447,
+      "worst": 13.625901460250343
+     },
+     "full_psnr": {
+      "mean": 20.017517528103635,
+      "worst": 15.251062905230482
+     },
+     "periph_psnr": {
+      "mean": 19.55954060239503,
+      "worst": 15.486456015627468
+     },
+     "foveal_ssim": {
+      "mean": 0.8106510660714968,
+      "worst": 0.29852617542433135
+     },
+     "full_ssim": {
+      "mean": 0.6401460111111109,
+      "worst": 0.43735
+     },
+     "periph_ssim": {
+      "mean": 0.6098945894630832,
+      "worst": 0.4579700742432895
+     },
+     "foveal_psnr_of_mean_mse": 22.171718426393458,
+     "disc_area_frac_mean": 0.1520101273148148,
+     "kbps_target": 1346.875
+    },
+    {
+     "bytes": 572697,
+     "kbps": 1527.192,
+     "frames_encoded": 59,
+     "frames_dropped": 31,
+     "keyframes": 2,
+     "max_frame_bytes": 32807,
+     "foveal_psnr": {
+      "mean": 25.981514828201988,
+      "worst": 13.626670412259793
+     },
+     "full_psnr": {
+      "mean": 19.93486249121929,
+      "worst": 15.24574033938821
+     },
+     "periph_psnr": {
+      "mean": 19.48165466883887,
+      "worst": 15.103795118483623
+     },
+     "foveal_ssim": {
+      "mean": 0.8072424769652893,
+      "worst": 0.2969088403293013
+     },
+     "full_ssim": {
+      "mean": 0.6374790222222224,
+      "worst": 0.435411
+     },
+     "periph_ssim": {
+      "mean": 0.6072561581299073,
+      "worst": 0.4592344269178642
+     },
+     "foveal_psnr_of_mean_mse": 21.909692538371775,
+     "disc_area_frac_mean": 0.1520101273148148,
+     "kbps_target": 1385.3125
+    }
+   ],
+   "glance": {
+    "bytes": 597077,
+    "kbps": 1592.2053333333333,
+    "frames_encoded": 62,
+    "frames_dropped": 28,
+    "keyframes": 2,
+    "max_frame_bytes": 33689,
+    "foveal_psnr": {
+     "mean": 26.540675700593603,
+     "worst": 13.610838265982416
+    },
+    "full_psnr": {
+     "mean": 20.117608836537006,
+     "worst": 15.249988921312953
+    },
+    "periph_psnr": {
+     "mean": 19.64767009649288,
+     "worst": 15.490339449233339
+    },
+    "foveal_ssim": {
+     "mean": 0.8237808649317004,
+     "worst": 0.29611578412440254
+    },
+    "full_ssim": {
+     "mean": 0.6449395888888888,
+     "worst": 0.436493
+    },
+    "periph_ssim": {
+     "mean": 0.6137191909323396,
+     "worst": 0.46325936939206613
+    },
+    "foveal_psnr_of_mean_mse": 22.67153814089458,
+    "disc_area_frac_mean": 0.1520101273148148,
+    "kbps_target": 1423.75
+   },
+   "reached": true,
+   "percent_saved": 43.58501690341527
+  },
+  {
+   "experiment": "A",
+   "clip": "spreadsheet_1080p30.y4m",
+   "res": 1080,
+   "frames": 90,
+   "fovea_deg": 5.0,
+   "seed": 1,
+   "start_s": 0.0,
+   "synthetic_gaze": true,
+   "baseline_target_kbps": 4000,
+   "baseline": {
+    "bytes": 1700179,
+    "kbps": 4533.810666666667,
+    "frames_encoded": 47,
+    "frames_dropped": 43,
+    "keyframes": 2,
+    "max_frame_bytes": 137501,
+    "foveal_psnr": {
+     "mean": 26.299115573201444,
+     "worst": 13.212552618852529
+    },
+    "full_psnr": {
+     "mean": 26.24378969411751,
+     "worst": 13.576355224126267
+    },
+    "periph_psnr": {
+     "mean": 26.288249341097238,
+     "worst": 13.43815262791492
+    },
+    "foveal_ssim": {
+     "mean": 0.8224790748491677,
+     "worst": 0.36848055263625445
+    },
+    "full_ssim": {
+     "mean": 0.8345174111111109,
+     "worst": 0.469181
+    },
+    "periph_ssim": {
+     "mean": 0.8372110430676162,
+     "worst": 0.45934261526621434
+    },
+    "foveal_psnr_of_mean_mse": 20.873424746763078,
+    "disc_area_frac_mean": 0.15200748028120714,
+    "kbps_target": 4000
+   },
+   "goal_foveal_psnr": 25.799115573201444,
+   "tol_db": 0.5,
+   "probes": [
+    {
+     "bytes": 1639240,
+     "kbps": 4371.306666666667,
+     "frames_encoded": 89,
+     "frames_dropped": 1,
+     "keyframes": 2,
+     "max_frame_bytes": 68853,
+     "foveal_psnr": {
+      "mean": 31.534500842607915,
+      "worst": 27.17221339975979
+     },
+     "full_psnr": {
+      "mean": 21.170048567924287,
+      "worst": 19.848136981432326
+     },
+     "periph_psnr": {
+      "mean": 20.531453003901408,
+      "worst": 19.1361452851892
+     },
+     "foveal_ssim": {
+      "mean": 0.924156907006079,
+      "worst": 0.8653924939999575
+     },
+     "full_ssim": {
+      "mean": 0.725581144444445,
+      "worst": 0.659078
+     },
+     "periph_ssim": {
+      "mean": 0.6907254831382436,
+      "worst": 0.6305717802990243
+     },
+     "foveal_psnr_of_mean_mse": 30.739949524239588,
+     "disc_area_frac_mean": 0.15200748028120714,
+     "kbps_target": 4000
+    },
+    {
+     "bytes": 904073,
+     "kbps": 2410.8613333333333,
+     "frames_encoded": 46,
+     "frames_dropped": 44,
+     "keyframes": 2,
+     "max_frame_bytes": 44925,
+     "foveal_psnr": {
+      "mean": 25.55435156884321,
+      "worst": 13.269512384563582
+     },
+     "full_psnr": {
+      "mean": 19.674012112071352,
+      "worst": 14.741081998087516
+     },
+     "periph_psnr": {
+      "mean": 19.278245307826378,
+      "worst": 14.784809988158488
+     },
+     "foveal_ssim": {
+      "mean": 0.7995710844694947,
+      "worst": 0.3742689813629808
+     },
+     "full_ssim": {
+      "mean": 0.6708726111111111,
+      "worst": 0.503501
+     },
+     "periph_ssim": {
+      "mean": 0.6483120389258419,
+      "worst": 0.5207995185836805
+     },
+     "foveal_psnr_of_mean_mse": 20.179043469724647,
+     "disc_area_frac_mean": 0.15200748028120714,
+     "kbps_target": 2020.0
+    },
+    {
+     "bytes": 1256111,
+     "kbps": 3349.6293333333333,
+     "frames_encoded": 71,
+     "frames_dropped": 19,
+     "keyframes": 2,
+     "max_frame_bytes": 58504,
+     "foveal_psnr": {
+      "mean": 28.80520022686515,
+      "worst": 13.217934742820239
+     },
+     "full_psnr": {
+      "mean": 20.70006741411672,
+      "worst": 14.937723026681681
+     },
+     "periph_psnr": {
+      "mean": 20.16185923287445,
+      "worst": 15.182127711301739
+     },
+     "foveal_ssim": {
+      "mean": 0.8732544429633892,
+      "worst": 0.3756676955321142
+     },
+     "full_ssim": {
+      "mean": 0.7058888777777779,
+      "worst": 0.502583
+     },
+     "periph_ssim": {
+      "mean": 0.676668987905182,
+      "worst": 0.526783804713012
+     },
+     "foveal_psnr_of_mean_mse": 24.3537961663393,
+     "disc_area_frac_mean": 0.15200748028120714,
+     "kbps_target": 3010.0
+    },
+    {
+     "bytes": 1051947,
+     "kbps": 2805.192,
+     "frames_encoded": 59,
+     "frames_dropped": 31,
+     "keyframes": 2,
+     "max_frame_bytes": 51872,
+     "foveal_psnr": {
+      "mean": 26.948751224547166,
+      "worst": 13.270512603165638
+     },
+     "full_psnr": {
+      "mean": 20.1644771526264,
+      "worst": 14.44600085941869
+     },
+     "periph_psnr": {
+      "mean": 19.694040186767324,
+      "worst": 14.393097551028642
+     },
+     "foveal_ssim": {
+      "mean": 0.8391860159510234,
+      "worst": 0.4280268900679962
+     },
+     "full_ssim": {
+      "mean": 0.688022522222222,
+      "worst": 0.492742
+     },
+     "periph_ssim": {
+      "mean": 0.6613516133478943,
+      "worst": 0.4881310408900764
+     },
+     "foveal_psnr_of_mean_mse": 21.912254535417727,
+     "disc_area_frac_mean": 0.15200748028120714,
+     "kbps_target": 2515.0
+    },
+    {
+     "bytes": 981190,
+     "kbps": 2616.5066666666667,
+     "frames_encoded": 51,
+     "frames_dropped": 39,
+     "keyframes": 2,
+     "max_frame_bytes": 48343,
+     "foveal_psnr": {
+      "mean": 25.86366341633445,
+      "worst": 13.234717924003496
+     },
+     "full_psnr": {
+      "mean": 19.873760581001683,
+      "worst": 14.456647983432699
+     },
+     "periph_psnr": {
+      "mean": 19.452895641298277,
+      "worst": 14.39836777716944
+     },
+     "foveal_ssim": {
+      "mean": 0.8019943271848389,
+      "worst": 0.3776658586308762
+     },
+     "full_ssim": {
+      "mean": 0.6746567111111115,
+      "worst": 0.490599
+     },
+     "periph_ssim": {
+      "mean": 0.6519371461588837,
+      "worst": 0.4891432130543655
+     },
+     "foveal_psnr_of_mean_mse": 20.935103453737,
+     "disc_area_frac_mean": 0.15200748028120714,
+     "kbps_target": 2267.5
+    },
+    {
+     "bytes": 934336,
+     "kbps": 2491.5626666666667,
+     "frames_encoded": 50,
+     "frames_dropped": 40,
+     "keyframes": 2,
+     "max_frame_bytes": 46687,
+     "foveal_psnr": {
+      "mean": 26.05502272902468,
+      "worst": 13.240782692447679
+     },
+     "full_psnr": {
+      "mean": 19.86613713457459,
+      "worst": 14.449274118314584
+     },
+     "periph_psnr": {
+      "mean": 19.43405468730225,
+      "worst": 14.39189972516388
+     },
+     "foveal_ssim": {
+      "mean": 0.8099694407363858,
+      "worst": 0.379095794098428
+     },
+     "full_ssim": {
+      "mean": 0.676171388888889,
+      "worst": 0.494958
+     },
+     "periph_ssim": {
+      "mean": 0.6527853404539266,
+      "worst": 0.4923911610659959
+     },
+     "foveal_psnr_of_mean_mse": 21.021519332321617,
+     "disc_area_frac_mean": 0.15200748028120714,
+     "kbps_target": 2143.75
+    },
+    {
+     "bytes": 921676,
+     "kbps": 2457.8026666666665,
+     "frames_encoded": 47,
+     "frames_dropped": 43,
+     "keyframes": 2,
+     "max_frame_bytes": 45489,
+     "foveal_psnr": {
+      "mean": 25.657837553951513,
+      "worst": 13.260340006696723
+     },
+     "full_psnr": {
+      "mean": 19.88741594904062,
+      "worst": 14.784175552903134
+     },
+     "periph_psnr": {
+      "mean": 19.48753307751829,
+      "worst": 15.021517477472045
+     },
+     "foveal_ssim": {
+      "mean": 0.802029464326844,
+      "worst": 0.37099698928875813
+     },
+     "full_ssim": {
+      "mean": 0.6775696888888889,
+      "worst": 0.499446
+     },
+     "periph_ssim": {
+      "mean": 0.655194812379563,
+      "worst": 0.5210682477517862
+     },
+     "foveal_psnr_of_mean_mse": 20.49608814714169,
+     "disc_area_frac_mean": 0.15200748028120714,
+     "kbps_target": 2081.875
+    }
+   ],
+   "glance": {
+    "bytes": 934336,
+    "kbps": 2491.5626666666667,
+    "frames_encoded": 50,
+    "frames_dropped": 40,
+    "keyframes": 2,
+    "max_frame_bytes": 46687,
+    "foveal_psnr": {
+     "mean": 26.05502272902468,
+     "worst": 13.240782692447679
+    },
+    "full_psnr": {
+     "mean": 19.86613713457459,
+     "worst": 14.449274118314584
+    },
+    "periph_psnr": {
+     "mean": 19.43405468730225,
+     "worst": 14.39189972516388
+    },
+    "foveal_ssim": {
+     "mean": 0.8099694407363858,
+     "worst": 0.379095794098428
+    },
+    "full_ssim": {
+     "mean": 0.676171388888889,
+     "worst": 0.494958
+    },
+    "periph_ssim": {
+     "mean": 0.6527853404539266,
+     "worst": 0.4923911610659959
+    },
+    "foveal_psnr_of_mean_mse": 21.021519332321617,
+    "disc_area_frac_mean": 0.15200748028120714,
+    "kbps_target": 2143.75
+   },
+   "reached": true,
+   "percent_saved": 45.04484527805602
+  },
+  {
+   "experiment": "A",
+   "clip": "csgo_1080p60_10s.y4m",
+   "res": 720,
+   "frames": 90,
+   "fovea_deg": 5.0,
+   "seed": 1,
+   "start_s": 6.9,
+   "synthetic_gaze": true,
+   "baseline_target_kbps": 2500,
+   "baseline": {
+    "bytes": 1019619,
+    "kbps": 2718.984,
+    "frames_encoded": 86,
+    "frames_dropped": 4,
+    "keyframes": 2,
+    "max_frame_bytes": 64746,
+    "foveal_psnr": {
+     "mean": 29.36751881272065,
+     "worst": 15.91376262659822
+    },
+    "full_psnr": {
+     "mean": 29.875020915818727,
+     "worst": 16.43708686792776
+    },
+    "periph_psnr": {
+     "mean": 30.087064096524305,
+     "worst": 16.544462668194818
+    },
+    "foveal_ssim": {
+     "mean": 0.7639667795513465,
+     "worst": 0.17151468621486277
+    },
+    "full_ssim": {
+     "mean": 0.7790866222222227,
+     "worst": 0.33104
+    },
+    "periph_ssim": {
+     "mean": 0.7825112870031656,
+     "worst": 0.3614613517588524
+    },
+    "foveal_psnr_of_mean_mse": 27.224031163408892,
+    "disc_area_frac_mean": 0.1520101273148148,
+    "kbps_target": 2500
+   },
+   "goal_foveal_psnr": 28.86751881272065,
+   "tol_db": 0.5,
+   "probes": [
+    {
+     "bytes": 916859,
+     "kbps": 2444.9573333333333,
+     "frames_encoded": 90,
+     "frames_dropped": 0,
+     "keyframes": 2,
+     "max_frame_bytes": 63721,
+     "foveal_psnr": {
+      "mean": 31.173983425509736,
+      "worst": 27.558886472878296
+     },
+     "full_psnr": {
+      "mean": 25.402258676704555,
+      "worst": 23.317810875350546
+     },
+     "periph_psnr": {
+      "mean": 24.89058988382696,
+      "worst": 22.936782500315815
+     },
+     "foveal_ssim": {
+      "mean": 0.8285574621562576,
+      "worst": 0.693395247999675
+     },
+     "full_ssim": {
+      "mean": 0.6543405555555555,
+      "worst": 0.518127
+     },
+     "periph_ssim": {
+      "mean": 0.6243570348959444,
+      "worst": 0.4776702543601459
+     },
+     "foveal_psnr_of_mean_mse": 30.58388444716197,
+     "disc_area_frac_mean": 0.1520101273148148,
+     "kbps_target": 2500
+    },
+    {
+     "bytes": 521018,
+     "kbps": 1389.3813333333333,
+     "frames_encoded": 79,
+     "frames_dropped": 11,
+     "keyframes": 2,
+     "max_frame_bytes": 31725,
+     "foveal_psnr": {
+      "mean": 28.0236488540191,
+      "worst": 15.283157194537193
+     },
+     "full_psnr": {
+      "mean": 24.309294408880955,
+      "worst": 14.864598435640284
+     },
+     "periph_psnr": {
+      "mean": 23.938600627472542,
+      "worst": 14.789164234584165
+     },
+     "foveal_ssim": {
+      "mean": 0.7114489512882487,
+      "worst": 0.17606646025433392
+     },
+     "full_ssim": {
+      "mean": 0.6033150666666666,
+      "worst": 0.336369
+     },
+     "periph_ssim": {
+      "mean": 0.5856232188162346,
+      "worst": 0.33756104261545306
+     },
+     "foveal_psnr_of_mean_mse": 25.189746358142763,
+     "disc_area_frac_mean": 0.1520101273148148,
+     "kbps_target": 1270.0
+    },
+    {
+     "bytes": 718691,
+     "kbps": 1916.5093333333332,
+     "frames_encoded": 90,
+     "frames_dropped": 0,
+     "keyframes": 2,
+     "max_frame_bytes": 47925,
+     "foveal_psnr": {
+      "mean": 30.09943051095175,
+      "worst": 26.9252221166896
+     },
+     "full_psnr": {
+      "mean": 25.249022719127147,
+      "worst": 23.181469626511824
+     },
+     "periph_psnr": {
+      "mean": 24.78350803998301,
+      "worst": 22.8276817324862
+     },
+     "foveal_ssim": {
+      "mean": 0.7935459013383344,
+      "worst": 0.6562068170269848
+     },
+     "full_ssim": {
+      "mean": 0.6401014777777776,
+      "worst": 0.509915
+     },
+     "periph_ssim": {
+      "mean": 0.6139152365404816,
+      "worst": 0.4696527522734263
+     },
+     "foveal_psnr_of_mean_mse": 29.60141932950322,
+     "disc_area_frac_mean": 0.1520101273148148,
+     "kbps_target": 1885.0
+    },
+    {
+     "bytes": 635908,
+     "kbps": 1695.7546666666667,
+     "frames_encoded": 90,
+     "frames_dropped": 0,
+     "keyframes": 2,
+     "max_frame_bytes": 39935,
+     "foveal_psnr": {
+      "mean": 29.594125242852968,
+      "worst": 26.366633067668552
+     },
+     "full_psnr": {
+      "mean": 25.170742128451447,
+      "worst": 23.11254567595562
+     },
+     "periph_psnr": {
+      "mean": 24.728618114269523,
+      "worst": 22.783827706393698
+     },
+     "foveal_ssim": {
+      "mean": 0.7751500930846641,
+      "worst": 0.6501939797155848
+     },
+     "full_ssim": {
+      "mean": 0.6331713333333332,
+      "worst": 0.501225
+     },
+     "periph_ssim": {
+      "mean": 0.6090512414284733,
+      "worst": 0.4617252207529763
+     },
+     "foveal_psnr_of_mean_mse": 29.15983982769049,
+     "disc_area_frac_mean": 0.1520101273148148,
+     "kbps_target": 1577.5
+    },
+    {
+     "bytes": 579063,
+     "kbps": 1544.168,
+     "frames_encoded": 86,
+     "frames_dropped": 4,
+     "keyframes": 2,
+     "max_frame_bytes": 36090,
+     "foveal_psnr": {
+      "mean": 28.919036712447724,
+      "worst": 16.196144767865327
+     },
+     "full_psnr": {
+      "mean": 24.86197687936388,
+      "worst": 17.194100782552916
+     },
+     "periph_psnr": {
+      "mean": 24.454765654597036,
+      "worst": 17.413488266051623
+     },
+     "foveal_ssim": {
+      "mean": 0.7465633438166352,
+      "worst": 0.18599419787128835
+     },
+     "full_ssim": {
+      "mean": 0.6207360111111114,
+      "worst": 0.365068
+     },
+     "periph_ssim": {
+      "mean": 0.599667444716887,
+      "worst": 0.3944801544174076
+     },
+     "foveal_psnr_of_mean_mse": 27.17813989368775,
+     "disc_area_frac_mean": 0.1520101273148148,
+     "kbps_target": 1423.75
+    },
+    {
+     "bytes": 548769,
+     "kbps": 1463.384,
+     "frames_encoded": 82,
+     "frames_dropped": 8,
+     "keyframes": 2,
+     "max_frame_bytes": 33889,
+     "foveal_psnr": {
+      "mean": 28.453694404246264,
+      "worst": 15.248947354171927
+     },
+     "full_psnr": {
+      "mean": 24.530427538248368,
+      "worst": 14.860669557452791
+     },
+     "periph_psnr": {
+      "mean": 24.136625137224442,
+      "worst": 14.790410148619541
+     },
+     "foveal_ssim": {
+      "mean": 0.7270612615922757,
+      "worst": 0.17463037242295099
+     },
+     "full_ssim": {
+      "mean": 0.6106217222222221,
+      "worst": 0.351759
+     },
+     "periph_ssim": {
+      "mean": 0.5913454570329832,
+      "worst": 0.3811040127129319
+     },
+     "foveal_psnr_of_mean_mse": 26.031205504238134,
+     "disc_area_frac_mean": 0.1520101273148148,
+     "kbps_target": 1346.875
+    },
+    {
+     "bytes": 566859,
+     "kbps": 1511.624,
+     "frames_encoded": 85,
+     "frames_dropped": 5,
+     "keyframes": 2,
+     "max_frame_bytes": 34946,
+     "foveal_psnr": {
+      "mean": 28.738418652123855,
+      "worst": 15.940209239191994
+     },
+     "full_psnr": {
+      "mean": 24.746069186685553,
+      "worst": 16.694286460461786
+     },
+     "periph_psnr": {
+      "mean": 24.345901244092694,
+      "worst": 16.854237476647377
+     },
+     "foveal_ssim": {
+      "mean": 0.7396351297517783,
+      "worst": 0.17191429326359597
+     },
+     "full_ssim": {
+      "mean": 0.6172995111111111,
+      "worst": 0.350899
+     },
+     "periph_ssim": {
+      "mean": 0.5968930874408775,
+      "worst": 0.3846093587333579
+     },
+     "foveal_psnr_of_mean_mse": 26.73186894803476,
+     "disc_area_frac_mean": 0.1520101273148148,
+     "kbps_target": 1385.3125
+    }
+   ],
+   "glance": {
+    "bytes": 579063,
+    "kbps": 1544.168,
+    "frames_encoded": 86,
+    "frames_dropped": 4,
+    "keyframes": 2,
+    "max_frame_bytes": 36090,
+    "foveal_psnr": {
+     "mean": 28.919036712447724,
+     "worst": 16.196144767865327
+    },
+    "full_psnr": {
+     "mean": 24.86197687936388,
+     "worst": 17.194100782552916
+    },
+    "periph_psnr": {
+     "mean": 24.454765654597036,
+     "worst": 17.413488266051623
+    },
+    "foveal_ssim": {
+     "mean": 0.7465633438166352,
+     "worst": 0.18599419787128835
+    },
+    "full_ssim": {
+     "mean": 0.6207360111111114,
+     "worst": 0.365068
+    },
+    "periph_ssim": {
+     "mean": 0.599667444716887,
+     "worst": 0.3944801544174076
+    },
+    "foveal_psnr_of_mean_mse": 27.17813989368775,
+    "disc_area_frac_mean": 0.1520101273148148,
+    "kbps_target": 1423.75
+   },
+   "reached": true,
+   "percent_saved": 43.2079041288952
+  },
+  {
+   "experiment": "A",
+   "clip": "csgo_1080p60_10s.y4m",
+   "res": 1080,
+   "frames": 90,
+   "fovea_deg": 5.0,
+   "seed": 1,
+   "start_s": 6.9,
+   "synthetic_gaze": true,
+   "baseline_target_kbps": 4000,
+   "baseline": {
+    "bytes": 1703682,
+    "kbps": 4543.152,
+    "frames_encoded": 75,
+    "frames_dropped": 15,
+    "keyframes": 2,
+    "max_frame_bytes": 102937,
+    "foveal_psnr": {
+     "mean": 28.01026158033654,
+     "worst": 15.102175810715883
+    },
+    "full_psnr": {
+     "mean": 28.50526795122404,
+     "worst": 14.637270570813914
+    },
+    "periph_psnr": {
+     "mean": 28.749250982934416,
+     "worst": 14.554006343365444
+    },
+    "foveal_ssim": {
+     "mean": 0.7077113345637617,
+     "worst": 0.19368811583030154
+    },
+    "full_ssim": {
+     "mean": 0.7336677666666668,
+     "worst": 0.338458
+    },
+    "periph_ssim": {
+     "mean": 0.7393751097831689,
+     "worst": 0.3336161789329345
+    },
+    "foveal_psnr_of_mean_mse": 24.285868465166345,
+    "disc_area_frac_mean": 0.15200748028120714,
+    "kbps_target": 4000
+   },
+   "goal_foveal_psnr": 27.51026158033654,
+   "tol_db": 0.5,
+   "probes": [
+    {
+     "bytes": 1535772,
+     "kbps": 4095.392,
+     "frames_encoded": 90,
+     "frames_dropped": 0,
+     "keyframes": 2,
+     "max_frame_bytes": 100036,
+     "foveal_psnr": {
+      "mean": 30.467105878451648,
+      "worst": 27.441233618942896
+     },
+     "full_psnr": {
+      "mean": 25.970784117719116,
+      "worst": 23.747912265671616
+     },
+     "periph_psnr": {
+      "mean": 25.532812043582982,
+      "worst": 23.395278833646465
+     },
+     "foveal_ssim": {
+      "mean": 0.7963141377746645,
+      "worst": 0.6686144016960175
+     },
+     "full_ssim": {
+      "mean": 0.6648680666666666,
+      "worst": 0.536068
+     },
+     "periph_ssim": {
+      "mean": 0.6427940911724263,
+      "worst": 0.4978850066466103
+     },
+     "foveal_psnr_of_mean_mse": 29.981473311310832,
+     "disc_area_frac_mean": 0.15200748028120714,
+     "kbps_target": 4000
+    },
+    {
+     "bytes": 875341,
+     "kbps": 2334.2426666666665,
+     "frames_encoded": 65,
+     "frames_dropped": 25,
+     "keyframes": 2,
+     "max_frame_bytes": 48929,
+     "foveal_psnr": {
+      "mean": 26.433391881381134,
+      "worst": 14.031253407658834
+     },
+     "full_psnr": {
+      "mean": 23.589734658498955,
+      "worst": 14.266456078725056
+     },
+     "periph_psnr": {
+      "mean": 23.290085247349726,
+      "worst": 14.000122156692164
+     },
+     "foveal_ssim": {
+      "mean": 0.6576430256982391,
+      "worst": 0.19792808306632326
+     },
+     "full_ssim": {
+      "mean": 0.5983587444444446,
+      "worst": 0.377734
+     },
+     "periph_ssim": {
+      "mean": 0.589368059646891,
+      "worst": 0.3556691943852821
+     },
+     "foveal_psnr_of_mean_mse": 22.755496310254912,
+     "disc_area_frac_mean": 0.15200748028120714,
+     "kbps_target": 2020.0
+    },
+    {
+     "bytes": 1234369,
+     "kbps": 3291.6506666666664,
+     "frames_encoded": 86,
+     "frames_dropped": 4,
+     "keyframes": 2,
+     "max_frame_bytes": 74828,
+     "foveal_psnr": {
+      "mean": 29.257407570267514,
+      "worst": 15.745124906939107
+     },
+     "full_psnr": {
+      "mean": 25.507437756199916,
+      "worst": 16.541482310082248
+     },
+     "periph_psnr": {
+      "mean": 25.131952550090773,
+      "worst": 16.71142615737923
+     },
+     "foveal_ssim": {
+      "mean": 0.7505641036366465,
+      "worst": 0.19699766315738743
+     },
+     "full_ssim": {
+      "mean": 0.6456168333333334,
+      "worst": 0.383963
+     },
+     "periph_ssim": {
+      "mean": 0.6284634820053006,
+      "worst": 0.4196132756981227
+     },
+     "foveal_psnr_of_mean_mse": 27.01094578420892,
+     "disc_area_frac_mean": 0.15200748028120714,
+     "kbps_target": 3010.0
+    },
+    {
+     "bytes": 1039434,
+     "kbps": 2771.824,
+     "frames_encoded": 76,
+     "frames_dropped": 14,
+     "keyframes": 2,
+     "max_frame_bytes": 62408,
+     "foveal_psnr": {
+      "mean": 27.89406747602492,
+      "worst": 15.179142956109601
+     },
+     "full_psnr": {
+      "mean": 24.624632296093953,
+      "worst": 14.791215047456728
+     },
+     "periph_psnr": {
+      "mean": 24.300021549138016,
+      "worst": 14.721023231444615
+     },
+     "foveal_ssim": {
+      "mean": 0.6990468882004979,
+      "worst": 0.19661675299332682
+     },
+     "full_ssim": {
+      "mean": 0.6212948777777777,
+      "worst": 0.36157
+     },
+     "periph_ssim": {
+      "mean": 0.6093016686601844,
+      "worst": 0.3612268867957029
+     },
+     "foveal_psnr_of_mean_mse": 24.3742936082233,
+     "disc_area_frac_mean": 0.15200748028120714,
+     "kbps_target": 2515.0
+    },
+    {
+     "bytes": 973742,
+     "kbps": 2596.6453333333334,
+     "frames_encoded": 72,
+     "frames_dropped": 18,
+     "keyframes": 2,
+     "max_frame_bytes": 54880,
+     "foveal_psnr": {
+      "mean": 27.407186516545437,
+      "worst": 15.169532844793292
+     },
+     "full_psnr": {
+      "mean": 24.211760074664877,
+      "worst": 14.790168457727917
+     },
+     "periph_psnr": {
+      "mean": 23.893753143631688,
+      "worst": 14.721447747897889
+     },
+     "foveal_ssim": {
+      "mean": 0.6820713488281964,
+      "worst": 0.19729115131658193
+     },
+     "full_ssim": {
+      "mean": 0.6118804444444446,
+      "worst": 0.362393
+     },
+     "periph_ssim": {
+      "mean": 0.6013239445505102,
+      "worst": 0.3621853852143294
+     },
+     "foveal_psnr_of_mean_mse": 23.864542084623356,
+     "disc_area_frac_mean": 0.15200748028120714,
+     "kbps_target": 2267.5
+    },
+    {
+     "bytes": 1020571,
+     "kbps": 2721.5226666666667,
+     "frames_encoded": 76,
+     "frames_dropped": 14,
+     "keyframes": 2,
+     "max_frame_bytes": 57585,
+     "foveal_psnr": {
+      "mean": 27.83626040916798,
+      "worst": 15.168710109601573
+     },
+     "full_psnr": {
+      "mean": 24.61256774320625,
+      "worst": 14.790289205210186
+     },
+     "periph_psnr": {
+      "mean": 24.29183441101326,
+      "worst": 14.721730781921746
+     },
+     "foveal_ssim": {
+      "mean": 0.6968542582385389,
+      "worst": 0.19748472861307187
+     },
+     "full_ssim": {
+      "mean": 0.6203756333333331,
+      "worst": 0.362365
+     },
+     "periph_ssim": {
+      "mean": 0.608621858514175,
+      "worst": 0.36181865538459423
+     },
+     "foveal_psnr_of_mean_mse": 24.35740282590434,
+     "disc_area_frac_mean": 0.15200748028120714,
+     "kbps_target": 2391.25
+    },
+    {
+     "bytes": 994586,
+     "kbps": 2652.2293333333337,
+     "frames_encoded": 74,
+     "frames_dropped": 16,
+     "keyframes": 2,
+     "max_frame_bytes": 56703,
+     "foveal_psnr": {
+      "mean": 27.65062045047518,
+      "worst": 15.75296048229565
+     },
+     "full_psnr": {
+      "mean": 24.45934908241579,
+      "worst": 15.25825200778363
+     },
+     "periph_psnr": {
+      "mean": 24.139001091223616,
+      "worst": 15.066218186920795
+     },
+     "foveal_ssim": {
+      "mean": 0.6879182997684684,
+      "worst": 0.19817786022308403
+     },
+     "full_ssim": {
+      "mean": 0.6158800333333333,
+      "worst": 0.38097
+     },
+     "periph_ssim": {
+      "mean": 0.6049801897166096,
+      "worst": 0.39641019326409443
+     },
+     "foveal_psnr_of_mean_mse": 24.27983592447208,
+     "disc_area_frac_mean": 0.15200748028120714,
+     "kbps_target": 2329.375
+    }
+   ],
+   "glance": {
+    "bytes": 994586,
+    "kbps": 2652.2293333333337,
+    "frames_encoded": 74,
+    "frames_dropped": 16,
+    "keyframes": 2,
+    "max_frame_bytes": 56703,
+    "foveal_psnr": {
+     "mean": 27.65062045047518,
+     "worst": 15.75296048229565
+    },
+    "full_psnr": {
+     "mean": 24.45934908241579,
+     "worst": 15.25825200778363
+    },
+    "periph_psnr": {
+     "mean": 24.139001091223616,
+     "worst": 15.066218186920795
+    },
+    "foveal_ssim": {
+     "mean": 0.6879182997684684,
+     "worst": 0.19817786022308403
+    },
+    "full_ssim": {
+     "mean": 0.6158800333333333,
+     "worst": 0.38097
+    },
+    "periph_ssim": {
+     "mean": 0.6049801897166096,
+     "worst": 0.39641019326409443
+    },
+    "foveal_psnr_of_mean_mse": 24.27983592447208,
+    "disc_area_frac_mean": 0.15200748028120714,
+    "kbps_target": 2329.375
+   },
+   "reached": true,
+   "percent_saved": 41.62138239413223
+  },
+  {
+   "experiment": "A",
    "clip": "call-desk.mp4",
    "res": 720,
    "frames": 90,
    "fovea_deg": 3.0,
    "seed": 1,
+   "start_s": 0.0,
    "synthetic_gaze": true,
    "baseline_target_kbps": 2500,
    "baseline": {
@@ -1656,37 +3652,37 @@
      "kbps_target": 1885.0
     },
     {
-     "bytes": 749110,
-     "kbps": 1997.6266666666668,
+     "bytes": 747157,
+     "kbps": 1992.4186666666667,
      "frames_encoded": 90,
      "frames_dropped": 0,
      "keyframes": 2,
-     "max_frame_bytes": 35248,
+     "max_frame_bytes": 38660,
      "foveal_psnr": {
-      "mean": 48.53209480983503,
+      "mean": 48.55166050528566,
       "worst": 39.28926576129357
      },
      "full_psnr": {
-      "mean": 27.296723007624184,
-      "worst": 26.960743642319436
+      "mean": 27.296531131451204,
+      "worst": 26.960411929902314
      },
      "periph_psnr": {
-      "mean": 27.050604748648325,
-      "worst": 26.754205871302865
+      "mean": 27.050412644972695,
+      "worst": 26.753874108205874
      },
      "foveal_ssim": {
-      "mean": 0.9900141803392716,
+      "mean": 0.9899874524393949,
       "worst": 0.9537868434472214
      },
      "full_ssim": {
-      "mean": 0.8535392666666668,
-      "worst": 0.844288
+      "mean": 0.8535306222222222,
+      "worst": 0.844235
      },
      "periph_ssim": {
-      "mean": 0.8455153751224005,
-      "worst": 0.836862484024023
+      "mean": 0.8455078786925702,
+      "worst": 0.836808991843289
      },
-     "foveal_psnr_of_mean_mse": 46.7657260864527,
+     "foveal_psnr_of_mean_mse": 46.76572863364876,
      "disc_area_frac_mean": 0.05569892939814815,
      "kbps_target": 2192.5
     },
@@ -1841,6 +3837,7 @@
    "frames": 90,
    "fovea_deg": 8.0,
    "seed": 1,
+   "start_s": 0.0,
    "synthetic_gaze": true,
    "baseline_target_kbps": 2500,
    "baseline": {
@@ -1928,6 +3925,7 @@
    "frames": 90,
    "fovea_deg": 5.0,
    "seed": 2,
+   "start_s": 0.0,
    "synthetic_gaze": true,
    "baseline_target_kbps": 2500,
    "baseline": {
@@ -2050,12 +4048,12 @@
       "worst": 41.255178799276806
      },
      "full_psnr": {
-      "mean": 29.208825313396346,
+      "mean": 29.208825313396343,
       "worst": 27.287186023165052
      },
      "periph_psnr": {
       "mean": 28.4927022540234,
-      "worst": 26.867008887643227
+      "worst": 26.867008887643223
      },
      "foveal_ssim": {
       "mean": 0.9896248274439684,
@@ -2109,37 +4107,37 @@
      "kbps_target": 2192.5
     },
     {
-     "bytes": 815741,
-     "kbps": 2175.3093333333336,
+     "bytes": 814981,
+     "kbps": 2173.2826666666665,
      "frames_encoded": 90,
      "frames_dropped": 0,
      "keyframes": 2,
      "max_frame_bytes": 46294,
      "foveal_psnr": {
-      "mean": 47.68588995729256,
+      "mean": 47.673996294467806,
       "worst": 41.367988903373686
      },
      "full_psnr": {
-      "mean": 29.217262621191427,
+      "mean": 29.217413812933078,
       "worst": 27.329230498977264
      },
      "periph_psnr": {
-      "mean": 28.499554310871478,
+      "mean": 28.499725002113962,
       "worst": 26.90733163604466
      },
      "foveal_ssim": {
-      "mean": 0.9907741059185976,
+      "mean": 0.9907636984480382,
       "worst": 0.9737936312637199
      },
      "full_ssim": {
-      "mean": 0.9014061666666667,
+      "mean": 0.9014037444444448,
       "worst": 0.848532
      },
      "periph_ssim": {
-      "mean": 0.8854331490600431,
+      "mean": 0.8854322494901019,
       "worst": 0.8342504015494238
      },
-     "foveal_psnr_of_mean_mse": 47.123807369729846,
+     "foveal_psnr_of_mean_mse": 47.11664429320429,
      "disc_area_frac_mean": 0.15427513744212965,
      "kbps_target": 2346.25
     },
@@ -2259,6 +4257,7 @@
    "frames": 90,
    "fovea_deg": 5.0,
    "seed": 3,
+   "start_s": 0.0,
    "synthetic_gaze": true,
    "baseline_target_kbps": 2500,
    "baseline": {

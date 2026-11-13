@@ -1,5 +1,27 @@
 # Glance — project status
-_Last updated: 13 Nov 2026 (Helsinki) by autopilot_
+_Last updated: Fri 13 Nov 2026 evening (Helsinki) by the laptop session_
+
+## UPDATE 13 Nov evening (laptop session) — read this before the final report below
+Three foveation methods now measured on six clips (3 call clips + river, spreadsheet, game gameplay). All gaze traces are SYNTHETIC, zero tracker error, 3-second windows, one seed unless stated, foveal PSNR only (no VMAF). 42 Python tests green.
+
+| Method | Call clips, equal bitrate | Busy / screen / game, equal bitrate | Equal foveal quality → kbps saved | Raw data / command |
+|---|---|---|---|---|
+| **Per-block quality (H.264, x264 ROI)** | **+2.72 to +3.46 dB, wins 9 of 9** | −0.28 to +4.40 dB, wins 8 of 9 | **46.5–62.0 % on all six clips** (vs 2500 kbps baseline) | `results/raw/exp_roi.json`; `python offline/experiments/roi.py --out` |
+| Blur pre-filter (VP9, what the browser demo does) | −3.15 to +0.48 dB, wins 5 of 29 (mean −1.14) | +1.05 to +4.59 dB, wins 24 of 24 | call clips 0.8–15.9 % in 6 of 10; busy/screen/game **41.6–48.5 %** | `exp_a.json`, `exp_b.json`; `python offline/experiments/run.py --ab` |
+| Two-layer grid (VP9 low-res base + sharp crop) | −5.36 to −3.32 dB, wins 0 of 9 | +0.57 to +2.78 dB, wins 9 of 9 | call clips not reached; others 14.6–27.5 % | `exp_layers.json`; `python offline/experiments/layers.py --out` |
+
+**What to pitch:** per-block quality is the only method that wins on video calls: about +3 dB where the viewer looks at the same bitrate, or about half the bitrate at the same foveal quality. It needs a native encoder; no shipped browser API exposes per-region quality (docs/research.md §8). The browser demo shows the blur method.
+
+**Skeptic findings (`offline/experiments/skeptic.py --all`, `results/raw/skeptic.json`):**
+- Measurement and baseline fairness confirmed (independent scorer agrees within 0.005 dB; identical encoder command for both streams).
+- The blur method's loss on call clips comes from the synthetic trace jumping every 0.2–0.6 s. With a fixed gaze or a calm call-like trace it wins by about 1 dB (2 clips, 300–1000 kbps); with the jumpy trace it loses everywhere.
+- Busy-content gains at ≤1000 kbps are mostly fewer frozen frames (the baseline drops 50–86 of 90 frames there). Counting only frames both streams encoded: river +3.59 → +0.23 dB, spreadsheet +3.04 → +0.61 dB. At 4000 kbps (almost no drops) the gain is real: +2.77 and +4.61 dB. The equal-quality savings above have about the same drop counts in both streams.
+- Scoring over a disc 1.5× the fovea radius makes the blur method lose even with a fixed gaze (+1.08 → −2.87 dB): just outside the fovea it is clearly worse.
+- A bug was found and fixed: on ffmpeg 8 the pre-filter corrupted tagged mp4 clips (regression test added). With the fix the laptop reproduces the server's call-clip numbers.
+
+**Not done / caveats:** no tracker error or lag for the per-block and two-layer methods (the blur method lost in all 21 tracker-error conditions); x264 is not bit-deterministic (about 2 % size noise, so gains under ~0.5 dB are noise); the periphery pays (per-block: −0.2 to −3.6 dB at equal bitrate, −4.7 to −7.6 dB in the saving case); no VMAF/FovVideoVDP; no user study; the two-layer run missed its bitrate tolerance in 4 of 18 rows; real webcam traces still missing (key G records one).
+
+**Containers:** six unrelated containers on the home server are STOPPED since 12 Nov 23:40 UTC (intern, uarb, study). Restart command in `autopilot/stopped_containers.md`. The server autopilot loop is not running (it ended at its 30-run cap on 13 Nov 06:09 UTC).
 
 ## FINAL REPORT
 (13 Nov run 19; T7b still Blocked, so this is the report with that gap stated. Smoke green, 26 Python tests green.)
@@ -16,7 +38,7 @@ _Last updated: 13 Nov 2026 (Helsinki) by autopilot_
    3. **T**: look at the 20 dots; read GO / GO-with-big-fovea / PIVOT and the error in degrees. **X** recenters.
    4. **1-3** pick a clip and look around; **M** mouse/eyes, **V** camera view, **F** foveation preview.
    5. **E** then **S**: split screen with live kbps and % saved; **R** shows where bits go. **B**: bad-network mode (500 kbps CBR both) with foveal PSNR comparison.
-6. **Containers:** none were stopped (see `autopilot/stopped_containers.md`).
+6. **Containers:** six unrelated containers on the home server are stopped (see the update above and `autopilot/stopped_containers.md`).
 
 ## Now
 Idle. All tasks ticked except Blocked T7b. After feature freeze (14 Nov 13:00 Helsinki) only bug fixes.
