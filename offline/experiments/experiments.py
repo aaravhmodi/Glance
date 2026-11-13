@@ -17,7 +17,7 @@ TOL_DB = 0.5
 BISECT_STEPS = 6
 MIN_KBPS = 40
 UNCONSTRAINED = {360: 500, 720: 2500, 1080: 4000}  # libwebrtc simulcast targets, research.md section 1
-SIZES = {360: (640, 360), 720: (1280, 720)}
+SIZES = {360: (640, 360), 720: (1280, 720), 1080: (1920, 1080)}
 
 
 def _probe(src, ref, w, h, n, kbps, true_gaze, r_meas, tmp, tag):
@@ -29,19 +29,19 @@ def _probe(src, ref, w, h, n, kbps, true_gaze, r_meas, tmp, tag):
     return s
 
 
-def _setup(clip, res, n, seed, tmp, deg):
+def _setup(clip, res, n, seed, tmp, deg, start_s=0.0):
     w, h = SIZES[res]
     os.makedirs(tmp, exist_ok=True)
     trace = traces.generate(seed, n / pipeline.FPS, width=w, height=h, clip=os.path.basename(clip))
-    ref = pipeline.make_reference(clip, w, h, n, os.path.join(tmp, "ref.mkv"))
+    ref = pipeline.make_reference(clip, w, h, n, os.path.join(tmp, "ref.mkv"), start_s=start_s)
     gin = pipeline.glance_frames(ref, w, h, n, trace, os.path.join(tmp, "glance_in.mkv"), deg=deg)
     true_gaze = [pipeline.gaze_px(trace, k, w, h)[:2] for k in range(n)]
     return w, h, trace, ref, gin, true_gaze
 
 
-def experiment_a(clip, res, n=90, seed=1, deg=fovea.FOVEA_DEG, base_kbps=None, tmp="results/tmp/a"):
+def experiment_a(clip, res, n=90, seed=1, deg=fovea.FOVEA_DEG, base_kbps=None, tmp="results/tmp/a", start_s=0.0):
     shutil.rmtree(tmp, ignore_errors=True)
-    w, h, trace, ref, gin, true_gaze = _setup(clip, res, n, seed, tmp, deg)
+    w, h, trace, ref, gin, true_gaze = _setup(clip, res, n, seed, tmp, deg, start_s)
     r_meas = fovea.deg_to_px(deg, w)
     base_kbps = base_kbps or UNCONSTRAINED[res]
     try:
@@ -65,16 +65,16 @@ def experiment_a(clip, res, n=90, seed=1, deg=fovea.FOVEA_DEG, base_kbps=None, t
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     res_row = {"experiment": "A", "clip": os.path.basename(clip), "res": res, "frames": n, "fovea_deg": deg,
-               "seed": seed, "synthetic_gaze": True, "baseline_target_kbps": base_kbps, "baseline": base,
+               "seed": seed, "start_s": start_s, "synthetic_gaze": True, "baseline_target_kbps": base_kbps, "baseline": base,
                "goal_foveal_psnr": goal, "tol_db": TOL_DB, "probes": probes, "glance": best, "reached": best is not None}
     # percent saved compares ACHIEVED bytes. If a stream used fewer bytes than the cap (easy content), that is real.
     res_row["percent_saved"] = (100.0 * (1 - best["kbps"] / base["kbps"])) if best else None
     return res_row
 
 
-def experiment_b(clip, res, caps, n=90, seed=1, deg=fovea.FOVEA_DEG, tmp="results/tmp/b"):
+def experiment_b(clip, res, caps, n=90, seed=1, deg=fovea.FOVEA_DEG, tmp="results/tmp/b", start_s=0.0):
     shutil.rmtree(tmp, ignore_errors=True)
-    w, h, trace, ref, gin, true_gaze = _setup(clip, res, n, seed, tmp, deg)
+    w, h, trace, ref, gin, true_gaze = _setup(clip, res, n, seed, tmp, deg, start_s)
     r_meas = fovea.deg_to_px(deg, w)
     rows = []
     try:
@@ -82,7 +82,7 @@ def experiment_b(clip, res, caps, n=90, seed=1, deg=fovea.FOVEA_DEG, tmp="result
             b = _probe(ref, ref, w, h, n, cap, true_gaze, r_meas, tmp, "b")
             g = _probe(gin, ref, w, h, n, cap, true_gaze, r_meas, tmp, "g")
             rows.append({"experiment": "B", "clip": os.path.basename(clip), "res": res, "frames": n, "fovea_deg": deg,
-                         "seed": seed, "synthetic_gaze": True, "cap_kbps": cap, "baseline": b, "glance": g,
+                         "seed": seed, "start_s": start_s, "synthetic_gaze": True, "cap_kbps": cap, "baseline": b, "glance": g,
                          "foveal_psnr_gain_db": g["foveal_psnr"]["mean"] - b["foveal_psnr"]["mean"],
                          "foveal_ssim_gain": g["foveal_ssim"]["mean"] - b["foveal_ssim"]["mean"],
                          "kbps_ratio": g["kbps"] / b["kbps"]})

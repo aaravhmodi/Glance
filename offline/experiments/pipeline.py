@@ -67,8 +67,11 @@ def glance_frames(ref, w, h, n, trace, out, deg=fovea.FOVEA_DEG, radius_override
             f.write(frame)
     pw, ph = fovea.periphery_size(w, h)
     grid = f"fps={FPS},trim=end_frame={n},setpts=N/{FPS}/TB"  # both inputs on one 30 fps grid: frame k pairs with weights k
-    graph = (f"[0:v]{grid},format=yuv420p,split[a][b];[b]scale={pw}:{ph}:flags=area,scale={w}:{h}:flags=bilinear[p];"
-             f"[1:v]{grid},scale={w}:{h}:flags=bilinear[m];[p][a][m]maskedmerge,format=yuv420p")
+    # Same colour tags on the picture and the weight mask: otherwise ffmpeg 8 converts the untagged raw mask to the
+    # picture's matrix through RGB before maskedmerge, which corrupts the weights (found by the Skeptic, 13 Nov).
+    tag = "setparams=range=tv:colorspace=bt709"
+    graph = (f"[0:v]{grid},format=yuv420p,{tag},split[a][b];[b]scale={pw}:{ph}:flags=area,scale={w}:{h}:flags=bilinear[p];"
+             f"[1:v]{grid},{tag},scale={w}:{h}:flags=bilinear[m];[p][a][m]maskedmerge,format=yuv420p")
     try:
         ffmpeg("-i", ref, "-f", "rawvideo", "-pix_fmt", "yuv420p", "-s", f"{mw}x{mh}", "-framerate", str(FPS), "-i", wpath,
                "-filter_complex", graph, "-frames:v", str(n), "-c:v", "ffv1", out)
@@ -136,6 +139,7 @@ def write_disc_masks(path, w, h, n, centres, radius_px):
 def _metric_run(kind, ref, test, mask, stats_path, n):
     """One ffmpeg run. kind = psnr|ssim; mask None = full frame, else gray disc masks (test is merged into ref outside the disc)."""
     # every input is forced onto the same 30 fps grid and cut to exactly n frames, so frames pair up one-to-one
+    stats_path = stats_path.replace(os.sep, "/").replace(":", "\\\\:")  # Windows: backslash and the drive colon are special inside a filter graph
     grid = f"fps={FPS},trim=end_frame={n},setpts=N/{FPS}/TB"
     prep = "format=yuv420p,extractplanes=y"
     g = f"[0:v]{grid},{prep}[t];[1:v]{grid},{prep},split=2[r1][r2];"

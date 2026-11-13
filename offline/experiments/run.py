@@ -50,8 +50,11 @@ def quick(out_dir, seed=1, frames=90, kbps=500, w=1280, h=720):
 
 
 CLIPS_DIR = os.path.join(ROOT, "web", "public", "clips")
-AB_CLIPS = ["call-desk.mp4", "call-plants.mp4", "call-teacher.mp4"]  # real clips; downloads of busy/text/game clips are Blocked (TASKS.md)
+AB_CLIPS = ["call-desk.mp4", "call-plants.mp4", "call-teacher.mp4"]  # real call clips in the repo
 CAPS = [300, 500, 1000, 2500]
+MEDIA_DIR = os.path.join(ROOT, "offline", "experiments", "media")  # git-ignored raw downloads
+# (file, content type, start second). The game capture opens with ~6 s of a static buy menu; gameplay is on screen from about 7 s.
+EXTRA_CLIPS = [("riverbed_1080p25.y4m", "busy scene", 0.0), ("spreadsheet_1080p30.y4m", "screen/text", 0.0), ("csgo_1080p60_10s.y4m", "game/motion", 6.9)]
 
 
 def ab(out_dir, frames=90):
@@ -64,6 +67,16 @@ def ab(out_dir, frames=90):
             a_rows.append(experiments.experiment_a(clip, res, n=frames))
             print("A", c, res, "saved", a_rows[-1]["percent_saved"], flush=True)
             b_rows += experiments.experiment_b(clip, res, [k for k in CAPS if k <= 1000] if res == 360 else CAPS, n=frames)
+    for c, kind, start in EXTRA_CLIPS:  # non-call content, 1080p sources (docs/research.md section 7); 25/60 fps sources are resampled to 30
+        clip = os.path.join(MEDIA_DIR, c)
+        if not os.path.exists(clip):
+            print("SKIP", c, "(" + kind + "): not downloaded, see docs/research.md section 7", flush=True)
+            continue
+        for res in (720, 1080):
+            a_rows.append(experiments.experiment_a(clip, res, n=frames, start_s=start))
+            print("A", c, res, "saved", a_rows[-1]["percent_saved"], flush=True)
+            b_rows += experiments.experiment_b(clip, res, CAPS, n=frames, start_s=start)
+            print("B", c, res, [round(r["foveal_psnr_gain_db"], 2) for r in b_rows[-len(CAPS):]], flush=True)
     clip = os.path.join(CLIPS_DIR, AB_CLIPS[0])
     for deg in (3.0, 8.0):  # fovea size sweep on one clip (5 deg is in the rows above)
         a_rows.append(experiments.experiment_a(clip, 720, n=frames, deg=deg))

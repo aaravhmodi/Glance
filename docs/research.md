@@ -144,3 +144,31 @@ ffmpeg -i IN -an -r 30 -c:v libvpx-vp9 -deadline realtime -cpu-used 7 -b:v Bk -m
   then let ffmpeg drop the partial last frame.
 - Keep raw files in `offline/experiments/media/` (git-ignored). Commit only short transcodes (< 10 MB) with credits.
 - 25 fps and 60 fps sources: convert to 30 fps for the matrix and say so; do not upscale 720p talking heads to 1080p.
+
+## 8. Per-block quality (ROI) versus a moving pre-filter (researcher, 13 Nov)
+
+**No source compares a gaze-driven pre-filter with per-block QP at equal bitrate, and none measures what a moving
+filter costs in bits.** Our own measurements are the direct evidence; the literature below is indirect.
+
+| Work | Method | Reported |
+|---|---|---|
+| Illahi et al. 2017 / 2020 ([arXiv:1706.04804](https://ar5iv.labs.arxiv.org/html/1706.04804), [1809.05823](https://ar5iv.labs.arxiv.org/html/1809.05823), P) | x264, per-macroblock Gaussian QP offset | ">50 %" bandwidth; users rate max offset 4 like no foveation, sweet spot 8–12 |
+| Schwarz & Behnke 2025 ([pdf](https://www.ais.uni-bonn.de/papers/Telepresence_2025_Schwarz.pdf), P) | NVENC HEVC per-block QP delta vs foveated warping | QP: bandwidth "reduced to a third"; warping: "the warped regions contain high frequencies, which again increases the required video bitrate" |
+| EyeNexus ([arXiv:2509.11807](https://arxiv.org/html/2509.11807), P) | warp + QP offsets | combined 36.8 dB EWPSNR, QP-only 31.8, warp-only 32.6 (complementary) |
+| Karlsson et al. 2006 ([pdf](https://new.eurasip.org/Proceedings/Eusipco/Eusipco2006/papers/1568981806.pdf), P) | background low-pass + temporal filter holding the background still | 30–50 % bitrate cut; they needed temporal stabilisation |
+| Ryoo et al. 2016 (P), Romero-Rondón et al. 2018 ([pdf](https://webusers.i3s.unice.fr/~sassatelli/articles/RSPA_2018.pdf), P) | low-res frame + high-res gaze crop, merged at the client | Ryoo: 2× at equal user satisfaction |
+
+Tool facts (P, FFmpeg master source unless noted):
+- `addroi` ([doc](https://ffmpeg.org/ffmpeg-filters.html#addroi), [source](https://raw.githubusercontent.com/FFmpeg/FFmpeg/master/libavfilter/vf_addroi.c)):
+  `qoffset` −1..+1, negative = better; expressions evaluated once; no timeline, no commands, so one `addroi` cannot move.
+  With chained filters the earliest region containing a block wins (`frame.h`: "the first region containing a given area of the frame applies").
+- libx264 (`libavcodec/libx264.c`, `setup_roi`): needs `aq-mode` ≠ 0; QP delta = qoffset × 51 at 8 bit (−0.1 ≈ −5 QP); 16×16 blocks.
+- libvpx VP9 (`libavcodec/libvpxenc.c`): needs `aq-mode 0`, `cpu-used ≥ 5`, realtime; delta_q = qoffset × 63.
+  **Verified locally:** with CBR and `-drop-threshold 30` at 300 kbps the encoder keeps only 15–79 of 90 frames and quality falls everywhere. Not usable.
+- Also honour ROI: libx265, VAAPI, QSV. Do not: libsvtav1, libaom, nvenc (string absent from the wrappers).
+- Browser: WebCodecs has per-frame QP only; per-region quality is an open proposal
+  ([w3c/webcodecs#892](https://github.com/w3c/webcodecs/issues/892), P). No shipped browser API exposes it.
+
+Verdict: per-block QP is the dominant published method (savings of roughly 50–67 % at acceptable quality in cloud gaming / telepresence).
+Support for "QP beats a moving blur" is moderate and indirect. In a browser the equivalent is two streams (base + gaze crop).
+Not read: Wiedemann 2020, Illahi 2021, Lungaro 2018, Geisler & Perry, Itti, Lee/Pattichis/Bovik.

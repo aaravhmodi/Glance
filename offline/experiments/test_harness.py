@@ -111,6 +111,17 @@ class PipelineGates(unittest.TestCase):
         self.assertLess(m["periph_psnr"]["mean"], 30.0)  # blurred outside (testsrc2 is detailed)
         self.assertGreater(m["periph_psnr"]["mean"], 10.0)
 
+    def test_glance_filter_keeps_fovea_exact_on_a_colour_tagged_clip(self):
+        # regression: a real mp4 carries bt709/tv tags; the untagged weight mask used to be colour-converted and no pixel stayed exact
+        clip = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "web", "public", "clips", "call-desk.mp4")
+        d = os.path.join(self.dir, "tagged")
+        os.makedirs(d, exist_ok=True)
+        ref = pipeline.make_reference(clip, W, H, 10, os.path.join(d, "ref.mkv"))
+        g = pipeline.glance_frames(ref, W, H, 10, self.trace, os.path.join(d, "g.mkv"))
+        m = pipeline.measure(ref, g, W, H, 10, self.centres()[:10], fovea.fovea_radius_px(W, 4.0) - 2, d)
+        self.assertEqual(m["foveal_psnr"]["worst"], pipeline.PSNR_CAP)
+        self.assertLess(m["periph_psnr"]["mean"], 60.0)
+
     def test_sanity_gate_radius_covering_frame_equals_baseline(self):
         diag = math.hypot(W, H)
         res = pipeline.condition(self.clip, W, H, N, 400, self.trace, os.path.join(self.dir, "c1"), ref=self.ref,
