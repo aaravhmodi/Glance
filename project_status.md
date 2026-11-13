@@ -16,7 +16,7 @@ Not final yet (T11 pending; the experiment harness T6–T9 is not built, so ther
 6. Containers: none were stopped (see `autopilot/stopped_containers.md`).
 
 ## Now
-Idle between runs; next task in `autopilot/TASKS.md` is P3 `recorder.ts`.
+Idle between runs; next task in `autopilot/TASKS.md` is T6 offline harness core.
 
 ## Audit (13 Nov, after P2)
 - `npm run smoke` green (type check, unit tests, browser checks); smoke network log: 0 external requests. Source has no http(s) URLs.
