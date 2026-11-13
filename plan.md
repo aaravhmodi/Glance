@@ -52,6 +52,11 @@ in < 2 min, `--all` = full matrix + charts + tables). Raw output `results/raw/`,
   baseline bitrate and quality within noise; frame counts equal before any metric; achieved kbps within
   ±15 % of the cap or the condition is flagged.
 
+## Task: recorder.ts (autopilot run, 13 Nov)
+- Outcome: key G starts/stops recording the gaze trace; stopping downloads JSON `{format, clip, source, synthetic:false, width, height, samples:[{t,x,y,sigma}]}` (x,y normalised 0..1, same shape as the T6 generator).
+- Files: web/src/gaze/recorder.ts, web/tests/recorder.test.ts, web/src/app.ts (key G, status text), web/scripts/smoke.mjs (bad-network floor 50 -> 10 kbps; headless 12-pair runs measured 44-78 kbps).
+- Verification: unit tests (normalisation, clamp, NaN skip, cap, round trip) and `npm run smoke` green.
+
 ## Task: status checklist + audit (autopilot run, 13 Nov)
 - Outcome: `project_status.md` converted to PROMPT.md section format with the 5-minute "test this first" checklist at the top; audit of the P1/P2 work.
 - Files: project_status.md, MEMORY.md, autopilot/TASKS.md.

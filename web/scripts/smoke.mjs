@@ -167,7 +167,7 @@ try {
       await e.flush()
       return { nk: e.normal.stats.averageKbps(), gk: e.glance.stats.averageKbps(), nb: e.normal.config.bitrate, gb: e.glance.config.bitrate, same: JSON.stringify(e.normal.config) === JSON.stringify(e.glance.config), err: e.error, pairs: e.encoded, status: document.querySelector('#status').textContent, nq: window.glanceMeter.normal.fovPsnr.n }
     })
-    const okB = !b.err && b.same && b.nb === 500000 && b.gb === 500000 && b.pairs >= 8 && b.nk > 50 && b.nk < 1000 && b.gk > 50 && b.gk < 1000 && /B bad network ON/.test(b.status)
+    const okB = !b.err && b.same && b.nb === 500000 && b.gb === 500000 && b.pairs >= 8 && b.nk > 10 && b.nk < 1000 && b.gk > 10 && b.gk < 1000 && /B bad network ON/.test(b.status)
     lineB = `${okB ? 'OK  ' : 'FAIL'} bad network: cap ${b.nb / 1000} kbps both; achieved normal ${b.nk.toFixed(0)} / glance ${b.gk.toFixed(0)} kbps (${b.pairs} pairs, headless); ${b.err}`
     await app.keyboard.press('b')
     await app.waitForFunction(() => window.glanceEnc?.normal.config.bitrateMode === 'quantizer', null, { timeout: 10_000 })

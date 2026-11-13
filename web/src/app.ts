@@ -1,5 +1,6 @@
 import { SourceManager, W, H } from './video/source'
 import { MouseSource } from './gaze/mouse'
+import { GazeRecorder, downloadTrace } from './gaze/recorder'
 import { GazeSwitch } from './gaze/switch'
 import { EyeTracker } from './gaze/tracker'
 import { createCamView } from './ui/camview'
@@ -32,6 +33,7 @@ export async function startApp() {
   const src = new SourceManager(new URLSearchParams(location.search).has('synthetic')) // ?synthetic = tests only
   await src.init()
   src.webcam = () => (tracker?.running ? tracker.video : null) // share the tracker's camera stream
+  const rec = new GazeRecorder(W, H)
   const fov = new Foveator(W, H) // key F: show the foveated picture (what Glance would send)
   let foveate = false
   let reveal = false // key R: tint the quality map over the viewer's canvas (display only, never sent to the encoders)
@@ -63,6 +65,10 @@ export async function startApp() {
     }
     if (e.key.toLowerCase() === 'v') { cam.canvas.hidden = !cam.canvas.hidden; void startTracker() } // show what the vision sees
     if (e.key.toLowerCase() === 'r') reveal = !reveal
+    if (e.key.toLowerCase() === 'g') { // record gaze trace; press again to download JSON
+      if (rec.recording) downloadTrace(rec.stop())
+      else rec.start(performance.now(), src.current?.id ?? '')
+    }
     if (e.key.toLowerCase() === 'f') foveate = !foveate
     if (e.key.toLowerCase() === 'e') void toggleEncode()
     if (e.key.toLowerCase() === 's') void toggleSplit()
@@ -234,6 +240,7 @@ export async function startApp() {
       gaze.y = r.sample.y
       gaze.sigma = r.sample.sigma
     }
+    if (rec.recording) rec.add(performance.now(), gaze.x, gaze.y, gaze.sigma, r.source)
     if (enc && performance.now() - lastPushMs >= 1000 / 30 - 2) { // ~30 fps frame pair into both encoders
       lastPushMs = performance.now()
       fov.render(src.frame, gaze.x, gaze.y, foveaRadiusPx(geom, gaze.sigma))
@@ -257,7 +264,7 @@ export async function startApp() {
     frames++
     const why = r.fallback ? (tracker?.latest ? ' (fallback: face found, not calibrated yet)' : ' (fallback: no face)') : ''
     const camTxt = trackerErr ? ` · tracker ERROR ${trackerErr}` : tracker ? ` · tracker ${tracker.delegate || 'loading'} face ${tracker.latest ? 'yes' : 'no'}` : ''
-    status.textContent = `source: ${src.kind} ${src.current?.id ?? ''} (keys 1-${src.options.length}) · gaze[${r.source}${why}] ${Math.round(gaze.x)},${Math.round(gaze.y)} · M toggles mouse/eyes · C calibrates: ${calibMsg} · T validates: ${validMsg} · F foveate ${foveate ? 'ON' : 'off'} · E encode: ${encText(performance.now())} · S split ${split ? 'ON' : 'off'} · B bad network ${badNet ? `ON (${BAD_NETWORK_KBPS} kbps cap, both streams)` : 'off'} · R reveal ${reveal ? 'ON' : 'off'} · V camera view${camTxt} · frames ${frames}`
+    status.textContent = `source: ${src.kind} ${src.current?.id ?? ''} (keys 1-${src.options.length}) · gaze[${r.source}${why}] ${Math.round(gaze.x)},${Math.round(gaze.y)} · M toggles mouse/eyes · C calibrates: ${calibMsg} · T validates: ${validMsg} · F foveate ${foveate ? 'ON' : 'off'} · E encode: ${encText(performance.now())} · S split ${split ? 'ON' : 'off'} · B bad network ${badNet ? `ON (${BAD_NETWORK_KBPS} kbps cap, both streams)` : 'off'} · G record gaze ${rec.recording ? `REC ${rec.count}` : 'off'} · R reveal ${reveal ? 'ON' : 'off'} · V camera view${camTxt} · frames ${frames}`
     requestAnimationFrame(loop)
   }
   requestAnimationFrame(loop)
