@@ -2,6 +2,8 @@
 // Holds only the newest decoded frame (older ones are closed immediately so the decoder never stalls).
 export class StreamDecoder {
   latest: VideoFrame | null = null
+  /** When set, every decoded frame goes here (and is closed afterwards) instead of being kept in `latest`. */
+  onFrame: ((f: VideoFrame) => void) | null = null
   decoded = 0
   resyncs = 0
   error = ''
@@ -18,7 +20,12 @@ export class StreamDecoder {
 
   private make(): VideoDecoder {
     const d = new VideoDecoder({
-      output: (f) => { this.latest?.close(); this.latest = f; this.decoded++ },
+      output: (f) => {
+        this.decoded++
+        if (this.onFrame) { try { this.onFrame(f) } finally { f.close() } return }
+        this.latest?.close()
+        this.latest = f
+      },
       error: (e) => { this.error = String(e); this.needKey = true },
     })
     d.configure(this.config)

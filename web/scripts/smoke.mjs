@@ -140,6 +140,22 @@ try {
   const lineE = `${okEnc ? 'OK  ' : 'FAIL'} encoders: ${en.enc} frame pairs (${en.dropped} dropped), normal ${en.nkbps.toFixed(0)} kbps (${en.nb} B) vs glance ${en.gkbps.toFixed(0)} kbps (${en.gb} B) = ${(100 * (1 - en.gb / en.nb)).toFixed(1)}% saved; ${en.err}`
   console.log(lineE)
   text += '\n' + lineE
+  // Quality meter: decoded streams vs the untouched source, inside the nominal gaze circle and on the full frame.
+  let lineQ
+  try {
+    await app.waitForFunction(() => { const m = window.glanceMeter; return m && m.normal.fovPsnr.n >= 2 && m.glance.fovPsnr.n >= 2 }, null, { timeout: 30_000 })
+    const q = await app.evaluate(() => {
+      const m = window.glanceMeter
+      return { n: m.normal.fovPsnr.n, g: m.glance.fovPsnr.n, nf: m.normal.fovPsnr.mean(), gf: m.glance.fovPsnr.mean(), nF: m.normal.fullPsnr.mean(), gF: m.glance.fullPsnr.mean(), ns: m.normal.fovSsim.mean(), gs: m.glance.fovSsim.mean(), err: m.error, status: document.querySelector('#status').textContent }
+    })
+    // Same QP, so the fovea must stay close (<= 3 dB lower) and the full frame must be clearly worse for Glance (blurred periphery).
+    const okQ = !q.err && q.nf > 20 && q.gf > q.nf - 3 && q.gF < q.nF - 1 && q.ns > 0.5 && q.gs > q.ns - 0.1 && /foveal PSNR/.test(q.status)
+    lineQ = `${okQ ? 'OK  ' : 'FAIL'} quality: foveal PSNR normal ${q.nf.toFixed(1)} / glance ${q.gf.toFixed(1)} dB, SSIM ${q.ns.toFixed(3)} / ${q.gs.toFixed(3)}; full-frame PSNR ${q.nF.toFixed(1)} / ${q.gF.toFixed(1)} dB (${q.n}/${q.g} samples) ${q.err}`
+  } catch (e) {
+    lineQ = `FAIL quality: ${String(e).slice(0, 150)}`
+  }
+  console.log(lineQ)
+  text += '\n' + lineQ
   await app.keyboard.press('e')
   // Split screen: key S starts the encoders, decodes both streams, draws them side by side with live kbps + % saved.
   await app.keyboard.press('s')

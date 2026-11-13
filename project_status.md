@@ -16,7 +16,7 @@ Not final yet (T11 pending; the experiment harness T6–T9 is not built, so ther
 6. Containers: none were stopped (see `autopilot/stopped_containers.md`).
 
 ## Now
-Idle between runs; next task in `autopilot/TASKS.md` is P3 "Decoding + foveal PSNR/SSIM".
+Idle between runs; next task in `autopilot/TASKS.md` is P3 "Bad-network mode".
 
 ## Audit (13 Nov, after P2)
 - `npm run smoke` green (type check, unit tests, browser checks); smoke network log: 0 external requests. Source has no http(s) URLs.
@@ -29,6 +29,7 @@ Idle between runs; next task in `autopilot/TASKS.md` is P3 "Decoding + foveal PS
 - Smoke can flake (pixel comparisons across moving clips).
 
 ## Done (newest first)
+- P3 live quality meter (13 Nov): `metrics/quality.ts` (luma PSNR, 8x8 SSIM, circular mask), `metrics/meter.ts` (decodes both streams, compares every 6th frame with the untouched source inside the nominal 5° circle and on the full frame; rolling mean of 20; shown in the status line and under the split screen). Verified: unit tests `tests/quality.test.ts` (identical → 100 dB cap / SSIM 1, offset 5 → 34.15 dB, mask ≈ πr², blur lowers SSIM) and smoke: foveal PSNR normal 27.9 / Glance 28.0 dB, SSIM 0.984 / 0.981, full-frame PSNR 27.4 / 24.2 dB, 2 samples each (headless, same QP). Limits: few samples in headless; in-browser only, publishable numbers come from the offline harness. Reviewer PASS (round 1; fixed: offer() try/catch, label split over two lines). Researcher skipped (standard Wang 2004 formulas). No docs numbers, so no fact-check.
 - P1/P2 (commits in `git log`, see below). Details:
 - P1: gaze plumbing done (mouse source, M toggle, 0.5 s no-face fallback). Tracker done (webcam → Face Landmarker → features; verified with a fake webcam file cut from talking-heads). Calibration done (key C, 9 dots, ridge poly regression; ~12 s happy path). Filter done (One-Euro + confirmed saccade snap, applied in `EyeTracker` after the mapper, reset on face loss). Validation done (key T after C; 20 dots, deg error, GO/PIVOT; set `?screencm=` to your real screen width).
 - P2: real video source done (commits 14ba30b, 8167a76; verified by `npm run smoke`: picker lists 3 clips + webcam, keys 1–3 switch clips with non-black frames, key 4 selects webcam; unit tests in `tests/layout.test.ts`). Foveation done (key F previews it; `video/foveate.ts` + `fovea.ts`; verified by smoke: fovea region equals source, far detail drops 3.22 → 0.95, VideoFrame 1280×720; unit tests in `tests/fovea.test.ts`). Decision: in-browser per-region QP is impossible (WebCodecs QP is per frame), so quality differences come only from the pre-filter. Decision: 5° radius = 217 px at the default 31 cm screen (below the 250–300 px guess in the docs; use `?screencm=`). Encoders done (key E; `video/encoders.ts`, `metrics/stats.ts`; smoke: Glance ≈50% smaller than normal at the same QP over 5 s on call-desk, only 11 frames in headless; unit tests `tests/stats.test.ts`). Split screen done (key S; smoke: both panels decode and show a picture, E/S toggles clean). Reveal done (commit 711ea2f; key R; smoke checks the tint changes pixels near/far from the gaze and toggles off; unit test `revealRGBA`). Next: the checklist + audit task.

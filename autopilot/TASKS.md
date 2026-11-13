@@ -22,7 +22,7 @@ Priorities come from `docs/COURSE_CORRECTION.md` (P1 → P2 → P3). Process rul
 - [x] `project_status.md`: the 5-step "how to test it when I'm back" checklist at the top (open app → calibrate → validate → look around a clip → split screen/reveal), plus status of P1/P2. Then a full audit (AGENT_TEAM §5).
 
 ## P3 — old Stage 3+
-- [ ] Decoding + foveal PSNR/SSIM (inside the gaze circle and full frame, every Nth frame) on the dashboard.
+- [x] Decoding + foveal PSNR/SSIM (inside the gaze circle and full frame, every Nth frame) on the dashboard.
 - [ ] Bad-network mode: both encoders `bitrateMode: 'constant'` at the same cap (500 kbps); compare foveal PSNR normal vs Glance.
 - [ ] `recorder.ts`: export gaze trace `{t, x, y, sigma}` + clip id as JSON.
 - [ ] T6 Harness core in `offline/experiments/` (Python + ffmpeg; design in `plan.md`, sources in `docs/research.md`): port the foveation formula from `web/src/video/fovea.ts` exactly, libvpx-vp9 realtime CBR encode for baseline and Glance with identical flags, foveal/peripheral PSNR + SSIM vs the untouched source, VMAF on a gaze-following crop (skip with a logged note if ffmpeg lacks `libvmaf`), seeded gaze-trace generator, `run.py --quick`. Unit tests with numeric thresholds (identical input → infinite PSNR; mask area ≈ πr²; baseline vs itself → 0 % saved; radius ≥ diagonal → same bitrate as baseline).

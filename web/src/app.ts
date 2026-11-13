@@ -10,6 +10,7 @@ import { DualEncoder, vp9QuantizerSupported, CODEC } from './video/encoders'
 import { StreamDecoder, decoderConfigFor } from './video/decoder'
 import { splitPanels, panelLabel, savedLabel } from './ui/split'
 import { percentSaved } from './metrics/stats'
+import { QualityMeter, qualityLabel } from './metrics/meter'
 import { geometryFromUrl, runValidation, type ValidationResult } from './gaze/validate'
 
 // App shell: video source drawn to a canvas. Gaze comes from GazeSwitch (mouse now, eyes once the tracker lands; key M toggles).
@@ -112,18 +113,24 @@ export async function startApp() {
   ;(window as unknown as { glanceValidStatus: () => string }).glanceValidStatus = () => validMsg
   // Key E: run the two VP9 encoders (normal vs Glance) on the live frames and show kbps / % saved.
   let enc: DualEncoder | null = null
+  let meter: QualityMeter | null = null // decodes both streams and compares them with the source (foveal + full-frame PSNR/SSIM)
+  const disposeEnc = () => { if (enc) { enc.close(); enc = null } meter?.close(); meter = null; encMsg = 'off' }
   let encMsg = 'off'
   let lastPushMs = -Infinity
   const encT0 = performance.now() // chunk timestamps are relative to this, so stats seconds start at 0
   const toggleEncode = async () => {
     if (enc) {
       stopSplit() // may already have closed and cleared enc (when S started the encoders)
-      if (enc) { const e: DualEncoder = enc; enc = null; e.close(); encMsg = 'off' }
+      disposeEnc()
       return
     }
     if (!(await vp9QuantizerSupported(W, H))) { encMsg = 'VP9 quantizer mode not supported here'; return }
     if (enc) return // a second E press while the support check was pending
     enc = new DualEncoder(W, H, 30)
+    const m = (meter = new QualityMeter(W, H, CODEC))
+    enc.normal.onChunk = (c) => { m.push('normal', c); split?.n.push(c) }
+    enc.glance.onChunk = (c) => { m.push('glance', c); split?.g.push(c) }
+    ;(window as unknown as { glanceMeter: QualityMeter }).glanceMeter = m
     ;(window as unknown as { glanceEnc: DualEncoder }).glanceEnc = enc
   }
   // Key S: split screen. Left = decoded "normal" stream, right = decoded Glance stream, each with live kbps; starts the encoders if needed.
@@ -133,9 +140,8 @@ export async function startApp() {
     if (!split) return
     const s = split
     split = null
-    if (enc) { enc.normal.onChunk = null; enc.glance.onChunk = null }
     s.n.close(); s.g.close()
-    if (s.startedEnc && enc) { const e = enc; enc = null; e.close(); encMsg = 'off' }
+    if (s.startedEnc && enc) disposeEnc()
   }
   const toggleSplit = async () => {
     if (split) { stopSplit(); return }
@@ -147,8 +153,6 @@ export async function startApp() {
       if (!enc || split) return
       const cfg = decoderConfigFor(CODEC, W, H)
       const n = new StreamDecoder(cfg), g2 = new StreamDecoder(cfg)
-      enc.normal.onChunk = (c) => n.push(c)
-      enc.glance.onChunk = (c) => g2.push(c)
       split = { n, g: g2, startedEnc }
       ;(window as unknown as { glanceSplit: unknown }).glanceSplit = split
     } finally { splitPending = false }
@@ -176,11 +180,18 @@ export async function startApp() {
     g.fillStyle = '#7CFC9A'
     g.font = 'bold 26px ui-monospace, monospace'
     g.fillText(savedLabel(percentSaved(enc.normal.stats.total, enc.glance.stats.total)), right.x + 4, right.y + right.h + 34)
+    if (meter) {
+      g.fillStyle = '#fff'
+      g.font = '16px ui-monospace, monospace'
+      const [a, b] = qualityLabel(meter).split(' · ')
+      g.fillText(a, left.x + 4, right.y + right.h + 62)
+      if (b) g.fillText(b, left.x + 4, right.y + right.h + 84)
+    }
   }
   const encText =(nowMs: number) => {
     if (!enc) return encMsg
     const ns = enc.normal.stats, gs = enc.glance.stats, t = (nowMs - encT0) / 1000
-    return `normal ${ns.lastSecondKbps(t).toFixed(0)} kbps vs glance ${gs.lastSecondKbps(t).toFixed(0)} kbps · ${percentSaved(ns.total, gs.total).toFixed(0)}% saved${enc.error ? ' ERR ' + enc.error : ''}`
+    return `normal ${ns.lastSecondKbps(t).toFixed(0)} kbps vs glance ${gs.lastSecondKbps(t).toFixed(0)} kbps · ${percentSaved(ns.total, gs.total).toFixed(0)}% saved · ${meter ? qualityLabel(meter) : ''}${enc.error ? ' ERR ' + enc.error : ''}`
   }
   // Webcam + Face Landmarker start the first time eyes are requested (triggers the camera permission prompt).
   let tracker: EyeTracker | null = null
@@ -211,6 +222,7 @@ export async function startApp() {
       lastPushMs = performance.now()
       fov.render(src.frame, gaze.x, gaze.y, foveaRadiusPx(geom, gaze.sigma))
       const tsUs = Math.round((lastPushMs - encT0) * 1000)
+      try { meter?.offer(tsUs, src.frame, { cx: gaze.x, cy: gaze.y, r: foveaRadiusPx(geom, 0) }) } catch (e) { if (meter) meter.error = String(e) } // nominal 5 deg circle, same for both streams
       const gf = fov.frame(tsUs)
       try { enc.push(new VideoFrame(src.frame, { timestamp: tsUs }), gf) } catch (e) { gf.close(); throw e }
     }
