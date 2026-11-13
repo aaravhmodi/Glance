@@ -1,0 +1,89 @@
+{
+ "clip": "call-desk.mp4",
+ "width": 1280,
+ "height": 720,
+ "frames": 90,
+ "kbps_target": 500,
+ "fovea_deg": 5.0,
+ "measure_deg": 5.0,
+ "synthetic_gaze": true,
+ "baseline": {
+  "bytes": 194800,
+  "kbps": 519.4666666666667,
+  "frames_encoded": 89,
+  "frames_dropped": 1,
+  "keyframes": 2,
+  "max_frame_bytes": 28747,
+  "foveal_psnr": {
+   "mean": 43.45571852213347,
+   "worst": 35.911335870446045
+  },
+  "full_psnr": {
+   "mean": 43.115689214619636,
+   "worst": 35.599847750188786
+  },
+  "periph_psnr": {
+   "mean": 43.22623743430382,
+   "worst": 35.542899607224506
+  },
+  "foveal_ssim": {
+   "mean": 0.9770645188205848,
+   "worst": 0.930377545780349
+  },
+  "full_ssim": {
+   "mean": 0.9801040888888886,
+   "worst": 0.93554
+  },
+  "periph_ssim": {
+   "mean": 0.9807284902606284,
+   "worst": 0.9365245236068027
+  },
+  "foveal_psnr_of_mean_mse": 41.97764402266423,
+  "disc_area_frac_mean": 0.1520101273148148,
+  "flags": []
+ },
+ "glance": {
+  "bytes": 190052,
+  "kbps": 506.8053333333333,
+  "frames_encoded": 90,
+  "frames_dropped": 0,
+  "keyframes": 2,
+  "max_frame_bytes": 15749,
+  "foveal_psnr": {
+   "mean": 40.49626866726333,
+   "worst": 35.22094626352862
+  },
+  "full_psnr": {
+   "mean": 28.63546644225209,
+   "worst": 27.549961361169856
+  },
+  "periph_psnr": {
+   "mean": 27.97338597108661,
+   "worst": 27.039650299806794
+  },
+  "foveal_ssim": {
+   "mean": 0.9645335655580743,
+   "worst": 0.9092916581416619
+  },
+  "full_ssim": {
+   "mean": 0.8839404666666664,
+   "worst": 0.863503
+  },
+  "periph_ssim": {
+   "mean": 0.8697974789400755,
+   "worst": 0.8474688192325283
+  },
+  "foveal_psnr_of_mean_mse": 39.67410298933699,
+  "disc_area_frac_mean": 0.1520101273148148,
+  "flags": []
+ },
+ "percent_saved": 2.43737166324437,
+ "gaze_trace": {
+  "synthetic": true,
+  "seed": 1
+ },
+ "notes": [
+  "VMAF skipped: this ffmpeg has no libvmaf filter",
+  "FovVideoVDP skipped: pyfvvdp is not installed"
+ ]
+}

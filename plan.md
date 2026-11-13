@@ -62,3 +62,14 @@ in < 2 min, `--all` = full matrix + charts + tables). Raw output `results/raw/`,
 - Files: project_status.md, MEMORY.md, autopilot/TASKS.md.
 - Verification: clean `git worktree` + `npm ci && npm run smoke`, grep built bundle for external URLs, smoke network log line (0 external requests), status checked against `git log`.
 - Docs-only; numbers come from smoke output, so fact-check = compare to smoke output.
+
+## Task: T6 offline harness core (autopilot run, 13 Nov)
+- Finding: this image has NO numpy/cv2/pyfvvdp and ffmpeg has NO libvmaf. Harness is therefore pure Python 3 (stdlib) + ffmpeg filters
+  (gblur/scale/maskedmerge/psnr/ssim); VMAF and FovVideoVDP are skipped with a logged note (never faked).
+- Outcome: `offline/experiments/` with fovea.py (port of web/src/video/fovea.ts weights; blend = mix(sharp, ~11x-downscaled periphery, 1-w), a
+  2-level approximation of the shader's continuous LOD), traces.py (seeded synthetic gaze JSON), pipeline.py (libvpx-vp9 realtime CBR with flags from research.md §2; foveal/peripheral PSNR+SSIM via masked ffmpeg psnr/ssim,
+  SSIM-in-disc approximated, see docstring), run.py --quick, test_harness.py (13 tests).
+- Result: reviewer PASS round 1. Quick run (call-desk 720p, 500 kbps CBR, 90 frames, synthetic gaze): baseline 519 kbps vs Glance 507 (CBR fills the cap, so equal-bitrate case),
+  foveal PSNR 43.5 vs 40.5 dB: at this easy content/bitrate Glance does NOT win; the bisection in T7 decides. Not a headline number.
+- Verify: `python3 -m unittest discover -s offline/experiments -p "test_*.py"`: identical -> PSNR cap, mask area within 1 % of pi r^2, baseline vs itself 0 % saved,
+  radius >= diagonal -> Glance bytes == baseline bytes, trace determinism; `run.py --quick` writes results/raw/quick.json. Smoke stays green.
