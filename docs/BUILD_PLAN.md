@@ -213,16 +213,26 @@ Drive gaze with the **mouse first** (R9), then swap in real gaze.
 
 ## 5. License checklist
 
-| Component | License (verify) | OK to ship in demo? |
-|-----------|------------------|---------------------|
-| MediaPipe tasks-vision | Apache-2.0 | |
-| ONNX Runtime Web | MIT | |
-| WebGazer | GPL-3.0 (verify) | |
-| L2CS-Net | MIT (per Luxonis listing — verify repo) | |
-| MobileGaze (yakhyo) | verify | |
-| FAZE (NVlabs) | NVIDIA license (verify) | |
-| UNISAL | Apache-2.0 (verified) | yes |
-| FovVideoVDP | verify (may be non-commercial) | |
+Audited 14 Nov by the autopilot. "Read" = read from the installed package's `package.json`; "memory" = not verifiable offline in this run, re-check before any use beyond the hackathon.
+
+| Component | License | Source of the claim | OK to ship in demo? |
+|-----------|---------|---------------------|---------------------|
+| `@mediapipe/tasks-vision` (JS + vendored WASM in `web/public/mediapipe/wasm`) | Apache-2.0 | read: `node_modules/@mediapipe/tasks-vision/package.json` | yes (keep the licence notice) |
+| `face_landmarker.task`, `blaze_face_short_range.tflite` (vendored models) | Apache-2.0 (Google model cards) | memory; the files carry no licence text | yes for the demo; confirm on the model cards |
+| uPlot | MIT | read: `package.json` | yes |
+| Vite (build only, not shipped) | MIT | read | n/a (build tool) |
+| TypeScript, Playwright (dev only) | Apache-2.0 | read | n/a (dev tools) |
+| Mixkit clips (`web/public/clips/call-*.mp4`) | Mixkit Stock Video Free License | `web/public/clips/CREDITS.md` | yes for the demo; do not redistribute the files as stock |
+| Xiph clips (planned, T7b) | per-clip, mostly CC-BY / free (see xiph.org/derf) | not downloaded yet | decide when fetched |
+| ONNX Runtime Web | MIT | memory; NOT used in the repo | not shipped |
+| WebGazer | GPL-3.0 | memory; NOT used (own tracker) | do not bundle |
+| L2CS-Net, MobileGaze | unverified | NOT used | not shipped |
+| FAZE (NVlabs) | NVIDIA non-commercial (memory) | NOT used, idea only | not shipped |
+| UNISAL | Apache-2.0 | earlier note | not used |
+| FovVideoVDP (`pyfvvdp`) | believed non-commercial (CC BY-NC-SA, memory) | not installed here | offline analysis only, never shipped |
+| libvpx / ffmpeg (offline harness) | BSD-3 / LGPL-GPL depending on build | memory | offline only, never shipped |
+
+Result: everything shipped in `web/dist` is Apache-2.0 or MIT, plus the Mixkit clips. The repo itself has no LICENSE file yet (Aarav's decision).
 
 ## 6. Pre-flight checklist (Thu morning)
 - [ ] `npm run build && npm run preview` works **with Wi-Fi off**
