@@ -35,4 +35,4 @@ Priorities come from `docs/COURSE_CORRECTION.md` (P1 → P2 → P3). Process rul
 - [x] T11 (done 13 Nov run 19, T7b still Blocked) Final report at the top of `project_status.md` (see `autopilot/PROMPT.md` "Final report"), in the section format PROMPT.md lists. Then add the line `ALL DONE` below.
 
 ## Blocked
-- T7b: curl to media.xiph.org refused (needs approval) in runs 13-25 (run 25 retried a 1 KB range probe, still refused; run 24 retried a probe, still refused; run 23 retried a 1 KB range probe, still refused; run 22 retried a probe, still refused; run 21: a 1 KB range probe still "requires approval"); see project_status.md.
+- T7b: curl to media.xiph.org refused (needs approval) in runs 13-26 (run 26 retried a 1 KB range probe, still refused; run 25 retried a 1 KB range probe, still refused; run 24 retried a probe, still refused; run 23 retried a 1 KB range probe, still refused; run 22 retried a probe, still refused; run 21: a 1 KB range probe still "requires approval"); see project_status.md.
