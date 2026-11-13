@@ -51,3 +51,9 @@ in < 2 min, `--all` = full matrix + charts + tables). Raw output `results/raw/`,
 - **Sanity gates (fail the run, not just warn):** baseline vs itself = 0 % saved; radius ≥ frame diagonal =
   baseline bitrate and quality within noise; frame counts equal before any metric; achieved kbps within
   ±15 % of the cap or the condition is flagged.
+
+## Task: status checklist + audit (autopilot run, 13 Nov)
+- Outcome: `project_status.md` converted to PROMPT.md section format with the 5-minute "test this first" checklist at the top; audit of the P1/P2 work.
+- Files: project_status.md, MEMORY.md, autopilot/TASKS.md.
+- Verification: clean `git worktree` + `npm ci && npm run smoke`, grep built bundle for external URLs, smoke network log line (0 external requests), status checked against `git log`.
+- Docs-only; numbers come from smoke output, so fact-check = compare to smoke output.

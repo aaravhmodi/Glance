@@ -19,7 +19,7 @@ Priorities come from `docs/COURSE_CORRECTION.md` (P1 → P2 → P3). Process rul
 - [x] `video/encoders.ts` + `metrics/stats.ts`: two VP9 encoders (normal vs Glance), identical config, realtime, quantizer mode same QP, keyframe every 2 s; per-second kbps and % saved. Smoke test asserts Glance is smaller over ~5 s on a real clip.
 - [x] Split-screen demo mode: left = what a normal stream sends, right = what Glance sends (decoded), live kbps and "% bandwidth saved" for each.
 - [x] "Reveal" toggle (key `R`, off by default): overlay the quality map so judges see where the bits go.
-- [ ] `project_status.md`: the 5-step "how to test it when I'm back" checklist at the top (open app → calibrate → validate → look around a clip → split screen/reveal), plus status of P1/P2. Then a full audit (AGENT_TEAM §5).
+- [x] `project_status.md`: the 5-step "how to test it when I'm back" checklist at the top (open app → calibrate → validate → look around a clip → split screen/reveal), plus status of P1/P2. Then a full audit (AGENT_TEAM §5).
 
 ## P3 — old Stage 3+
 - [ ] Decoding + foveal PSNR/SSIM (inside the gaze circle and full frame, every Nth frame) on the dashboard.

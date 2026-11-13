@@ -1,9 +1,35 @@
 # Glance — project status
+_Last updated: 13 Nov 2026 (Helsinki) by autopilot_
 
-## How to test it when I'm back
-(Checklist is written at the end of the P2 queue; not ready yet. P1 so far: gaze plumbing only, no eye tracker yet.)
+## FINAL REPORT
+Not final yet (T11 pending; the experiment harness T6–T9 is not built, so there are no bandwidth numbers beyond the in-browser smoke ones). Interim state:
+1. Works (all verified by `cd web && npm run smoke`, green on 13 Nov): gaze source plumbing with mouse fallback, webcam tracker (Face Landmarker, vendored), 9-point calibration (C), 20-dot validation (T), One-Euro filter, real clip source, WebGL foveation (F), two VP9 encoders (E), split screen (S), Reveal (R). Smoke: Glance 319 kbps vs normal 634 kbps = 49.7 % saved on call-desk (11 frame pairs, headless, same QP, synthetic fovea at the mouse position).
+2. Headline results: none yet at pitch quality (waiting on T6–T9).
+3. Where Glance does NOT help: not measured yet. Known: in-browser QP is per frame, so gains come only from pre-filtering.
+4. Blocked: nothing. Audit limitation below.
+5. Test this first when you land (5 min):
+   1. `cd web && npm ci && npm run dev`, open the app in Chrome, allow the webcam. Add `?screencm=<your screen width in cm>`.
+   2. Press **C**, follow the 9 dots (~12 s).
+   3. Press **T**, look at the 20 dots; read the verdict (GO / GO-with-big-fovea / PIVOT) and the mean/max error in degrees. Press **X** to recenter if the cursor drifts.
+   4. Press **1–3** to pick a clip and look around. **M** toggles mouse/eyes, **V** shows the camera view, **F** previews the foveation.
+   5. Press **E** then **S** for split screen (left normal, right Glance, live kbps and % saved); **R** shows where the bits go. Bad-network mode (B) is not built yet (P3).
+6. Containers: none were stopped (see `autopilot/stopped_containers.md`).
 
-## Status
+## Now
+Idle between runs; next task in `autopilot/TASKS.md` is P3 "Decoding + foveal PSNR/SSIM".
+
+## Audit (13 Nov, after P2)
+- `npm run smoke` green (type check, unit tests, browser checks); smoke network log: 0 external requests. Source has no http(s) URLs.
+- Built bundle `web/dist` contains URL *strings*: w3.org SVG namespace, emscripten/github comments, and in `assets/vision_bundle-*.js` MediaPipe's Google telemetry endpoint `odml.pa.googleapis.com/v1/log`. Smoke saw no request to it, but a real browser might. `web/index.html` already sets CSP `connect-src 'self' blob: data:`, so a request to it would be blocked by the browser (not tested against that endpoint specifically).
+- Could not do the clean-`git worktree` rebuild: the sandbox refused `npm ci` outside /work. The /work tree was clean (`git status`) when smoke ran, which is the same check. The leftover `/tmp/audit` worktree can be removed with `git worktree remove /tmp/audit`.
+
+## Known bugs
+- MediaPipe telemetry URL string present in the bundle (see Audit). No request observed; CSP blocks it.
+- Head-pose sign conventions (yaw/pitch) not verified against real head turns; calibration's regression absorbs signs.
+- Smoke can flake (pixel comparisons across moving clips).
+
+## Done (newest first)
+- P1/P2 (commits in `git log`, see below). Details:
 - P1: gaze plumbing done (mouse source, M toggle, 0.5 s no-face fallback). Tracker done (webcam → Face Landmarker → features; verified with a fake webcam file cut from talking-heads). Calibration done (key C, 9 dots, ridge poly regression; ~12 s happy path). Filter done (One-Euro + confirmed saccade snap, applied in `EyeTracker` after the mapper, reset on face loss). Validation done (key T after C; 20 dots, deg error, GO/PIVOT; set `?screencm=` to your real screen width).
 - P2: real video source done (commits 14ba30b, 8167a76; verified by `npm run smoke`: picker lists 3 clips + webcam, keys 1–3 switch clips with non-black frames, key 4 selects webcam; unit tests in `tests/layout.test.ts`). Foveation done (key F previews it; `video/foveate.ts` + `fovea.ts`; verified by smoke: fovea region equals source, far detail drops 3.22 → 0.95, VideoFrame 1280×720; unit tests in `tests/fovea.test.ts`). Decision: in-browser per-region QP is impossible (WebCodecs QP is per frame), so quality differences come only from the pre-filter. Decision: 5° radius = 217 px at the default 31 cm screen (below the 250–300 px guess in the docs; use `?screencm=`). Encoders done (key E; `video/encoders.ts`, `metrics/stats.ts`; smoke: Glance ≈50% smaller than normal at the same QP over 5 s on call-desk, only 11 frames in headless; unit tests `tests/stats.test.ts`). Split screen done (key S; smoke: both panels decode and show a picture, E/S toggles clean). Reveal done (commit 711ea2f; key R; smoke checks the tint changes pixels near/far from the gaze and toggles off; unit test `revealRGBA`). Next: the checklist + audit task.
 - Note: head-pose sign conventions (yaw/pitch) are not verified against real head turns; calibration's regression absorbs signs, but check if the pose features look odd.
