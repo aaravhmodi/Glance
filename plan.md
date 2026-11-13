@@ -79,3 +79,12 @@ in < 2 min, `--all` = full matrix + charts + tables). Raw output `results/raw/`,
 - Outcome: `offline/experiments/experiments.py` (A: bisection for the lowest Glance kbps whose foveal PSNR is within 0.5 dB of baseline, else "not reached"; B: equal CBR caps), `run.py --ab` writes `results/raw/exp_a.json`, `exp_b.json`. Matrix: 3 clips x {360p, 720p} x caps {300,500,1000,2500} (360p <= 1000), fovea 3/5/8 deg, 3 seeded synthetic traces on one clip.
 - Verify: unit tests (15, incl. A/B self-consistency), `python3 offline/experiments/run.py --ab`, smoke. Skeptic re-runs one condition.
 - Finding: Glance frames are bit-exact inside the fovea before encoding (100 dB, `probe_pre.py`), yet after VP9 CBR foveal PSNR is 0.8-3 dB BELOW baseline at equal bitrate on call-desk (2500: 48.0 vs 48.8; 1000: 44.2 vs 46.0; 500: 40.5 vs 43.5).
+
+## Task: T8 transport model + tracker-error run (autopilot run, 14 Nov)
+- T7b still blocked (curl to media.xiph.org refused again, not worked around); T8 taken instead.
+- Researcher: not spawned; research.md §3 (1200-byte packets, freeze until keyframe, kVideoMtu) and §4 (WebGazer 4.17°, webcam 90th pct 6.3-8°) already hold the sources. Jitter-buffer size is our own parameter, stated in results.
+- Outcome: `transport.py` (seeded loss + jitter model, pure, unit-tested), `t8.py` (transport_experiment, tracker_error_experiment), `test_transport.py`, `run.py --t8` -> `results/raw/exp_transport.json`, `exp_tracker.json`.
+- Transport: 1200 B packets per frame, each lost with p = 2 % (rng seeded by (seed, frame, packet): both streams see the same draws); frame delay half-normal sd 50 ms, jitter buffer 100 ms, later = dropped; a missing frame breaks decoding until the next keyframe, viewer sees the last good frame (grey before the first keyframe). Same cap for both; several seeds, mean + worst.
+- Tracker error: fovea centred on trace + AR(1) Gaussian noise (mean radial error 0/2/4/6 deg) + 100 ms lag; fixed 5 deg radius vs sigma-adaptive radius (sigma = error); scored at the TRUE gaze (5 deg disc); baseline = same cap.
+- FovVideoVDP / VMAF skipped (not installed), noted in the JSON.
+- Verify: unit tests (loss 0 -> identity; loss 1 -> nothing shown; freeze until keyframe; frame-loss rate near 1-(1-p)^k; determinism; noise mean radial error within 10 % of target); `run.py --t8`; smoke. Skeptic re-runs one condition.

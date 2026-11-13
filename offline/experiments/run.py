@@ -14,6 +14,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import pipeline  # noqa: E402
 import traces  # noqa: E402
 import experiments  # noqa: E402
+import t8  # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 QUICK_CLIP = os.path.join(ROOT, "web", "public", "clips", "call-desk.mp4")
@@ -77,12 +78,36 @@ def ab(out_dir, frames=90):
     return a_rows, b_rows
 
 
+def t8_run(out_dir):
+    """T8: loss/jitter transport model (3 clips x 720p x caps 500/1000) and tracker-error runs (desk 500/1000, teacher 500)."""
+    os.makedirs(out_dir, exist_ok=True)
+    t_rows, e_rows = [], []
+    for c in AB_CLIPS:
+        for cap in (500, 1000):
+            t_rows.append(t8.transport_experiment(os.path.join(CLIPS_DIR, c), 720, cap, net_seeds=(1, 2, 3, 4)))
+            r = t_rows[-1]
+            print("T", c, cap, "gain clean/lossy dB %.2f %.2f" % (r["foveal_psnr_gain_db_clean"], r["foveal_psnr_gain_db_lossy"]), flush=True)
+    for c, cap in (("call-desk.mp4", 500), ("call-desk.mp4", 1000), ("call-teacher.mp4", 500)):
+        e_rows += t8.tracker_error_experiment(os.path.join(CLIPS_DIR, c), 720, cap)
+        print("E", c, cap, "done", flush=True)
+    notes = metric_availability()
+    for name, rows in (("exp_transport.json", t_rows), ("exp_tracker.json", e_rows)):
+        with open(os.path.join(out_dir, name), "w") as f:
+            json.dump({"synthetic_gaze": True, "notes": notes, "rows": rows}, f, indent=1)
+    return t_rows, e_rows
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--quick", action="store_true", help="one condition: call-desk 720p, 500 kbps, 5 deg fovea, synthetic gaze")
     ap.add_argument("--out", default=os.path.join(ROOT, "results", "raw"))
     ap.add_argument("--ab", action="store_true", help="experiments A and B over the real-clip matrix (several minutes)")
+    ap.add_argument("--t8", action="store_true", help="loss/jitter transport model and tracker-error runs (~30 min)")
     args = ap.parse_args()
+    if args.t8:
+        t, e = t8_run(args.out)
+        print("wrote exp_transport.json (%d rows) and exp_tracker.json (%d rows) to %s" % (len(t), len(e), args.out))
+        return
     if args.ab:
         a, b = ab(args.out)
         print("wrote exp_a.json (%d rows) and exp_b.json (%d rows) to %s" % (len(a), len(b), args.out))

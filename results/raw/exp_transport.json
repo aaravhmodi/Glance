@@ -1,0 +1,1431 @@
+{
+ "synthetic_gaze": true,
+ "notes": [
+  "VMAF skipped: this ffmpeg has no libvmaf filter",
+  "FovVideoVDP skipped: pyfvvdp is not installed"
+ ],
+ "rows": [
+  {
+   "experiment": "T",
+   "clip": "call-desk.mp4",
+   "res": 720,
+   "frames": 150,
+   "cap_kbps": 500,
+   "fovea_deg": 5.0,
+   "gaze_seed": 1,
+   "synthetic_gaze": true,
+   "loss": 0.02,
+   "jitter_buffer_ms": 100,
+   "net_seeds": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "model": "transport.py: 1200 B packets, no retransmission, freeze until next keyframe, grey before first keyframe",
+   "baseline": {
+    "kbps": 512.416,
+    "frames_dropped_by_encoder": 2,
+    "clean": {
+     "runs": [
+      {
+       "net_seed": 0,
+       "packets": 336,
+       "packets_lost": 0,
+       "frames_with_loss": 0,
+       "frames_late": 0,
+       "frozen_frames": 0,
+       "frozen_fraction": 0.0,
+       "longest_freeze_frames": 0,
+       "never_shown_frames": 0,
+       "foveal_psnr": 43.600324097612365,
+       "foveal_ssim": 0.9790706965299822,
+       "full_psnr": 43.61545052700833
+      }
+     ],
+     "foveal_psnr": {
+      "mean": 43.600324097612365,
+      "worst": 43.600324097612365
+     },
+     "foveal_ssim": {
+      "mean": 0.9790706965299822,
+      "worst": 0.9790706965299822
+     },
+     "frozen_fraction": {
+      "mean": 0.0,
+      "worst": 0.0
+     },
+     "packets": 336
+    },
+    "lossy": {
+     "runs": [
+      {
+       "net_seed": 1,
+       "packets": 336,
+       "packets_lost": 6,
+       "frames_with_loss": 6,
+       "frames_late": 4,
+       "frozen_frames": 103,
+       "frozen_fraction": 0.6866666666666666,
+       "longest_freeze_frames": 60,
+       "never_shown_frames": 60,
+       "foveal_psnr": 30.371651493081888,
+       "foveal_ssim": 0.857131918545284,
+       "full_psnr": 30.236744449931734
+      },
+      {
+       "net_seed": 2,
+       "packets": 336,
+       "packets_lost": 8,
+       "frames_with_loss": 7,
+       "frames_late": 7,
+       "frozen_frames": 138,
+       "frozen_fraction": 0.92,
+       "longest_freeze_frames": 117,
+       "never_shown_frames": 0,
+       "foveal_psnr": 35.30331482662668,
+       "foveal_ssim": 0.9234343603143611,
+       "full_psnr": 35.17377119111132
+      },
+      {
+       "net_seed": 3,
+       "packets": 336,
+       "packets_lost": 9,
+       "frames_with_loss": 9,
+       "frames_late": 8,
+       "frozen_frames": 121,
+       "frozen_fraction": 0.8066666666666666,
+       "longest_freeze_frames": 60,
+       "never_shown_frames": 60,
+       "foveal_psnr": 29.47490237577417,
+       "foveal_ssim": 0.8521709693977935,
+       "full_psnr": 29.797334974757323
+      },
+      {
+       "net_seed": 4,
+       "packets": 336,
+       "packets_lost": 4,
+       "frames_with_loss": 4,
+       "frames_late": 7,
+       "frozen_frames": 118,
+       "frozen_fraction": 0.7866666666666666,
+       "longest_freeze_frames": 57,
+       "never_shown_frames": 0,
+       "foveal_psnr": 37.983321875022234,
+       "foveal_ssim": 0.9479969361735099,
+       "full_psnr": 37.80655250837421
+      }
+     ],
+     "foveal_psnr": {
+      "mean": 33.283297642626245,
+      "worst": 29.47490237577417
+     },
+     "foveal_ssim": {
+      "mean": 0.8951835461077371,
+      "worst": 0.8521709693977935
+     },
+     "frozen_fraction": {
+      "mean": 0.7999999999999999,
+      "worst": 0.92
+     },
+     "packets": 336
+    }
+   },
+   "glance": {
+    "kbps": 507.4784,
+    "frames_dropped_by_encoder": 0,
+    "clean": {
+     "runs": [
+      {
+       "net_seed": 0,
+       "packets": 338,
+       "packets_lost": 0,
+       "frames_with_loss": 0,
+       "frames_late": 0,
+       "frozen_frames": 0,
+       "frozen_fraction": 0.0,
+       "longest_freeze_frames": 0,
+       "never_shown_frames": 0,
+       "foveal_psnr": 41.004640296774824,
+       "foveal_ssim": 0.9682904264195863,
+       "full_psnr": 28.68670507900122
+      }
+     ],
+     "foveal_psnr": {
+      "mean": 41.004640296774824,
+      "worst": 41.004640296774824
+     },
+     "foveal_ssim": {
+      "mean": 0.9682904264195863,
+      "worst": 0.9682904264195863
+     },
+     "frozen_fraction": {
+      "mean": 0.0,
+      "worst": 0.0
+     },
+     "packets": 338
+    },
+    "lossy": {
+     "runs": [
+      {
+       "net_seed": 1,
+       "packets": 338,
+       "packets_lost": 7,
+       "frames_with_loss": 7,
+       "frames_late": 4,
+       "frozen_frames": 119,
+       "frozen_fraction": 0.7933333333333333,
+       "longest_freeze_frames": 50,
+       "never_shown_frames": 0,
+       "foveal_psnr": 32.351456267597285,
+       "foveal_ssim": 0.8966874924629485,
+       "full_psnr": 28.232096284862244
+      },
+      {
+       "net_seed": 2,
+       "packets": 338,
+       "packets_lost": 8,
+       "frames_with_loss": 8,
+       "frames_late": 7,
+       "frozen_frames": 138,
+       "frozen_fraction": 0.92,
+       "longest_freeze_frames": 117,
+       "never_shown_frames": 0,
+       "foveal_psnr": 31.313179239770196,
+       "foveal_ssim": 0.8833137177251726,
+       "full_psnr": 28.019546951740754
+      },
+      {
+       "net_seed": 3,
+       "packets": 338,
+       "packets_lost": 6,
+       "frames_with_loss": 6,
+       "frames_late": 8,
+       "frozen_frames": 113,
+       "frozen_fraction": 0.7533333333333333,
+       "longest_freeze_frames": 52,
+       "never_shown_frames": 0,
+       "foveal_psnr": 33.352602072471925,
+       "foveal_ssim": 0.9079169844587155,
+       "full_psnr": 28.347692422366116
+      },
+      {
+       "net_seed": 4,
+       "packets": 338,
+       "packets_lost": 4,
+       "frames_with_loss": 4,
+       "frames_late": 7,
+       "frozen_frames": 118,
+       "frozen_fraction": 0.7866666666666666,
+       "longest_freeze_frames": 57,
+       "never_shown_frames": 0,
+       "foveal_psnr": 32.92514987461223,
+       "foveal_ssim": 0.9020264337198026,
+       "full_psnr": 28.267226756477545
+      }
+     ],
+     "foveal_psnr": {
+      "mean": 32.48559686361291,
+      "worst": 31.313179239770196
+     },
+     "foveal_ssim": {
+      "mean": 0.8974861570916598,
+      "worst": 0.8833137177251726
+     },
+     "frozen_fraction": {
+      "mean": 0.8133333333333334,
+      "worst": 0.92
+     },
+     "packets": 338
+    }
+   },
+   "foveal_psnr_gain_db_clean": -2.5956838008375414,
+   "foveal_psnr_gain_db_lossy": -0.7977007790133328
+  },
+  {
+   "experiment": "T",
+   "clip": "call-desk.mp4",
+   "res": 720,
+   "frames": 150,
+   "cap_kbps": 1000,
+   "fovea_deg": 5.0,
+   "gaze_seed": 1,
+   "synthetic_gaze": true,
+   "loss": 0.02,
+   "jitter_buffer_ms": 100,
+   "net_seeds": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "model": "transport.py: 1200 B packets, no retransmission, freeze until next keyframe, grey before first keyframe",
+   "baseline": {
+    "kbps": 986.5744,
+    "frames_dropped_by_encoder": 0,
+    "clean": {
+     "runs": [
+      {
+       "net_seed": 0,
+       "packets": 586,
+       "packets_lost": 0,
+       "frames_with_loss": 0,
+       "frames_late": 0,
+       "frozen_frames": 0,
+       "frozen_fraction": 0.0,
+       "longest_freeze_frames": 0,
+       "never_shown_frames": 0,
+       "foveal_psnr": 46.22614041070085,
+       "foveal_ssim": 0.9869640309408485,
+       "full_psnr": 46.51850130436396
+      }
+     ],
+     "foveal_psnr": {
+      "mean": 46.22614041070085,
+      "worst": 46.22614041070085
+     },
+     "foveal_ssim": {
+      "mean": 0.9869640309408485,
+      "worst": 0.9869640309408485
+     },
+     "frozen_fraction": {
+      "mean": 0.0,
+      "worst": 0.0
+     },
+     "packets": 586
+    },
+    "lossy": {
+     "runs": [
+      {
+       "net_seed": 1,
+       "packets": 586,
+       "packets_lost": 12,
+       "frames_with_loss": 12,
+       "frames_late": 4,
+       "frozen_frames": 135,
+       "frozen_fraction": 0.9,
+       "longest_freeze_frames": 60,
+       "never_shown_frames": 60,
+       "foveal_psnr": 28.851078666593935,
+       "foveal_ssim": 0.8484937245840285,
+       "full_psnr": 29.2408953629029
+      },
+      {
+       "net_seed": 2,
+       "packets": 586,
+       "packets_lost": 11,
+       "frames_with_loss": 10,
+       "frames_late": 7,
+       "frozen_frames": 138,
+       "frozen_fraction": 0.92,
+       "longest_freeze_frames": 117,
+       "never_shown_frames": 0,
+       "foveal_psnr": 36.774288999726394,
+       "foveal_ssim": 0.9382013971292582,
+       "full_psnr": 36.590398932316106
+      },
+      {
+       "net_seed": 3,
+       "packets": 586,
+       "packets_lost": 13,
+       "frames_with_loss": 13,
+       "frames_late": 8,
+       "frozen_frames": 145,
+       "frozen_fraction": 0.9666666666666667,
+       "longest_freeze_frames": 60,
+       "never_shown_frames": 60,
+       "foveal_psnr": 27.61985744109619,
+       "foveal_ssim": 0.8373602736709399,
+       "full_psnr": 28.103613379489374
+      },
+      {
+       "net_seed": 4,
+       "packets": 586,
+       "packets_lost": 11,
+       "frames_with_loss": 11,
+       "frames_late": 7,
+       "frozen_frames": 132,
+       "frozen_fraction": 0.88,
+       "longest_freeze_frames": 59,
+       "never_shown_frames": 0,
+       "foveal_psnr": 37.23449928259895,
+       "foveal_ssim": 0.9431081309620616,
+       "full_psnr": 37.342725857822664
+      }
+     ],
+     "foveal_psnr": {
+      "mean": 32.619931097503866,
+      "worst": 27.61985744109619
+     },
+     "foveal_ssim": {
+      "mean": 0.891790881586572,
+      "worst": 0.8373602736709399
+     },
+     "frozen_fraction": {
+      "mean": 0.9166666666666666,
+      "worst": 0.9666666666666667
+     },
+     "packets": 586
+    }
+   },
+   "glance": {
+    "kbps": 989.9024000000001,
+    "frames_dropped_by_encoder": 0,
+    "clean": {
+     "runs": [
+      {
+       "net_seed": 0,
+       "packets": 592,
+       "packets_lost": 0,
+       "frames_with_loss": 0,
+       "frames_late": 0,
+       "frozen_frames": 0,
+       "frozen_fraction": 0.0,
+       "longest_freeze_frames": 0,
+       "never_shown_frames": 0,
+       "foveal_psnr": 44.679320030453596,
+       "foveal_ssim": 0.982961009990626,
+       "full_psnr": 28.78563621196805
+      }
+     ],
+     "foveal_psnr": {
+      "mean": 44.679320030453596,
+      "worst": 44.679320030453596
+     },
+     "foveal_ssim": {
+      "mean": 0.982961009990626,
+      "worst": 0.982961009990626
+     },
+     "frozen_fraction": {
+      "mean": 0.0,
+      "worst": 0.0
+     },
+     "packets": 592
+    },
+    "lossy": {
+     "runs": [
+      {
+       "net_seed": 1,
+       "packets": 592,
+       "packets_lost": 10,
+       "frames_with_loss": 10,
+       "frames_late": 4,
+       "frozen_frames": 129,
+       "frozen_fraction": 0.86,
+       "longest_freeze_frames": 60,
+       "never_shown_frames": 60,
+       "foveal_psnr": 25.72529012700045,
+       "foveal_ssim": 0.8185854424483933,
+       "full_psnr": 22.7483000922639
+      },
+      {
+       "net_seed": 2,
+       "packets": 592,
+       "packets_lost": 11,
+       "frames_with_loss": 11,
+       "frames_late": 7,
+       "frozen_frames": 138,
+       "frozen_fraction": 0.92,
+       "longest_freeze_frames": 117,
+       "never_shown_frames": 0,
+       "foveal_psnr": 32.111169714530725,
+       "foveal_ssim": 0.8932581393615601,
+       "full_psnr": 28.19405579488662
+      },
+      {
+       "net_seed": 3,
+       "packets": 592,
+       "packets_lost": 12,
+       "frames_with_loss": 12,
+       "frames_late": 8,
+       "frozen_frames": 131,
+       "frozen_fraction": 0.8733333333333333,
+       "longest_freeze_frames": 60,
+       "never_shown_frames": 60,
+       "foveal_psnr": 26.793124247445256,
+       "foveal_ssim": 0.8316913048673569,
+       "full_psnr": 22.870249400065436
+      },
+      {
+       "net_seed": 4,
+       "packets": 592,
+       "packets_lost": 13,
+       "frames_with_loss": 13,
+       "frames_late": 6,
+       "frozen_frames": 119,
+       "frozen_fraction": 0.7933333333333333,
+       "longest_freeze_frames": 57,
+       "never_shown_frames": 0,
+       "foveal_psnr": 33.02548862062345,
+       "foveal_ssim": 0.9006403284218205,
+       "full_psnr": 28.282674656173434
+      }
+     ],
+     "foveal_psnr": {
+      "mean": 29.41376817739997,
+      "worst": 25.72529012700045
+     },
+     "foveal_ssim": {
+      "mean": 0.8610438037747827,
+      "worst": 0.8185854424483933
+     },
+     "frozen_fraction": {
+      "mean": 0.8616666666666667,
+      "worst": 0.92
+     },
+     "packets": 592
+    }
+   },
+   "foveal_psnr_gain_db_clean": -1.5468203802472544,
+   "foveal_psnr_gain_db_lossy": -3.206162920103896
+  },
+  {
+   "experiment": "T",
+   "clip": "call-plants.mp4",
+   "res": 720,
+   "frames": 150,
+   "cap_kbps": 500,
+   "fovea_deg": 5.0,
+   "gaze_seed": 1,
+   "synthetic_gaze": true,
+   "loss": 0.02,
+   "jitter_buffer_ms": 100,
+   "net_seeds": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "model": "transport.py: 1200 B packets, no retransmission, freeze until next keyframe, grey before first keyframe",
+   "baseline": {
+    "kbps": 500.73440000000005,
+    "frames_dropped_by_encoder": 0,
+    "clean": {
+     "runs": [
+      {
+       "net_seed": 0,
+       "packets": 340,
+       "packets_lost": 0,
+       "frames_with_loss": 0,
+       "frames_late": 0,
+       "frozen_frames": 0,
+       "frozen_fraction": 0.0,
+       "longest_freeze_frames": 0,
+       "never_shown_frames": 0,
+       "foveal_psnr": 39.823880778414114,
+       "foveal_ssim": 0.9691914896987583,
+       "full_psnr": 39.42988425618797
+      }
+     ],
+     "foveal_psnr": {
+      "mean": 39.823880778414114,
+      "worst": 39.823880778414114
+     },
+     "foveal_ssim": {
+      "mean": 0.9691914896987583,
+      "worst": 0.9691914896987583
+     },
+     "frozen_fraction": {
+      "mean": 0.0,
+      "worst": 0.0
+     },
+     "packets": 340
+    },
+    "lossy": {
+     "runs": [
+      {
+       "net_seed": 1,
+       "packets": 340,
+       "packets_lost": 5,
+       "frames_with_loss": 5,
+       "frames_late": 4,
+       "frozen_frames": 103,
+       "frozen_fraction": 0.6866666666666666,
+       "longest_freeze_frames": 60,
+       "never_shown_frames": 60,
+       "foveal_psnr": 25.003289684264622,
+       "foveal_ssim": 0.8051958432023131,
+       "full_psnr": 25.136086034738632
+      },
+      {
+       "net_seed": 2,
+       "packets": 340,
+       "packets_lost": 9,
+       "frames_with_loss": 9,
+       "frames_late": 7,
+       "frozen_frames": 138,
+       "frozen_fraction": 0.92,
+       "longest_freeze_frames": 117,
+       "never_shown_frames": 0,
+       "foveal_psnr": 24.407518720627596,
+       "foveal_ssim": 0.7203961812320939,
+       "full_psnr": 20.87880863934105
+      },
+      {
+       "net_seed": 3,
+       "packets": 340,
+       "packets_lost": 8,
+       "frames_with_loss": 8,
+       "frames_late": 8,
+       "frozen_frames": 131,
+       "frozen_fraction": 0.8733333333333333,
+       "longest_freeze_frames": 60,
+       "never_shown_frames": 60,
+       "foveal_psnr": 21.81581966076352,
+       "foveal_ssim": 0.726270456001741,
+       "full_psnr": 21.42954305147524
+      },
+      {
+       "net_seed": 4,
+       "packets": 340,
+       "packets_lost": 4,
+       "frames_with_loss": 4,
+       "frames_late": 7,
+       "frozen_frames": 118,
+       "frozen_fraction": 0.7866666666666666,
+       "longest_freeze_frames": 57,
+       "never_shown_frames": 0,
+       "foveal_psnr": 27.860664763745724,
+       "foveal_ssim": 0.7950343145880616,
+       "full_psnr": 25.381318309480452
+      }
+     ],
+     "foveal_psnr": {
+      "mean": 24.771823207350366,
+      "worst": 21.81581966076352
+     },
+     "foveal_ssim": {
+      "mean": 0.7617241987560524,
+      "worst": 0.7203961812320939
+     },
+     "frozen_fraction": {
+      "mean": 0.8166666666666667,
+      "worst": 0.92
+     },
+     "packets": 340
+    }
+   },
+   "glance": {
+    "kbps": 492.992,
+    "frames_dropped_by_encoder": 0,
+    "clean": {
+     "runs": [
+      {
+       "net_seed": 0,
+       "packets": 329,
+       "packets_lost": 0,
+       "frames_with_loss": 0,
+       "frames_late": 0,
+       "frozen_frames": 0,
+       "frozen_fraction": 0.0,
+       "longest_freeze_frames": 0,
+       "never_shown_frames": 0,
+       "foveal_psnr": 38.94712059512093,
+       "foveal_ssim": 0.9629095843127322,
+       "full_psnr": 28.82708614687565
+      }
+     ],
+     "foveal_psnr": {
+      "mean": 38.94712059512093,
+      "worst": 38.94712059512093
+     },
+     "foveal_ssim": {
+      "mean": 0.9629095843127322,
+      "worst": 0.9629095843127322
+     },
+     "frozen_fraction": {
+      "mean": 0.0,
+      "worst": 0.0
+     },
+     "packets": 329
+    },
+    "lossy": {
+     "runs": [
+      {
+       "net_seed": 1,
+       "packets": 329,
+       "packets_lost": 6,
+       "frames_with_loss": 6,
+       "frames_late": 4,
+       "frozen_frames": 93,
+       "frozen_fraction": 0.62,
+       "longest_freeze_frames": 50,
+       "never_shown_frames": 0,
+       "foveal_psnr": 30.997617733495943,
+       "foveal_ssim": 0.8760995256273704,
+       "full_psnr": 26.319416048700614
+      },
+      {
+       "net_seed": 2,
+       "packets": 329,
+       "packets_lost": 9,
+       "frames_with_loss": 9,
+       "frames_late": 7,
+       "frozen_frames": 138,
+       "frozen_fraction": 0.92,
+       "longest_freeze_frames": 117,
+       "never_shown_frames": 0,
+       "foveal_psnr": 24.013276715988635,
+       "foveal_ssim": 0.7149473717759678,
+       "full_psnr": 19.983840537135436
+      },
+      {
+       "net_seed": 3,
+       "packets": 329,
+       "packets_lost": 7,
+       "frames_with_loss": 7,
+       "frames_late": 8,
+       "frozen_frames": 123,
+       "frozen_fraction": 0.82,
+       "longest_freeze_frames": 52,
+       "never_shown_frames": 0,
+       "foveal_psnr": 27.89216599586076,
+       "foveal_ssim": 0.803372533883961,
+       "full_psnr": 24.06922462118215
+      },
+      {
+       "net_seed": 4,
+       "packets": 329,
+       "packets_lost": 5,
+       "frames_with_loss": 5,
+       "frames_late": 7,
+       "frozen_frames": 118,
+       "frozen_fraction": 0.7866666666666666,
+       "longest_freeze_frames": 57,
+       "never_shown_frames": 0,
+       "foveal_psnr": 27.29402262088329,
+       "foveal_ssim": 0.7923598346262449,
+       "full_psnr": 23.16413787214602
+      }
+     ],
+     "foveal_psnr": {
+      "mean": 27.549270766557157,
+      "worst": 24.013276715988635
+     },
+     "foveal_ssim": {
+      "mean": 0.796694816478386,
+      "worst": 0.7149473717759678
+     },
+     "frozen_fraction": {
+      "mean": 0.7866666666666666,
+      "worst": 0.92
+     },
+     "packets": 329
+    }
+   },
+   "foveal_psnr_gain_db_clean": -0.876760183293186,
+   "foveal_psnr_gain_db_lossy": 2.7774475592067915
+  },
+  {
+   "experiment": "T",
+   "clip": "call-plants.mp4",
+   "res": 720,
+   "frames": 150,
+   "cap_kbps": 1000,
+   "fovea_deg": 5.0,
+   "gaze_seed": 1,
+   "synthetic_gaze": true,
+   "loss": 0.02,
+   "jitter_buffer_ms": 100,
+   "net_seeds": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "model": "transport.py: 1200 B packets, no retransmission, freeze until next keyframe, grey before first keyframe",
+   "baseline": {
+    "kbps": 989.9024000000001,
+    "frames_dropped_by_encoder": 0,
+    "clean": {
+     "runs": [
+      {
+       "net_seed": 0,
+       "packets": 585,
+       "packets_lost": 0,
+       "frames_with_loss": 0,
+       "frames_late": 0,
+       "frozen_frames": 0,
+       "frozen_fraction": 0.0,
+       "longest_freeze_frames": 0,
+       "never_shown_frames": 0,
+       "foveal_psnr": 43.28628848359312,
+       "foveal_ssim": 0.9831226833167787,
+       "full_psnr": 42.97611143379225
+      }
+     ],
+     "foveal_psnr": {
+      "mean": 43.28628848359312,
+      "worst": 43.28628848359312
+     },
+     "foveal_ssim": {
+      "mean": 0.9831226833167787,
+      "worst": 0.9831226833167787
+     },
+     "frozen_fraction": {
+      "mean": 0.0,
+      "worst": 0.0
+     },
+     "packets": 585
+    },
+    "lossy": {
+     "runs": [
+      {
+       "net_seed": 1,
+       "packets": 585,
+       "packets_lost": 10,
+       "frames_with_loss": 10,
+       "frames_late": 4,
+       "frozen_frames": 129,
+       "frozen_fraction": 0.86,
+       "longest_freeze_frames": 60,
+       "never_shown_frames": 60,
+       "foveal_psnr": 22.780497521912796,
+       "foveal_ssim": 0.7264396410614332,
+       "full_psnr": 22.455487677340074
+      },
+      {
+       "net_seed": 2,
+       "packets": 585,
+       "packets_lost": 12,
+       "frames_with_loss": 11,
+       "frames_late": 7,
+       "frozen_frames": 138,
+       "frozen_fraction": 0.92,
+       "longest_freeze_frames": 117,
+       "never_shown_frames": 0,
+       "foveal_psnr": 24.947893569501062,
+       "foveal_ssim": 0.7218874938410157,
+       "full_psnr": 21.265942271445194
+      },
+      {
+       "net_seed": 3,
+       "packets": 585,
+       "packets_lost": 13,
+       "frames_with_loss": 13,
+       "frames_late": 8,
+       "frozen_frames": 131,
+       "frozen_fraction": 0.8733333333333333,
+       "longest_freeze_frames": 60,
+       "never_shown_frames": 60,
+       "foveal_psnr": 22.55535461558439,
+       "foveal_ssim": 0.7305587737811414,
+       "full_psnr": 22.05025643203312
+      },
+      {
+       "net_seed": 4,
+       "packets": 585,
+       "packets_lost": 11,
+       "frames_with_loss": 11,
+       "frames_late": 7,
+       "frozen_frames": 118,
+       "frozen_fraction": 0.7866666666666666,
+       "longest_freeze_frames": 57,
+       "never_shown_frames": 0,
+       "foveal_psnr": 28.916848493040458,
+       "foveal_ssim": 0.799963344310048,
+       "full_psnr": 26.348566406300023
+      }
+     ],
+     "foveal_psnr": {
+      "mean": 24.800148550009677,
+      "worst": 22.55535461558439
+     },
+     "foveal_ssim": {
+      "mean": 0.7447123132484096,
+      "worst": 0.7218874938410157
+     },
+     "frozen_fraction": {
+      "mean": 0.86,
+      "worst": 0.92
+     },
+     "packets": 585
+    }
+   },
+   "glance": {
+    "kbps": 976.2031999999999,
+    "frames_dropped_by_encoder": 0,
+    "clean": {
+     "runs": [
+      {
+       "net_seed": 0,
+       "packets": 586,
+       "packets_lost": 0,
+       "frames_with_loss": 0,
+       "frames_late": 0,
+       "frozen_frames": 0,
+       "frozen_fraction": 0.0,
+       "longest_freeze_frames": 0,
+       "never_shown_frames": 0,
+       "foveal_psnr": 42.8515267973955,
+       "foveal_ssim": 0.9811536039272352,
+       "full_psnr": 29.05023132458322
+      }
+     ],
+     "foveal_psnr": {
+      "mean": 42.8515267973955,
+      "worst": 42.8515267973955
+     },
+     "foveal_ssim": {
+      "mean": 0.9811536039272352,
+      "worst": 0.9811536039272352
+     },
+     "frozen_fraction": {
+      "mean": 0.0,
+      "worst": 0.0
+     },
+     "packets": 586
+    },
+    "lossy": {
+     "runs": [
+      {
+       "net_seed": 1,
+       "packets": 586,
+       "packets_lost": 11,
+       "frames_with_loss": 11,
+       "frames_late": 4,
+       "frozen_frames": 129,
+       "frozen_fraction": 0.86,
+       "longest_freeze_frames": 60,
+       "never_shown_frames": 60,
+       "foveal_psnr": 22.96638025800744,
+       "foveal_ssim": 0.7333243213602095,
+       "full_psnr": 20.35321803515676
+      },
+      {
+       "net_seed": 2,
+       "packets": 586,
+       "packets_lost": 15,
+       "frames_with_loss": 14,
+       "frames_late": 7,
+       "frozen_frames": 138,
+       "frozen_fraction": 0.92,
+       "longest_freeze_frames": 117,
+       "never_shown_frames": 0,
+       "foveal_psnr": 24.51572917840333,
+       "foveal_ssim": 0.7165279769221418,
+       "full_psnr": 20.009881566816883
+      },
+      {
+       "net_seed": 3,
+       "packets": 586,
+       "packets_lost": 12,
+       "frames_with_loss": 12,
+       "frames_late": 8,
+       "frozen_frames": 131,
+       "frozen_fraction": 0.8733333333333333,
+       "longest_freeze_frames": 60,
+       "never_shown_frames": 60,
+       "foveal_psnr": 22.60750924393957,
+       "foveal_ssim": 0.7346685193213165,
+       "full_psnr": 20.287087608171174
+      },
+      {
+       "net_seed": 4,
+       "packets": 586,
+       "packets_lost": 14,
+       "frames_with_loss": 14,
+       "frames_late": 6,
+       "frozen_frames": 119,
+       "frozen_fraction": 0.7933333333333333,
+       "longest_freeze_frames": 57,
+       "never_shown_frames": 0,
+       "foveal_psnr": 28.16916560356415,
+       "foveal_ssim": 0.7923491539263459,
+       "full_psnr": 23.184860512609607
+      }
+     ],
+     "foveal_psnr": {
+      "mean": 24.564696070978624,
+      "worst": 22.60750924393957
+     },
+     "foveal_ssim": {
+      "mean": 0.7442174928825034,
+      "worst": 0.7165279769221418
+     },
+     "frozen_fraction": {
+      "mean": 0.8616666666666667,
+      "worst": 0.92
+     },
+     "packets": 586
+    }
+   },
+   "foveal_psnr_gain_db_clean": -0.4347616861976178,
+   "foveal_psnr_gain_db_lossy": -0.23545247903105349
+  },
+  {
+   "experiment": "T",
+   "clip": "call-teacher.mp4",
+   "res": 720,
+   "frames": 150,
+   "cap_kbps": 500,
+   "fovea_deg": 5.0,
+   "gaze_seed": 1,
+   "synthetic_gaze": true,
+   "loss": 0.02,
+   "jitter_buffer_ms": 100,
+   "net_seeds": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "model": "transport.py: 1200 B packets, no retransmission, freeze until next keyframe, grey before first keyframe",
+   "baseline": {
+    "kbps": 492.9248,
+    "frames_dropped_by_encoder": 0,
+    "clean": {
+     "runs": [
+      {
+       "net_seed": 0,
+       "packets": 330,
+       "packets_lost": 0,
+       "frames_with_loss": 0,
+       "frames_late": 0,
+       "frozen_frames": 0,
+       "frozen_fraction": 0.0,
+       "longest_freeze_frames": 0,
+       "never_shown_frames": 0,
+       "foveal_psnr": 40.894849781057985,
+       "foveal_ssim": 0.972058718760025,
+       "full_psnr": 40.76079258624634
+      }
+     ],
+     "foveal_psnr": {
+      "mean": 40.894849781057985,
+      "worst": 40.894849781057985
+     },
+     "foveal_ssim": {
+      "mean": 0.972058718760025,
+      "worst": 0.972058718760025
+     },
+     "frozen_fraction": {
+      "mean": 0.0,
+      "worst": 0.0
+     },
+     "packets": 330
+    },
+    "lossy": {
+     "runs": [
+      {
+       "net_seed": 1,
+       "packets": 330,
+       "packets_lost": 4,
+       "frames_with_loss": 4,
+       "frames_late": 4,
+       "frozen_frames": 90,
+       "frozen_fraction": 0.6,
+       "longest_freeze_frames": 47,
+       "never_shown_frames": 0,
+       "foveal_psnr": 30.716305038980117,
+       "foveal_ssim": 0.8798668137122861,
+       "full_psnr": 30.34359322764579
+      },
+      {
+       "net_seed": 2,
+       "packets": 330,
+       "packets_lost": 8,
+       "frames_with_loss": 8,
+       "frames_late": 7,
+       "frozen_frames": 138,
+       "frozen_fraction": 0.92,
+       "longest_freeze_frames": 117,
+       "never_shown_frames": 0,
+       "foveal_psnr": 21.416391386582323,
+       "foveal_ssim": 0.7179863856606545,
+       "full_psnr": 21.069553503699872
+      },
+      {
+       "net_seed": 3,
+       "packets": 330,
+       "packets_lost": 9,
+       "frames_with_loss": 9,
+       "frames_late": 8,
+       "frozen_frames": 131,
+       "frozen_fraction": 0.8733333333333333,
+       "longest_freeze_frames": 60,
+       "never_shown_frames": 60,
+       "foveal_psnr": 21.723419864450488,
+       "foveal_ssim": 0.7248293162667403,
+       "full_psnr": 20.62749619579813
+      },
+      {
+       "net_seed": 4,
+       "packets": 330,
+       "packets_lost": 5,
+       "frames_with_loss": 5,
+       "frames_late": 7,
+       "frozen_frames": 118,
+       "frozen_fraction": 0.7866666666666666,
+       "longest_freeze_frames": 57,
+       "never_shown_frames": 0,
+       "foveal_psnr": 26.715979149171435,
+       "foveal_ssim": 0.8136538321909791,
+       "full_psnr": 26.01090367993412
+      }
+     ],
+     "foveal_psnr": {
+      "mean": 25.14302385979609,
+      "worst": 21.416391386582323
+     },
+     "foveal_ssim": {
+      "mean": 0.784084086957665,
+      "worst": 0.7179863856606545
+     },
+     "frozen_fraction": {
+      "mean": 0.795,
+      "worst": 0.92
+     },
+     "packets": 330
+    }
+   },
+   "glance": {
+    "kbps": 487.98240000000004,
+    "frames_dropped_by_encoder": 0,
+    "clean": {
+     "runs": [
+      {
+       "net_seed": 0,
+       "packets": 330,
+       "packets_lost": 0,
+       "frames_with_loss": 0,
+       "frames_late": 0,
+       "frozen_frames": 0,
+       "frozen_fraction": 0.0,
+       "longest_freeze_frames": 0,
+       "never_shown_frames": 0,
+       "foveal_psnr": 40.07978677868855,
+       "foveal_ssim": 0.9671136302166807,
+       "full_psnr": 30.295071160673736
+      }
+     ],
+     "foveal_psnr": {
+      "mean": 40.07978677868855,
+      "worst": 40.07978677868855
+     },
+     "foveal_ssim": {
+      "mean": 0.9671136302166807,
+      "worst": 0.9671136302166807
+     },
+     "frozen_fraction": {
+      "mean": 0.0,
+      "worst": 0.0
+     },
+     "packets": 330
+    },
+    "lossy": {
+     "runs": [
+      {
+       "net_seed": 1,
+       "packets": 330,
+       "packets_lost": 7,
+       "frames_with_loss": 7,
+       "frames_late": 4,
+       "frozen_frames": 119,
+       "frozen_fraction": 0.7933333333333333,
+       "longest_freeze_frames": 50,
+       "never_shown_frames": 0,
+       "foveal_psnr": 27.36880651304627,
+       "foveal_ssim": 0.8184114463211305,
+       "full_psnr": 24.251320890459862
+      },
+      {
+       "net_seed": 2,
+       "packets": 330,
+       "packets_lost": 9,
+       "frames_with_loss": 9,
+       "frames_late": 7,
+       "frozen_frames": 138,
+       "frozen_fraction": 0.92,
+       "longest_freeze_frames": 117,
+       "never_shown_frames": 0,
+       "foveal_psnr": 21.869907321959047,
+       "foveal_ssim": 0.7235293008720243,
+       "full_psnr": 20.396013805852633
+      },
+      {
+       "net_seed": 3,
+       "packets": 330,
+       "packets_lost": 7,
+       "frames_with_loss": 7,
+       "frames_late": 8,
+       "frozen_frames": 123,
+       "frozen_fraction": 0.82,
+       "longest_freeze_frames": 52,
+       "never_shown_frames": 0,
+       "foveal_psnr": 26.599317181161418,
+       "foveal_ssim": 0.798947960489738,
+       "full_psnr": 23.95739924234503
+      },
+      {
+       "net_seed": 4,
+       "packets": 330,
+       "packets_lost": 5,
+       "frames_with_loss": 5,
+       "frames_late": 7,
+       "frozen_frames": 118,
+       "frozen_fraction": 0.7866666666666666,
+       "longest_freeze_frames": 57,
+       "never_shown_frames": 0,
+       "foveal_psnr": 26.910779998542974,
+       "foveal_ssim": 0.8105497736729819,
+       "full_psnr": 23.880835381211067
+      }
+     ],
+     "foveal_psnr": {
+      "mean": 25.687202753677425,
+      "worst": 21.869907321959047
+     },
+     "foveal_ssim": {
+      "mean": 0.7878596203389687,
+      "worst": 0.7235293008720243
+     },
+     "frozen_fraction": {
+      "mean": 0.83,
+      "worst": 0.92
+     },
+     "packets": 330
+    }
+   },
+   "foveal_psnr_gain_db_clean": -0.8150630023694347,
+   "foveal_psnr_gain_db_lossy": 0.5441788938813339
+  },
+  {
+   "experiment": "T",
+   "clip": "call-teacher.mp4",
+   "res": 720,
+   "frames": 150,
+   "cap_kbps": 1000,
+   "fovea_deg": 5.0,
+   "gaze_seed": 1,
+   "synthetic_gaze": true,
+   "loss": 0.02,
+   "jitter_buffer_ms": 100,
+   "net_seeds": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "model": "transport.py: 1200 B packets, no retransmission, freeze until next keyframe, grey before first keyframe",
+   "baseline": {
+    "kbps": 969.0576,
+    "frames_dropped_by_encoder": 0,
+    "clean": {
+     "runs": [
+      {
+       "net_seed": 0,
+       "packets": 577,
+       "packets_lost": 0,
+       "frames_with_loss": 0,
+       "frames_late": 0,
+       "frozen_frames": 0,
+       "frozen_fraction": 0.0,
+       "longest_freeze_frames": 0,
+       "never_shown_frames": 0,
+       "foveal_psnr": 43.66243980450849,
+       "foveal_ssim": 0.9830369297054027,
+       "full_psnr": 43.66236479184238
+      }
+     ],
+     "foveal_psnr": {
+      "mean": 43.66243980450849,
+      "worst": 43.66243980450849
+     },
+     "foveal_ssim": {
+      "mean": 0.9830369297054027,
+      "worst": 0.9830369297054027
+     },
+     "frozen_fraction": {
+      "mean": 0.0,
+      "worst": 0.0
+     },
+     "packets": 577
+    },
+    "lossy": {
+     "runs": [
+      {
+       "net_seed": 1,
+       "packets": 577,
+       "packets_lost": 7,
+       "frames_with_loss": 7,
+       "frames_late": 4,
+       "frozen_frames": 105,
+       "frozen_fraction": 0.7,
+       "longest_freeze_frames": 60,
+       "never_shown_frames": 60,
+       "foveal_psnr": 25.816724047753908,
+       "foveal_ssim": 0.7862669961898745,
+       "full_psnr": 25.163437923949562
+      },
+      {
+       "net_seed": 2,
+       "packets": 577,
+       "packets_lost": 14,
+       "frames_with_loss": 12,
+       "frames_late": 7,
+       "frozen_frames": 138,
+       "frozen_fraction": 0.92,
+       "longest_freeze_frames": 117,
+       "never_shown_frames": 0,
+       "foveal_psnr": 21.623454931245526,
+       "foveal_ssim": 0.7147598027077048,
+       "full_psnr": 21.282103284226423
+      },
+      {
+       "net_seed": 3,
+       "packets": 577,
+       "packets_lost": 12,
+       "frames_with_loss": 12,
+       "frames_late": 8,
+       "frozen_frames": 131,
+       "frozen_fraction": 0.8733333333333333,
+       "longest_freeze_frames": 60,
+       "never_shown_frames": 60,
+       "foveal_psnr": 22.007790449631596,
+       "foveal_ssim": 0.7246343548944978,
+       "full_psnr": 20.94681452279218
+      },
+      {
+       "net_seed": 4,
+       "packets": 577,
+       "packets_lost": 12,
+       "frames_with_loss": 12,
+       "frames_late": 7,
+       "frozen_frames": 118,
+       "frozen_fraction": 0.7866666666666666,
+       "longest_freeze_frames": 57,
+       "never_shown_frames": 0,
+       "foveal_psnr": 27.259980673558616,
+       "foveal_ssim": 0.8139104653722401,
+       "full_psnr": 26.572831736081735
+      }
+     ],
+     "foveal_psnr": {
+      "mean": 24.17698752554741,
+      "worst": 21.623454931245526
+     },
+     "foveal_ssim": {
+      "mean": 0.7598929047910793,
+      "worst": 0.7147598027077048
+     },
+     "frozen_fraction": {
+      "mean": 0.82,
+      "worst": 0.92
+     },
+     "packets": 577
+    }
+   },
+   "glance": {
+    "kbps": 963.7824,
+    "frames_dropped_by_encoder": 0,
+    "clean": {
+     "runs": [
+      {
+       "net_seed": 0,
+       "packets": 577,
+       "packets_lost": 0,
+       "frames_with_loss": 0,
+       "frames_late": 0,
+       "frozen_frames": 0,
+       "frozen_fraction": 0.0,
+       "longest_freeze_frames": 0,
+       "never_shown_frames": 0,
+       "foveal_psnr": 43.56766309770994,
+       "foveal_ssim": 0.9814261011791423,
+       "full_psnr": 30.551470435778562
+      }
+     ],
+     "foveal_psnr": {
+      "mean": 43.56766309770994,
+      "worst": 43.56766309770994
+     },
+     "foveal_ssim": {
+      "mean": 0.9814261011791423,
+      "worst": 0.9814261011791423
+     },
+     "frozen_fraction": {
+      "mean": 0.0,
+      "worst": 0.0
+     },
+     "packets": 577
+    },
+    "lossy": {
+     "runs": [
+      {
+       "net_seed": 1,
+       "packets": 577,
+       "packets_lost": 9,
+       "frames_with_loss": 9,
+       "frames_late": 4,
+       "frozen_frames": 119,
+       "frozen_fraction": 0.7933333333333333,
+       "longest_freeze_frames": 50,
+       "never_shown_frames": 0,
+       "foveal_psnr": 28.1052884910553,
+       "foveal_ssim": 0.8236657868673465,
+       "full_psnr": 24.33756324120512
+      },
+      {
+       "net_seed": 2,
+       "packets": 577,
+       "packets_lost": 13,
+       "frames_with_loss": 12,
+       "frames_late": 7,
+       "frozen_frames": 138,
+       "frozen_fraction": 0.92,
+       "longest_freeze_frames": 117,
+       "never_shown_frames": 0,
+       "foveal_psnr": 22.18189209308587,
+       "foveal_ssim": 0.723197327329082,
+       "full_psnr": 20.409732914974512
+      },
+      {
+       "net_seed": 3,
+       "packets": 577,
+       "packets_lost": 11,
+       "frames_with_loss": 11,
+       "frames_late": 8,
+       "frozen_frames": 131,
+       "frozen_fraction": 0.8733333333333333,
+       "longest_freeze_frames": 60,
+       "never_shown_frames": 60,
+       "foveal_psnr": 22.137829866792615,
+       "foveal_ssim": 0.7288038037202843,
+       "full_psnr": 19.495137080416796
+      },
+      {
+       "net_seed": 4,
+       "packets": 577,
+       "packets_lost": 13,
+       "frames_with_loss": 13,
+       "frames_late": 6,
+       "frozen_frames": 119,
+       "frozen_fraction": 0.7933333333333333,
+       "longest_freeze_frames": 57,
+       "never_shown_frames": 0,
+       "foveal_psnr": 27.62796002744342,
+       "foveal_ssim": 0.815308575697393,
+       "full_psnr": 23.8878232509668
+      }
+     ],
+     "foveal_psnr": {
+      "mean": 25.0132426195943,
+      "worst": 22.137829866792615
+     },
+     "foveal_ssim": {
+      "mean": 0.7727438734035263,
+      "worst": 0.723197327329082
+     },
+     "frozen_fraction": {
+      "mean": 0.8450000000000001,
+      "worst": 0.92
+     },
+     "packets": 577
+    }
+   },
+   "foveal_psnr_gain_db_clean": -0.0947767067985481,
+   "foveal_psnr_gain_db_lossy": 0.8362550940468907
+  }
+ ]
+}
